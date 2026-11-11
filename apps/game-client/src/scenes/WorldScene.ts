@@ -4,6 +4,7 @@ import { NavGrid, findPath, gridToIso, isoToGrid } from "@eidolith/navigation-co
 import { mapById } from "@eidolith/game-data";
 import { network, type RemotePlayer, type WorldSnapshot } from "../net/NetworkManager";
 import { joyState } from "../state";
+import { mountHub, type HubHandle } from "../ui/hub";
 import type { HudData } from "./HudScene";
 import meadowVillage from "@eidolith/game-data/maps/meadow_village.json";
 import whisperingForest from "@eidolith/game-data/maps/whispering_forest.json";
@@ -15,18 +16,26 @@ interface TiledObject { name: string; type: string; properties?: { name: string;
 interface TiledMap { width: number; height: number; layers: { name: string; data?: number[]; objects?: TiledObject[] }[]; }
 const prop = (o: TiledObject, n: string) => o.properties?.find(p => p.name === n)?.value;
 const SPEED_TILES_PER_SEC = 4.2;
+/** Name labels: dark pill backing so names never merge with each other or the scenery,
+ *  and they live on a top depth layer so canopies never cover them. */
+const NAME_STYLE: Phaser.Types.GameObjects.Text.TextStyle = { fontSize: "14px", color: "#ffffff", backgroundColor: "rgba(8,12,18,0.55)", padding: { x: 7, y: 3 } };
+const LABEL_DEPTH = 90000;
 
 export class WorldScene extends Phaser.Scene {
   private profile!: PlayerProfile;
+  private hub?: HubHandle;
   private mapId = "";
   private grid!: NavGrid;
   private originX = 0; private originY = 0;
   private portals = new Map<string, { targetMap: string; targetSpawn: string }>();
   private player!: Phaser.GameObjects.Container;
   private playerBody!: Phaser.GameObjects.Image;
+  private playerLabel!: Phaser.GameObjects.Text;
+  private tintRect!: Phaser.GameObjects.Rectangle;
+  private worldMinutes = 720;
   private gridPos = { x: 0, y: 0 };
   private path: { x: number; y: number }[] = [];
-  private remotes = new Map<string, { container: Phaser.GameObjects.Container; target: { x: number; y: number } }>();
+  private remotes = new Map<string, { container: Phaser.GameObjects.Container; label: Phaser.GameObjects.Text; target: { x: number; y: number } }>();
   private lastSentAt = 0; private lastCellKey = "";
   private unsubs: (() => void)[] = [];
   private changingMap = false;
@@ -46,6 +55,16 @@ export class WorldScene extends Phaser.Scene {
     const snap = data.snapshot ?? network.lastSnapshot!;
     this.buildMap(snap.world.mapId, snap);
     this.launchHud(snap);
+    this.hub = mountHub(this, {
+      profile: this.profile,
+      onLogout: () => {
+        void network.request("POST", "/auth/logout").catch(() => undefined);
+        network.clearTokens();
+        this.scene.stop("Hud");
+        this.scene.start("Login");
+      },
+    });
+    this.events.once("shutdown", () => { this.hub?.destroy(); this.hub = undefined; });
     this.subscribeWorld();
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => this.onTap(pointer));
     const w = window as unknown as { __eidolith?: unknown };
@@ -67,6 +86,19 @@ export class WorldScene extends Phaser.Scene {
     this.portals.clear();
     for (const o of objects) if (o.type === "portal") {
       this.portals.set(`${Number(prop(o, "tileX"))},${Number(prop(o, "tileY"))}`, { targetMap: String(prop(o, "targetMap")), targetSpawn: String(prop(o, "targetSpawn")) });
+    }
+    // Backdrop: the world sits inside a forest — dark ground + a ring of trees beyond
+    // the map diamond, so the portrait screen never shows empty black corners.
+    this.cameras.main.setBackgroundColor("#101c12");
+    const worldW = (W + H) * 32, worldH = (W + H) * 16 + 32;
+    this.add.rectangle(worldW / 2, worldH / 2, worldW + 2400, worldH + 2400, 0x182b1c).setDepth(-3000);
+    let seed = 1234567;
+    const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+    for (let i = 0; i < 110; i++) {
+      const wx = (rnd() - 0.12) * (worldW + 500), wy = (rnd() - 0.08) * (worldH + 340);
+      const g = this.gridFromWorld(wx, wy);
+      if (g.x > -1.2 && g.y > -1.2 && g.x < W + 0.2 && g.y < H + 0.2) continue; // outside the diamond only
+      this.add.image(wx, wy, rnd() > 0.45 ? "tree" : "pine").setOrigin(0.5, 1).setDepth(-2000 + wy * 0.01).setAlpha(0.92);
     }
     // Ground baked into one RenderTexture.
     const rt = this.add.renderTexture(0, 0, (W + H) * 32, (W + H) * 16 + 32).setOrigin(0, 0).setDepth(-1000);
@@ -95,18 +127,18 @@ export class WorldScene extends Phaser.Scene {
         if (sprite === "house") img.setScale(1.0);
       } else if (o.type === "npc") {
         const npcTex: Record<string, string> = { "Elder Rowan": "npc_rowan", "Mira": "npc_mira", "Kael": "npc_kael" };
-        this.add.image(p.x, p.y + 14, npcTex[o.name] ?? "wanderer").setOrigin(0.5, 1).setDepth(p.y);
-        this.add.text(p.x, p.y - 98, o.name, { fontSize: "13px", color: "#cfe6ff" }).setOrigin(0.5).setDepth(p.y + 1);
+        this.add.image(p.x, p.y + 14, npcTex[o.name] ?? "wanderer").setOrigin(0.5, 1).setScale(0.5).setDepth(p.y);
+        this.add.text(p.x, p.y - 98, o.name, { ...NAME_STYLE, fontSize: "13px", color: "#cfe6ff" }).setOrigin(0.5).setDepth(LABEL_DEPTH);
       }
     }
     // Player.
     this.gridPos = { x: snap.player.x, y: snap.player.y };
     const pp = this.worldFromGrid(this.gridPos.x, this.gridPos.y);
     const playerTex = this.profile.avatarId === "wanderer_female" ? "wanderer_f" : "wanderer";
-    this.playerBody = this.add.image(0, 14, playerTex).setOrigin(0.5, 1).setScale(0.52);
+    this.playerBody = this.add.image(0, 14, playerTex).setOrigin(0.5, 1).setScale(0.5);
     this.tweens.add({ targets: this.playerBody, y: 11, duration: 900, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
-    const nameText = this.add.text(0, -100, this.profile.displayName, { fontSize: "14px", color: "#ffffff" }).setOrigin(0.5);
-    this.player = this.add.container(pp.x, pp.y, [this.playerBody, nameText]).setDepth(pp.y);
+    this.player = this.add.container(pp.x, pp.y, [this.playerBody]).setDepth(pp.y);
+    this.playerLabel = this.add.text(pp.x, pp.y - 100, this.profile.displayName, NAME_STYLE).setOrigin(0.5).setDepth(LABEL_DEPTH);
     this.path = [];
     this.lastCellKey = `${Math.round(this.gridPos.x)},${Math.round(this.gridPos.y)}`;
     // Remote players from snapshot.
@@ -117,6 +149,26 @@ export class WorldScene extends Phaser.Scene {
     cam.setBounds(0, 0, (W + H) * 32, (W + H) * 16 + 32);
     cam.startFollow(this.player, true, 0.12, 0.12);
     cam.setZoom(1.6);
+    // Day/night tint, driven by the world clock (60 real minutes = 24 game hours).
+    this.worldMinutes = snap.world.time.hour * 60 + snap.world.time.minute;
+    this.tintRect = this.add.rectangle(0, 0, 4200, 4200, 0x000000, 0).setDepth(80000);
+    this.applyTint();
+    this.time.addEvent({ delay: 1000, loop: true, callback: () => { this.worldMinutes = (this.worldMinutes + 0.4) % 1440; this.applyTint(); } });
+  }
+
+  /** Smooth keyframed tint: deep blue at night, warm at dawn/dusk, clear at midday. */
+  private applyTint(): void {
+    if (!this.tintRect) return;
+    const keys: [number, number, number, number, number][] = [
+      [0, 8, 12, 44, 0.40], [5, 8, 12, 44, 0.40], [6.5, 70, 50, 60, 0.16], [8, 0, 0, 0, 0],
+      [16, 0, 0, 0, 0], [17.5, 120, 60, 30, 0.13], [19, 30, 30, 80, 0.26], [20.5, 8, 12, 44, 0.40], [24, 8, 12, 44, 0.40],
+    ];
+    const h = this.worldMinutes / 60;
+    let a = keys[0], b = keys[keys.length - 1];
+    for (let i = 0; i < keys.length - 1; i++) if (h >= keys[i][0] && h <= keys[i + 1][0]) { a = keys[i]; b = keys[i + 1]; break; }
+    const t = b[0] === a[0] ? 0 : (h - a[0]) / (b[0] - a[0]);
+    const mix = (i: number) => Math.round(a[i] + (b[i] - a[i]) * t);
+    this.tintRect.setFillStyle(Phaser.Display.Color.GetColor(mix(1), mix(2), mix(3)), a[4] + (b[4] - a[4]) * t);
   }
 
   private launchHud(snap: WorldSnapshot): void {
@@ -141,14 +193,15 @@ export class WorldScene extends Phaser.Scene {
   private addRemote(rp: RemotePlayer): void {
     if (this.remotes.has(rp.playerId)) return;
     const p = this.worldFromGrid(rp.x, rp.y);
-    const body = this.add.image(0, 14, rp.avatarId === "wanderer_female" ? "wanderer_f" : "wanderer").setOrigin(0.5, 1).setScale(0.52).setTint(0xcfe8ff);
-    const label = this.add.text(0, -100, rp.displayName, { fontSize: "14px", color: "#dfffd0" }).setOrigin(0.5);
-    const container = this.add.container(p.x, p.y, [body, label]).setDepth(p.y);
-    this.remotes.set(rp.playerId, { container, target: { x: rp.x, y: rp.y } });
+    const body = this.add.image(0, 14, rp.avatarId === "wanderer_female" ? "wanderer_f" : "wanderer").setOrigin(0.5, 1).setScale(0.5).setTint(0xcfe8ff);
+    const container = this.add.container(p.x, p.y, [body]).setDepth(p.y);
+    const label = this.add.text(p.x, p.y - 100, rp.displayName, { ...NAME_STYLE, color: "#dfffd0" }).setOrigin(0.5).setDepth(LABEL_DEPTH);
+    this.remotes.set(rp.playerId, { container, label, target: { x: rp.x, y: rp.y } });
     this.updateHudPlayers();
   }
   private removeRemote(playerId: string): void {
     this.remotes.get(playerId)?.container.destroy();
+    this.remotes.get(playerId)?.label.destroy();
     this.remotes.delete(playerId);
     this.updateHudPlayers();
   }
@@ -169,7 +222,7 @@ export class WorldScene extends Phaser.Scene {
     if (joyState.active || this.changingMap) return;
     const worldPoint = pointer.positionToCamera(this.cameras.main) as Phaser.Math.Vector2;
     // Ignore taps on the joystick corner.
-    if (pointer.x < 190 && pointer.y > this.scale.height - 220) return;
+    if (pointer.x < 210 && pointer.y > this.scale.height - 310) return;
     const g = this.gridFromWorld(worldPoint.x, worldPoint.y);
     const tx = Math.round(g.x), ty = Math.round(g.y);
     if (!this.grid.walkable(tx, ty)) return;
@@ -203,6 +256,7 @@ export class WorldScene extends Phaser.Scene {
 
   update(time: number, deltaMs: number): void {
     if (!this.player) return;
+    if (this.tintRect) { const v = this.cameras.main.worldView; this.tintRect.setPosition(v.centerX, v.centerY); }
     const dt = Math.min(deltaMs, 100) / 1000;
     let moved = false;
     if (joyState.active && (joyState.vec.x !== 0 || joyState.vec.y !== 0)) {
@@ -223,6 +277,7 @@ export class WorldScene extends Phaser.Scene {
     if (moved) {
       const p = this.worldFromGrid(this.gridPos.x, this.gridPos.y);
       this.player.setPosition(p.x, p.y).setDepth(p.y);
+      this.playerLabel?.setPosition(p.x, p.y - 100);
       this.sendPosition(time);
       this.checkPortal();
     }
@@ -232,6 +287,7 @@ export class WorldScene extends Phaser.Scene {
       const cur = remote.container;
       cur.x += (p.x - cur.x) * 0.25; cur.y += (p.y - cur.y) * 0.25;
       cur.setDepth(cur.y);
+      remote.label.setPosition(cur.x, cur.y - 100);
     }
   }
 }

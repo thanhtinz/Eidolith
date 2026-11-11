@@ -10,7 +10,7 @@
  "version": "1.10",
  "tiledversion": "1.10.2",
  "nextlayerid": 4,
- "nextobjectid": 134,
+ "nextobjectid": 131,
  "tilesets": [
   {
    "firstgid": 1,
@@ -1031,7 +1031,6 @@
     0,
     0,
     0,
-    1,
     0,
     0,
     0,
@@ -1043,6 +1042,7 @@
     0,
     0,
     0,
+    0,
     1,
     0,
     0,
@@ -1277,7 +1277,6 @@
     0,
     0,
     0,
-    1,
     0,
     0,
     0,
@@ -1292,6 +1291,7 @@
     0,
     0,
     0,
+    0,
     1,
     1,
     0,
@@ -1514,7 +1514,7 @@
     0,
     1,
     0,
-    1,
+    0,
     0,
     0,
     0,
@@ -4706,62 +4706,6 @@
     },
     {
      "id": 111,
-     "name": "rock",
-     "type": "prop",
-     "x": -512,
-     "y": 256,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "tileX",
-       "type": "int",
-       "value": 0
-      },
-      {
-       "name": "tileY",
-       "type": "int",
-       "value": 16
-      },
-      {
-       "name": "sprite",
-       "type": "string",
-       "value": "rock"
-      }
-     ]
-    },
-    {
-     "id": 112,
-     "name": "tree",
-     "type": "prop",
-     "x": -352,
-     "y": 592,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "tileX",
-       "type": "int",
-       "value": 13
-      },
-      {
-       "name": "tileY",
-       "type": "int",
-       "value": 24
-      },
-      {
-       "name": "sprite",
-       "type": "string",
-       "value": "tree"
-      }
-     ]
-    },
-    {
-     "id": 113,
      "name": "pine",
      "type": "prop",
      "x": 288,
@@ -4789,7 +4733,7 @@
      ]
     },
     {
-     "id": 114,
+     "id": 112,
      "name": "pine",
      "type": "prop",
      "x": -384,
@@ -4817,7 +4761,7 @@
      ]
     },
     {
-     "id": 115,
+     "id": 113,
      "name": "pine",
      "type": "prop",
      "x": -256,
@@ -4845,7 +4789,7 @@
      ]
     },
     {
-     "id": 116,
+     "id": 114,
      "name": "tree",
      "type": "prop",
      "x": 224,
@@ -4873,7 +4817,7 @@
      ]
     },
     {
-     "id": 117,
+     "id": 115,
      "name": "bush",
      "type": "prop",
      "x": -320,
@@ -4901,7 +4845,7 @@
      ]
     },
     {
-     "id": 118,
+     "id": 116,
      "name": "bush",
      "type": "prop",
      "x": 512,
@@ -4929,7 +4873,7 @@
      ]
     },
     {
-     "id": 119,
+     "id": 117,
      "name": "pine",
      "type": "prop",
      "x": 192,
@@ -4957,7 +4901,7 @@
      ]
     },
     {
-     "id": 120,
+     "id": 118,
      "name": "rock",
      "type": "prop",
      "x": -160,
@@ -4985,7 +4929,7 @@
      ]
     },
     {
-     "id": 121,
+     "id": 119,
      "name": "pine",
      "type": "prop",
      "x": -32,
@@ -5013,7 +4957,7 @@
      ]
     },
     {
-     "id": 122,
+     "id": 120,
      "name": "pine",
      "type": "prop",
      "x": -224,
@@ -5041,7 +4985,7 @@
      ]
     },
     {
-     "id": 123,
+     "id": 121,
      "name": "tree",
      "type": "prop",
      "x": -384,
@@ -5069,7 +5013,7 @@
      ]
     },
     {
-     "id": 124,
+     "id": 122,
      "name": "pine",
      "type": "prop",
      "x": 160,
@@ -5097,35 +5041,7 @@
      ]
     },
     {
-     "id": 125,
-     "name": "tree",
-     "type": "prop",
-     "x": -32,
-     "y": 208,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "tileX",
-       "type": "int",
-       "value": 6
-      },
-      {
-       "name": "tileY",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "sprite",
-       "type": "string",
-       "value": "tree"
-      }
-     ]
-    },
-    {
-     "id": 126,
+     "id": 123,
      "name": "from_village",
      "type": "spawn",
      "x": -416,
@@ -5148,7 +5064,7 @@
      ]
     },
     {
-     "id": 127,
+     "id": 124,
      "name": "portal_village",
      "type": "portal",
      "x": -448,
@@ -5181,7 +5097,7 @@
      ]
     },
     {
-     "id": 128,
+     "id": 125,
      "name": "wild_spawn_1",
      "type": "wild_spawn",
      "x": 64,
@@ -5209,7 +5125,7 @@
      ]
     },
     {
-     "id": 129,
+     "id": 126,
      "name": "wild_spawn_2",
      "type": "wild_spawn",
      "x": -256,
@@ -5237,7 +5153,7 @@
      ]
     },
     {
-     "id": 130,
+     "id": 127,
      "name": "wild_spawn_3",
      "type": "wild_spawn",
      "x": 288,
@@ -5265,7 +5181,7 @@
      ]
     },
     {
-     "id": 131,
+     "id": 128,
      "name": "wild_spawn_4",
      "type": "wild_spawn",
      "x": 320,
@@ -5293,7 +5209,7 @@
      ]
     },
     {
-     "id": 132,
+     "id": 129,
      "name": "wild_spawn_5",
      "type": "wild_spawn",
      "x": -288,
@@ -5321,7 +5237,7 @@
      ]
     },
     {
-     "id": 133,
+     "id": 130,
      "name": "wild_spawn_6",
      "type": "wild_spawn",
      "x": 160,

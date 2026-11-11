@@ -9,11 +9,16 @@ export class HudScene extends Phaser.Scene {
   private minutes = 0;
   constructor() { super("Hud"); }
   create(data: HudData): void {
-    this.add.text(16, 14, data.mapLabel, { fontSize: "19px", color: "#e8e4d8" });
-    this.timeText = this.add.text(16, 42, "", { fontSize: "16px", color: "#cdb87a" });
-    this.playersText = this.add.text(16, 68, "", { fontSize: "15px", color: "#9a937f" });
+    // Translucent dark panels behind every HUD text block so text stays readable
+    // over bright scenery (trees, roofs, water).
+    const g = this.add.graphics();
+    g.fillStyle(0x060a08, 0.52).fillRoundedRect(8, 112, 330, 92, 12);
+    g.fillStyle(0x060a08, 0.52).fillRoundedRect(this.scale.width - 188, 8, 180, 40, 12);
+    this.add.text(16, 118, data.mapLabel, { fontSize: "19px", color: "#e8e4d8" });
+    this.timeText = this.add.text(16, 146, "", { fontSize: "16px", color: "#cdb87a" });
+    this.playersText = this.add.text(16, 172, "", { fontSize: "15px", color: "#9a937f" });
     this.add.text(this.scale.width - 16, 14, data.weatherLabel, { fontSize: "16px", color: "#9fc6e8" }).setOrigin(1, 0);
-    this.add.text(this.scale.width - 16, this.scale.height - 16, data.nameLevel, { fontSize: "16px", color: "#e8e4d8" }).setOrigin(1, 1);
+    // Player name/level lives in the hub top bar now (ui/hub.ts) — no duplicate chip here.
     this.minutes = data.startMinutes;
     this.setPlayers(data.players);
     this.updateClock();
@@ -29,7 +34,7 @@ export class HudScene extends Phaser.Scene {
     this.timeText?.setText(`Giờ thế giới: ${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
   }
   private buildJoystick(): void {
-    const bx = 96, by = this.scale.height - 120;
+    const bx = 96, by = this.scale.height - 228;
     const base = this.add.graphics();
     base.fillStyle(0x000000, 0.25).fillCircle(bx, by, 54);
     base.lineStyle(2, 0xffffff, 0.35).strokeCircle(bx, by, 54);

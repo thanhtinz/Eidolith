@@ -91,6 +91,7 @@ for (x, y) in [(5, 22), (6, 22), (5, 23), (6, 23), (7, 22)]:
 for _ in range(150):
     x, y = random.randint(0, W - 1), random.randint(0, H - 1)
     if blocked[idx(x, y)] or (x, y) in path or g[idx(x, y)] == 4: continue
+    if max(abs(x - 1), abs(y - 14)) <= 2: continue  # keep spawn/portal clearing visible
     blocked[idx(x, y)] = True
     sprite = random.choice(["pine", "pine", "tree", "rock", "bush"])
     objects.append(obj(oid, sprite, "prop", x, y, sprite=sprite)); oid += 1

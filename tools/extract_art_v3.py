@@ -44,11 +44,13 @@ def extract(img: Image.Image, tol=26) -> Image.Image:
     return im.crop(bbox) if bbox else im
 
 def finish(im: Image.Image, target_h: int, colors=110) -> Image.Image:
+    from PIL import ImageFilter
     w, h = im.size
     scale = target_h / h
     im = im.resize((max(1, round(w * scale)), target_h), Image.LANCZOS)
     alpha = im.getchannel("A")
-    q = im.convert("RGB").quantize(colors=colors, method=Image.MEDIANCUT).convert("RGB")
+    rgb = im.convert("RGB").filter(ImageFilter.UnsharpMask(radius=2, percent=68, threshold=2))
+    q = rgb.quantize(colors=colors, method=Image.MEDIANCUT).convert("RGB")
     out = q.convert("RGBA"); out.putalpha(alpha)
     return out
 
@@ -165,8 +167,8 @@ female = Image.open(f"{AC}/media-generation-eidolith-wanderer-female-v1-0-b6bb5f
 m = extract(male.crop((30, 60, 600, 1240)), tol=22)
 f = extract(female.crop((20, 40, 580, 1240)), tol=22)
 print("wanderer crops:", m.size, f.size)
-finish(m, 200).save(f"{OUT_C}/wanderer-v3.png")
-finish(f, 200).save(f"{OUT_C}/wanderer-female-v3.png")
+finish(m, 208).save(f"{OUT_C}/wanderer-v3.png")
+finish(f, 208).save(f"{OUT_C}/wanderer-female-v3.png")
 # ---------- Creatures sheet (2736x912, cream bg): 4 in a row ----------
 cre = Image.open(f"{AC}/media-generation-eidolith-creatures-v1-0-ad253a18-8d36-4c07-aff9-3271edf0b4ef.webp")
 names = ["emberling", "mossling", "aquafin", "zephy"]
@@ -176,3 +178,12 @@ for i, name in enumerate(names):
     print(name, c.size)
     finish(c, 170).save(f"{OUT_CR}/{name}-v1.png")
 print("ALL v3 extraction done")
+
+# ---------- NPC sheet (1920x1280, cream bg): 3 figures in a row ----------
+npc_sheet = Image.open(f"{AC}/media-generation-eidolith-npcs-v1-0-9b0c18d2-7b51-4ee6-97a6-e6381c2a1ef7.webp")
+for i, name in enumerate(["npc-rowan-v4", "npc-mira-v4", "npc-kael-v4"]):
+    cell = npc_sheet.crop((i * 640 + 10, 40, (i + 1) * 640 - 10, 1240))
+    c = extract(cell, tol=22)
+    print(name, c.size)
+    finish(c, 208).save(f"{OUT_C}/{name}.png")
+print("NPC v4 done")
