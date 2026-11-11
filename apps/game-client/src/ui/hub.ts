@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import type { PlayerProfile } from "@eidolith/shared-types";
+import { network } from "../net/NetworkManager";
 import { CREATURES, ELEMENTS } from "@eidolith/game-data";
 /** Hub UI (Part 13 §2): top player bar + bottom navigation
  *  World · Eidolons · Sanctuary · Quests · Menu with bottom-sheet panels.
@@ -48,15 +49,33 @@ const MENU_ICONS: Record<string, string> = {
 const CSS = `
 .hub-root{position:relative;width:720px;height:1280px;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#e8e4d8;pointer-events:none}
 .hub-root *{box-sizing:border-box;margin:0;padding:0}
-.hub-top{position:absolute;top:14px;left:14px;display:flex;align-items:center;gap:12px;background:rgba(8,13,18,.62);border:1px solid rgba(232,201,106,.35);border-radius:16px;padding:8px 16px 8px 8px;pointer-events:auto;backdrop-filter:blur(3px)}
-.hub-top img{width:52px;height:64px;object-fit:cover;object-position:top;border-radius:10px;background:#20303a}
-.hub-top .nm{font-size:21px;font-weight:700;line-height:1.15}
-.hub-top .lv{font-size:16px;color:#cdb87a}
-.hub-top .xp{font-size:14px;color:#9a937f}
-.hub-ctx{position:absolute;top:14px;right:14px;text-align:right;background:rgba(8,13,18,.62);border:1px solid rgba(232,201,106,.35);border-radius:16px;padding:10px 16px;pointer-events:auto;backdrop-filter:blur(3px)}
-.hub-ctx .mp{font-size:19px;font-weight:700;line-height:1.2}
-.hub-ctx .ck{font-size:16px;color:#cdb87a}
-.hub-ctx .wt{font-size:14.5px;color:#9fc6e8}
+.hudbar{position:absolute;top:12px;left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(8,13,18,.66);border:1px solid rgba(232,201,106,.35);border-radius:18px;padding:8px 12px;pointer-events:auto;backdrop-filter:blur(3px)}
+.hud-id{display:flex;align-items:center;gap:11px;min-width:0}
+.hud-av{position:relative;flex:none}
+.hud-av img{width:50px;height:60px;object-fit:cover;object-position:top;border-radius:10px;background:#20303a;display:block}
+.hud-badge{position:absolute;right:-7px;bottom:-7px;min-width:26px;height:26px;border-radius:50%;background:#e8c96a;color:#231a05;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #0b0f14;padding:0 4px}
+.hud-meta{min-width:0}
+.hud-meta .nm{font-size:20px;font-weight:700;line-height:1.15;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.dot{width:10px;height:10px;border-radius:50%;background:#5a6672;flex:none}
+.dot.on{background:#57d977;box-shadow:0 0 6px #57d977}
+.hud-exp{position:relative;width:196px;height:17px;background:rgba(255,255,255,.10);border-radius:9px;margin-top:5px;overflow:hidden}
+.hud-exp i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#2fae9b,#7fd4c1);border-radius:9px}
+.hud-exp span{position:absolute;inset:0;font-size:11.5px;line-height:17px;text-align:center;color:#eaf6f2;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.hud-right{display:flex;align-items:center;gap:8px;flex:none}
+.cur{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:7px 13px 7px 9px;font-size:16.5px;font-weight:700}
+.cur svg{width:20px;height:20px}
+.cur.gold{color:#f2cf6b}.cur.gem{color:#8fd8ff}
+.cur span{color:#e8e4d8}
+.hbtn{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#cdb87a;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.hbtn svg{width:22px;height:22px}
+.hudrow{position:absolute;top:96px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
+.qtrack{display:flex;align-items:center;gap:8px;background:rgba(8,13,18,.55);border:1px solid rgba(232,201,106,.25);border-radius:999px;color:#e8e4d8;font-size:14.5px;padding:7px 14px 7px 10px;cursor:pointer;pointer-events:auto;max-width:400px}
+.qtrack svg{width:17px;height:17px;color:#e8c96a;flex:none}
+.qtrack span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hub-ctx{text-align:right;background:rgba(8,13,18,.55);border:1px solid rgba(232,201,106,.25);border-radius:14px;padding:7px 13px;pointer-events:auto}
+.hub-ctx .mp{font-size:15.5px;font-weight:700;line-height:1.2}
+.hub-ctx .ck{font-size:13.5px;color:#cdb87a}
+.hub-ctx .wt{font-size:13px;color:#9fc6e8}
 .hub-nav{position:absolute;left:0;right:0;bottom:0;display:flex;background:rgba(8,12,17,.88);border-top:1px solid rgba(232,201,106,.35);padding:10px 8px 18px;pointer-events:auto;backdrop-filter:blur(4px)}
 .hub-nav button{flex:1;background:none;border:none;color:#9a937f;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:15.5px;padding:8px 0 4px;border-radius:14px;cursor:pointer}
 .hub-nav button svg{width:30px;height:30px}
@@ -137,7 +156,13 @@ function questsHtml(tab: string): string {
     <div class="qobj"><span>Thu thập Eidolon đầu tiên</span><span class="st">Chưa mở</span></div></div>`;
 }
 
-export interface HubHandle { destroy: () => void; }
+const TOP_ICONS = {
+  coin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.4"/></svg>',
+  gem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10l3.5 5.5L12 20 3.5 9.5 7 4z"/><path d="M3.5 9.5h17M12 20L8.8 9.5 12 4l3.2 5.5L12 20"/></svg>',
+  mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>',
+  quest: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 3.5h12v17l-3-2.2L12 20.5l-3-2.2-3 2.2v-17z" stroke-linejoin="round"/><path d="M9.5 8h5M9.5 11.5h5"/></svg>',
+};
+export interface HubHandle { destroy: () => void; setWallet: (w: { gold: number; crystal: number } | null) => void; }
 
 export interface HubHudInfo { mapLabel: string; weatherLabel: string; startMinutes: number; players: number; }
 export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hud: HubHudInfo; onLogout: () => void }): HubHandle {
@@ -145,9 +170,23 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   const regionName = p.currentRegion.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   const avatar = p.avatarId === "wanderer_female" ? "assets/chars/wanderer-female-v4.png" : "assets/chars/wanderer-v4.png";
   const html = `<style>${CSS}</style><div class="hub-root">
-    <div class="hub-ctx"><div class="mp">${opts.hud.mapLabel}</div><div class="ck" id="hub-clock"></div><div class="wt">${opts.hud.weatherLabel} · <span id="hub-players">${opts.hud.players}</span> người chơi</div></div>
-    <div class="hub-top"><img src="${avatar}" alt=""/>
-      <div><div class="nm">${p.displayName}</div><div class="lv">Cấp ${p.level}</div><div class="xp">EXP ${p.experience} · ${regionName}</div></div></div>
+    <div class="hudbar">
+      <div class="hud-id">
+        <div class="hud-av"><img src="${avatar}" alt=""/><span class="hud-badge">${p.level}</span></div>
+        <div class="hud-meta"><div class="nm">${p.displayName}<span class="dot" id="hub-conn"></span></div>
+          <div class="hud-exp"><i style="width:${Math.min(100, Math.round((p.experience / (100 * p.level)) * 100))}%"></i><span>EXP ${p.experience}/${100 * p.level}</span></div></div>
+      </div>
+      <div class="hud-right">
+        <div class="cur gold">${TOP_ICONS.coin}<span id="w-gold">—</span></div>
+        <div class="cur gem">${TOP_ICONS.gem}<span id="w-crystal">—</span></div>
+        <button class="hbtn" id="hb-mail" title="Thư">${MENU_ICONS.mail}</button>
+        <button class="hbtn" id="hb-settings" title="Cài đặt">${MENU_ICONS.settings}</button>
+      </div>
+    </div>
+    <div class="hudrow">
+      <button class="qtrack" id="hub-qtrack">${TOP_ICONS.quest}<span>Arc 0 · Nói chuyện với Elder Rowan</span></button>
+      <div class="hub-ctx"><div class="mp">${opts.hud.mapLabel}</div><div class="ck" id="hub-clock"></div><div class="wt">${opts.hud.weatherLabel} · <span id="hub-players">${opts.hud.players}</span> người chơi</div></div>
+    </div>
     <section class="hub-panel" id="hub-panel"><header><div><h2 id="hub-title"></h2><div class="sub" id="hub-sub"></div></div><button class="x" id="hub-close">✕</button></header><div class="hub-body" id="hub-body"></div></section>
     <div class="toast" id="hub-toast"></div>
     <nav class="hub-nav">
@@ -188,6 +227,20 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   const clockTimer = window.setInterval(() => { minutes = (minutes + 0.4) % 1440; drawClock(); }, 1000);
   const onPlayers = (n: number) => { playersEl.textContent = String(n); };
   scene.game.events.on("hud:players", onPlayers);
+  // Top-bar wiring: real wallet values, connection dot, shortcut buttons.
+  const fmt = (n: number) => n.toLocaleString("vi-VN");
+  const goldEl = root.querySelector("#w-gold") as HTMLElement;
+  const crystalEl = root.querySelector("#w-crystal") as HTMLElement;
+  const connEl = root.querySelector("#hub-conn") as HTMLElement;
+  const drawConn = () => connEl.classList.toggle("on", network.worldConnected);
+  drawConn();
+  const connTimer = window.setInterval(drawConn, 2000);
+  (root.querySelector("#hb-mail") as HTMLElement).addEventListener("click", () => setTab("menu"));
+  (root.querySelector("#hb-settings") as HTMLElement).addEventListener("click", () => {
+    setTab("menu");
+    (root.querySelector('[data-m="settings"]') as HTMLElement | null)?.click();
+  });
+  (root.querySelector("#hub-qtrack") as HTMLElement).addEventListener("click", () => setTab("quests"));
   const panel = root.querySelector("#hub-panel") as HTMLElement;
   const title = root.querySelector("#hub-title") as HTMLElement;
   const sub = root.querySelector("#hub-sub") as HTMLElement;
@@ -278,7 +331,13 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   root.querySelectorAll(".hub-nav button").forEach(b => b.addEventListener("click", () => setTab((b as HTMLElement).dataset.tab!)));
   root.querySelector("#hub-close")!.addEventListener("click", () => setTab("world"));
   return {
+    setWallet: (w) => {
+      if (!w) return;
+      goldEl.textContent = fmt(w.gold);
+      crystalEl.textContent = fmt(w.crystal);
+    },
     destroy: () => {
+      window.clearInterval(connTimer);
       window.clearInterval(clockTimer);
       scene.game.events.off("hud:players", onPlayers);
       window.clearInterval(syncTimer);

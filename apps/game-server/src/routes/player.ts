@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { isValidDisplayName } from "@eidolith/validation";
-import type { PlayerProfile, PlayerProgress, PlayerStatistics } from "@eidolith/shared-types";
+import type { PlayerProfile, PlayerProgress, PlayerStatistics, PlayerWallet } from "@eidolith/shared-types";
 import { query } from "../db.js";
 import { Errors, ok } from "../http.js";
 import { requireAuth, type AuthedRequest } from "../middleware.js";
@@ -37,6 +37,17 @@ playerRouter.patch("/me", async (req: AuthedRequest, res, next) => {
       await query(`UPDATE players.player_profiles SET avatar_id = $1, updated_at = now() WHERE id = $2`, [avatarId, profile.id]);
     }
     ok(req, res, toProfile(await loadProfile(req.userId!)));
+  } catch (e) { next(e); }
+});
+
+playerRouter.get("/wallet", async (req: AuthedRequest, res, next) => {
+  try {
+    const profile = await loadProfile(req.userId!);
+    const { rows } = await query<{ currency_id: string; balance: string }>(
+      `SELECT currency_id, balance FROM economy.player_wallets WHERE player_id = $1`, [profile.id]);
+    const bal = (id: string) => Number(rows.find(r => r.currency_id === id)?.balance ?? 0);
+    const wallet: PlayerWallet = { gold: bal("gold"), crystal: bal("crystal"), bondEssence: bal("bond_essence"), evolutionCore: bal("evolution_core") };
+    ok(req, res, wallet);
   } catch (e) { next(e); }
 });
 

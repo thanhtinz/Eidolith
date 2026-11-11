@@ -72,6 +72,8 @@ export class WorldScene extends Phaser.Scene {
       },
     });
     this.events.once("shutdown", () => { this.hub?.destroy(); this.hub = undefined; });
+    void network.request<{ gold: number; crystal: number }>("GET", "/player/wallet")
+      .then(w => this.hub?.setWallet(w)).catch(() => undefined);
     this.subscribeWorld();
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => this.onTap(pointer));
     const w = window as unknown as { __eidolith?: unknown };

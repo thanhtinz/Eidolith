@@ -62,6 +62,8 @@ export class NetworkManager {
     if (!json.success) { this.clearTokens(); throw new ApiClientError(json.error.code, json.error.message, res.status); }
     this.setTokens(json.data);
   }
+  get worldConnected(): boolean { return this.ws?.readyState === WebSocket.OPEN; }
+
   // ---- WebSocket ----
   subscribe(event: string, callback: (payload: never) => void): () => void {
     if (!this.handlers.has(event)) this.handlers.set(event, new Set());

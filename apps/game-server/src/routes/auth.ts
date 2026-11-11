@@ -35,6 +35,14 @@ authRouter.post("/register", async (req, res, next) => {
       const playerId = profileRows[0].id;
       await client.query(`INSERT INTO players.player_settings (player_id) VALUES ($1)`, [playerId]);
       await client.query(`INSERT INTO players.player_progress (player_id) VALUES ($1)`, [playerId]);
+      // Wallet (Part 5 §7) + starter grant — MVP baseline amounts, audited as
+      // currency_transactions with reason 'starter_grant' (see HUD-TOP-DESIGN-v1).
+      const STARTER: [string, number][] = [["gold", 500], ["crystal", 30], ["bond_essence", 0], ["evolution_core", 0]];
+      for (const [currency, amount] of STARTER) {
+        await client.query(`INSERT INTO economy.player_wallets (player_id, currency_id, balance) VALUES ($1,$2,$3)`, [playerId, currency, amount]);
+        if (amount > 0) await client.query(
+          `INSERT INTO economy.currency_transactions (player_id, currency_id, amount, balance_after, reason) VALUES ($1,$2,$3,$3,'starter_grant')`, [playerId, currency, amount]);
+      }
       await client.query("COMMIT");
       const response: RegisterResponse = { userId, emailVerificationRequired: true };
       ok(req, res, response, 201);

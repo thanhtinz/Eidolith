@@ -16,6 +16,9 @@ export interface PlayerProfile {
   playerId: string; displayName: string; level: number; experience: number;
   avatarId: string; currentRegion: string; currentMap: string;
 }
+export interface PlayerWallet {
+  gold: number; crystal: number; bondEssence: number; evolutionCore: number;
+}
 export interface PlayerProgress {
   mainStoryStage: string; tutorialCompleted: boolean;
   unlockedRegions: string[]; unlockedFeatures: string[];
