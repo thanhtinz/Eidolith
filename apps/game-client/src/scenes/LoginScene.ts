@@ -16,7 +16,7 @@ export class LoginScene extends Phaser.Scene {
     const form = document.createElement("div");
     form.className = "eidolith-form";
     form.innerHTML = `
-      ${register ? '<input id="f-username" placeholder="Username (3–32 ký tự)" autocomplete="username" />' : ""}
+      ${register ? '<input id="f-username" placeholder="Username (3–32 ký tự)" autocomplete="username" /><select id="f-gender" style="width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:8px;border:1px solid #4a4436;background:#1c202a;color:#fff;font-size:16px"><option value="wanderer_male">Nhân vật: Nam</option><option value="wanderer_female">Nhân vật: Nữ</option></select>' : ""}
       <input id="f-email" type="email" placeholder="Email" autocomplete="email" />
       <input id="f-password" type="password" placeholder="Mật khẩu (tối thiểu 8 ký tự, gồm chữ và số)" autocomplete="${register ? "new-password" : "current-password"}" />
       <div class="err" id="f-error"></div>
@@ -37,6 +37,10 @@ export class LoginScene extends Phaser.Scene {
       }
       const login = await network.request<LoginResponse>("POST", "/auth/login", { email, password, deviceId: "web-dev" });
       network.setTokens(login);
+      if (register) {
+        const avatarId = (form.querySelector("#f-gender") as HTMLSelectElement).value;
+        await network.request<PlayerProfile>("PATCH", "/player/me", { avatarId }).catch(() => undefined);
+      }
       await this.enterWorld();
     } catch (e) {
       errorEl.textContent = e instanceof ApiClientError ? e.message : "Không kết nối được máy chủ";

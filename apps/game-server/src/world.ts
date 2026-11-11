@@ -33,7 +33,7 @@ export function weatherFor(regionId: string, now = Date.now()) {
   return WEATHERS[h % WEATHERS.length];
 }
 interface PlayerState {
-  userId: string; playerId: string; displayName: string; level: number;
+  userId: string; playerId: string; displayName: string; level: number; avatarId: string;
   mapId: string; x: number; y: number; ws: WebSocket; lastPersist: number; lastMoveAt: number;
 }
 const zones = new Map<string, Map<string, PlayerState>>();
@@ -47,7 +47,7 @@ function send(ws: WebSocket, type: string, payload: unknown) {
 function broadcast(mapId: string, exceptPlayerId: string | null, type: string, payload: unknown) {
   for (const p of zone(mapId).values()) if (p.playerId !== exceptPlayerId) send(p.ws, type, payload);
 }
-const pub = (p: PlayerState) => ({ playerId: p.playerId, displayName: p.displayName, level: p.level, x: p.x, y: p.y, mapId: p.mapId });
+const pub = (p: PlayerState) => ({ playerId: p.playerId, displayName: p.displayName, level: p.level, avatarId: p.avatarId, x: p.x, y: p.y, mapId: p.mapId });
 async function persist(p: PlayerState) {
   p.lastPersist = Date.now();
   await query(`UPDATE players.player_profiles SET current_map_id=$1, position_x=$2, position_y=$3, updated_at=now() WHERE id=$4`,
@@ -67,15 +67,15 @@ export function attachWorldServer(server: Server): void {
         if (msg.type !== "auth.authenticate" || typeof payload.accessToken !== "string") { ws.close(4002, "unauthenticated"); return; }
         try {
           const decoded = verifyAccessToken(payload.accessToken);
-          const { rows } = await query<{ id: string; display_name: string; level: number; current_map_id: string; position_x: number; position_y: number }>(
-            `SELECT id, display_name, level, current_map_id, position_x, position_y FROM players.player_profiles WHERE user_id = $1`, [decoded.sub]);
+          const { rows } = await query<{ id: string; display_name: string; level: number; avatar_id: string; current_map_id: string; position_x: number; position_y: number }>(
+            `SELECT id, display_name, level, avatar_id, current_map_id, position_x, position_y FROM players.player_profiles WHERE user_id = $1`, [decoded.sub]);
           if (!rows.length) { ws.close(4003, "player not found"); return; }
           const r = rows[0];
           const mapId = SPAWNS.has(r.current_map_id) ? r.current_map_id : "meadow_village";
           const spawn = SPAWNS.get(mapId)!.get(mapId === "whispering_forest" ? "from_village" : "spawn_player")!;
           const hasSavedPos = r.position_x !== 0 || r.position_y !== 0;
           state = {
-            userId: decoded.sub, playerId: r.id, displayName: r.display_name, level: r.level,
+            userId: decoded.sub, playerId: r.id, displayName: r.display_name, level: r.level, avatarId: r.avatar_id,
             mapId, x: hasSavedPos ? r.position_x : spawn.x, y: hasSavedPos ? r.position_y : spawn.y,
             ws, lastPersist: 0, lastMoveAt: Date.now(),
           };

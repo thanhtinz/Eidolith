@@ -23,7 +23,7 @@ export class WorldScene extends Phaser.Scene {
   private originX = 0; private originY = 0;
   private portals = new Map<string, { targetMap: string; targetSpawn: string }>();
   private player!: Phaser.GameObjects.Container;
-  private playerBody!: Phaser.GameObjects.Rectangle;
+  private playerBody!: Phaser.GameObjects.Image;
   private gridPos = { x: 0, y: 0 };
   private path: { x: number; y: number }[] = [];
   private remotes = new Map<string, { container: Phaser.GameObjects.Container; target: { x: number; y: number } }>();
@@ -85,18 +85,20 @@ export class WorldScene extends Phaser.Scene {
       if (o.type === "prop") {
         const sprite = String(prop(o, "sprite"));
         const img = this.add.image(p.x, p.y + 16, sprite).setOrigin(0.5, 1).setDepth(p.y);
-        if (sprite === "house") img.setScale(1.15);
+        if (sprite === "house") img.setScale(1.0);
       } else if (o.type === "npc") {
-        const body = this.add.rectangle(p.x, p.y - 2, 16, 26, 0x7ab5d6).setOrigin(0.5, 1).setDepth(p.y);
-        void body;
-        this.add.text(p.x, p.y - 34, o.name, { fontSize: "13px", color: "#cfe6ff" }).setOrigin(0.5).setDepth(p.y + 1);
+        const npcTex: Record<string, string> = { "Elder Rowan": "npc_rowan", "Mira": "npc_mira", "Kael": "npc_kael" };
+        this.add.image(p.x, p.y + 14, npcTex[o.name] ?? "wanderer").setOrigin(0.5, 1).setDepth(p.y);
+        this.add.text(p.x, p.y - 42, o.name, { fontSize: "13px", color: "#cfe6ff" }).setOrigin(0.5).setDepth(p.y + 1);
       }
     }
     // Player.
     this.gridPos = { x: snap.player.x, y: snap.player.y };
     const pp = this.worldFromGrid(this.gridPos.x, this.gridPos.y);
-    this.playerBody = this.add.rectangle(0, 0, 18, 28, 0xe8c96a).setOrigin(0.5, 1);
-    const nameText = this.add.text(0, -34, this.profile.displayName, { fontSize: "14px", color: "#ffffff" }).setOrigin(0.5);
+    const playerTex = this.profile.avatarId === "wanderer_female" ? "wanderer_f" : "wanderer";
+    this.playerBody = this.add.image(0, 14, playerTex).setOrigin(0.5, 1);
+    this.tweens.add({ targets: this.playerBody, y: 11, duration: 900, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+    const nameText = this.add.text(0, -44, this.profile.displayName, { fontSize: "14px", color: "#ffffff" }).setOrigin(0.5);
     this.player = this.add.container(pp.x, pp.y, [this.playerBody, nameText]).setDepth(pp.y);
     this.path = [];
     this.lastCellKey = `${Math.round(this.gridPos.x)},${Math.round(this.gridPos.y)}`;
@@ -132,8 +134,8 @@ export class WorldScene extends Phaser.Scene {
   private addRemote(rp: RemotePlayer): void {
     if (this.remotes.has(rp.playerId)) return;
     const p = this.worldFromGrid(rp.x, rp.y);
-    const body = this.add.rectangle(0, 0, 18, 28, 0x9ad67a).setOrigin(0.5, 1);
-    const label = this.add.text(0, -34, rp.displayName, { fontSize: "14px", color: "#dfffd0" }).setOrigin(0.5);
+    const body = this.add.image(0, 14, rp.avatarId === "wanderer_female" ? "wanderer_f" : "wanderer").setOrigin(0.5, 1).setTint(0xcfe8ff);
+    const label = this.add.text(0, -44, rp.displayName, { fontSize: "14px", color: "#dfffd0" }).setOrigin(0.5);
     const container = this.add.container(p.x, p.y, [body, label]).setDepth(p.y);
     this.remotes.set(rp.playerId, { container, target: { x: rp.x, y: rp.y } });
     this.updateHudPlayers();
