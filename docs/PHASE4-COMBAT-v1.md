@@ -132,3 +132,7 @@ Nghiên cứu kỹ thuật các game cùng thể loại: khoảnh khắc ult "ki
 ### 10.2 Chuẩn style ult = CHIBI (Tín chốt 2026-11-11: "Đang chibi mà")
 
 Bản splash/video v1 bị bác vì tỉ lệ anime trưởng thành lệch hẳn sprite chibi trong game. Chuẩn từ nay: **mọi splash + video ult phải chibi** — đầu to tròn, mắt to long lanh, thân nhỏ mũm, đúng tỉ lệ sprite của loài đó. Emberling đã làm lại: splash chibi (`art-concepts/media-generation-ult-emberling-chibi-v2-0.webp` → `ult-eid-001-v2.png`) và video chibi (`ult-eid-001-v2.mp4`). Lưu ý sản xuất: video thô ra dài 10s — bản dùng trong game được dựng lại bằng ffmpeg: đoạn gầm + lao (0–2,0s) cắt thẳng vào đoạn bùng nổ cuối (8,5–10s), tổng 3,5s, 1,4MB. Registry đã trỏ sang v2; bản v1 giữ trên đĩa làm đối chứng.
+
+### 10.3 Nhịp mặt ult: dễ thương → dữ (Tín chốt 2026-11-11)
+
+Luật biểu cảm cho video ult: **mở đầu giữ nguyên khuôn mặt chibi dễ thương như splash, càng về cuối càng dữ** — mày xếch xuống, mắt loé lửa, nhe nanh, kết bằng cận mặt dữ rồi mới bùng nổ. Emberling v3 đạt nhịp này bằng cách dựng hai nguồn: nửa đầu lấy từ video chibi v2 (mặt dễ thương, lửa dâng), cắt thẳng ở 1,5s sang nửa cuối của bản quay "dữ" (cận mặt mắt lửa + bùng nổ) — tổng 3,0s (`ult-eid-001-v3.mp4`, registry đã trỏ v3). Khi làm ult cho loài khác: brief quay phải ghi rõ nhịp biểu cảm này, và nếu bản quay lệch nhịp thì dựng lại bằng cắt nối như trên.

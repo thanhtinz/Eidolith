@@ -39,7 +39,7 @@ const ULT_ART: Record<string, string> = {
  * Species listed here get a real animated cut-in; the rest use the
  * splash/band presentation. */
 const ULT_VIDEO: Record<string, string> = {
-  "EID-001": "assets/battle/ult-eid-001-v2.mp4",
+  "EID-001": "assets/battle/ult-eid-001-v3.mp4",
 };
 
 export class BattleScene extends Phaser.Scene {
@@ -487,7 +487,7 @@ export class BattleScene extends Phaser.Scene {
     const slot = this.overlay?.querySelector("#bt-cutin-slot");
     if (!slot) return;
     const rate = this.speed >= 2 ? 1.5 : 1;
-    this.cutinUntil = this.time.now + 3600 / rate;
+    this.cutinUntil = this.time.now + 3100 / rate;
     (window as unknown as Record<string, unknown>).__cutin = skillName;
     const poster = ULT_ART[v.def.creatureId];
     const el = document.createElement("div");
