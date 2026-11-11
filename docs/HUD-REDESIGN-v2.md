@@ -13,3 +13,6 @@ Lệnh của Tín: "Nghiên cứu làm lại HUD hết". Mẫu tham chiếu: HUD
 
 ## Không đổi
 Panel giữa màn hình, thẻ encounter, toàn bộ luồng dữ liệu (ví, nhiệm vụ, sưu tập) — chỉ thay lớp trình bày trên thế giới.
+
+## Triển khai 2026-11-11 — hướng A "Nhật ký thám hiểm" (Tín lệnh "Tiếp tục")
+HUD v2 bị chê "vẫn xấu lắm" vì chất liệu kính lạnh không hợp thế giới tranh ấm. Ba hướng mockup đã dựng trên cảnh rừng thật (A da/giấy/vàng · B sáng tối giản · C đậm chất game); Tín lệnh tiếp tục + thu gọn menu → áp **hướng A** cho toàn bộ: hub thế giới, menu thu gọn (mặc định một nút huy chương, bấm xổ 5 mục, chọn xong tự thu, icon nút thu đổi theo mục đang chọn), panel, thẻ encounter, toast, màn đăng nhập, joystick gỗ/vàng trong HudScene. Font game **Baloo 2** (tiêu đề/số) + **Be Vietnam Pro** (nội dung) tự host ở public/fonts (woff2 không vào git, khôi phục bằng tools/fetch-fonts.sh). Minimap tròn: bản đồ thu vào khung tròn 113px ở giữa vòng vàng để chấm vị trí không bao giờ bị cắt ở góc map; ruy-băng tên map neo phải.

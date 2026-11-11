@@ -6,3 +6,6 @@ shots/
 # Art sinh bằng tools/gen_art.py (chạy lại để tái tạo, seed cố định)
 apps/game-client/public/assets/**/*.png
 apps/game-client/public/fontawesome/
+
+# Font chữ game (Baloo 2 + Be Vietnam Pro) — nhị phân khôi phục bằng tools/fetch-fonts.sh
+apps/game-client/public/fonts/*.woff2

@@ -12,15 +12,15 @@ export class HudScene extends Phaser.Scene {
   private buildJoystick(): void {
     const bx = 96, by = this.scale.height - 228;
     const base = this.add.graphics();
-    base.fillStyle(0x06090c, 0.38).fillCircle(bx, by, 56);
-    base.lineStyle(3, 0xe8c96a, 0.5).strokeCircle(bx, by, 56);
-    base.lineStyle(1, 0xffffff, 0.18).strokeCircle(bx, by, 44);
+    base.fillStyle(0x2a190e, 0.55).fillCircle(bx, by, 56);
+    base.lineStyle(3, 0xd4a437, 0.9).strokeCircle(bx, by, 56);
+    base.lineStyle(1, 0xffe9a8, 0.25).strokeCircle(bx, by, 44);
     const knob = this.add.graphics();
     const drawKnob = (dx: number, dy: number) => {
       knob.clear();
-      knob.fillStyle(0x0b0f14, 0.55).fillCircle(bx + dx, by + dy, 24);
-      knob.lineStyle(2, 0xe8c96a, 0.65).strokeCircle(bx + dx, by + dy, 24);
-      knob.fillStyle(0xffffff, 0.5).fillCircle(bx + dx, by + dy, 9);
+      knob.fillStyle(0x3a2413, 0.85).fillCircle(bx + dx, by + dy, 24);
+      knob.lineStyle(2, 0xd4a437, 0.95).strokeCircle(bx + dx, by + dy, 24);
+      knob.fillStyle(0xffe9a8, 0.75).fillCircle(bx + dx, by + dy, 8);
     };
     drawKnob(0, 0);
     const zone = this.add.zone(bx, by, 140, 140).setInteractive();
