@@ -5,13 +5,13 @@ import Phaser from "phaser";
 export class PreloadScene extends Phaser.Scene {
   constructor() { super("Preload"); }
   preload(): void {
-    this.load.spritesheet("verdant", "assets/tilesets/verdant-v4.png", { frameWidth: 64, frameHeight: 32 });
-    for (const prop of ["tree", "pine", "house", "rock", "bush"]) this.load.image(prop, `assets/props/${prop}-v3.png`);
-    this.load.image("wanderer", "assets/chars/wanderer-v3.png");
-    this.load.image("wanderer_f", "assets/chars/wanderer-female-v3.png");
-    this.load.image("npc_rowan", "assets/chars/npc-rowan-v4.png");
-    this.load.image("npc_mira", "assets/chars/npc-mira-v4.png");
-    this.load.image("npc_kael", "assets/chars/npc-kael-v4.png");
+    this.load.spritesheet("verdant", "assets/tilesets/verdant-v5.png", { frameWidth: 64, frameHeight: 32 });
+    for (const prop of ["tree", "pine", "house", "rock", "bush"]) this.load.image(prop, `assets/props/${prop}-v4.png`);
+    this.load.image("wanderer", "assets/chars/wanderer-v4.png");
+    this.load.image("wanderer_f", "assets/chars/wanderer-female-v4.png");
+    this.load.image("npc_rowan", "assets/chars/npc-rowan-v5.png");
+    this.load.image("npc_mira", "assets/chars/npc-mira-v5.png");
+    this.load.image("npc_kael", "assets/chars/npc-kael-v5.png");
   }
   create(): void {
     const { width, height } = this.scale;

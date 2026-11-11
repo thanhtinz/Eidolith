@@ -55,8 +55,15 @@ export class WorldScene extends Phaser.Scene {
     const snap = data.snapshot ?? network.lastSnapshot!;
     this.buildMap(snap.world.mapId, snap);
     this.launchHud(snap);
+    const weatherVi: Record<string, string> = { clear: "Quang đãng", cloudy: "Nhiều mây", rain: "Mưa" };
     this.hub = mountHub(this, {
       profile: this.profile,
+      hud: {
+        mapLabel: `${mapById(snap.world.mapId)?.nameVi ?? snap.world.mapId} — Verdant Plains`,
+        weatherLabel: weatherVi[snap.world.weather] ?? snap.world.weather,
+        startMinutes: snap.world.time.hour * 60 + snap.world.time.minute,
+        players: snap.players.length + 1,
+      },
       onLogout: () => {
         void network.request("POST", "/auth/logout").catch(() => undefined);
         network.clearTokens();

@@ -7,10 +7,10 @@ import { CREATURES, ELEMENTS } from "@eidolith/game-data";
  *  pass through to the world; panels/nav capture their own touches. */
 
 const SPRITES: Record<string, string> = {
-  "EID-001": "assets/creatures/emberling-v1.png",
-  "EID-002": "assets/creatures/mossling-v1.png",
-  "EID-003": "assets/creatures/aquafin-v1.png",
-  "EID-005": "assets/creatures/zephy-v1.png",
+  "EID-001": "assets/creatures/emberling-v2.png",
+  "EID-002": "assets/creatures/mossling-v2.png",
+  "EID-003": "assets/creatures/aquafin-v2.png",
+  "EID-005": "assets/creatures/zephy-v2.png",
 };
 const ROLE_VI: Record<string, string> = {
   Guardian: "Hộ vệ", Striker: "Tấn công", Ranger: "Xạ thủ",
@@ -53,6 +53,10 @@ const CSS = `
 .hub-top .nm{font-size:21px;font-weight:700;line-height:1.15}
 .hub-top .lv{font-size:16px;color:#cdb87a}
 .hub-top .xp{font-size:14px;color:#9a937f}
+.hub-ctx{position:absolute;top:14px;right:14px;text-align:right;background:rgba(8,13,18,.62);border:1px solid rgba(232,201,106,.35);border-radius:16px;padding:10px 16px;pointer-events:auto;backdrop-filter:blur(3px)}
+.hub-ctx .mp{font-size:19px;font-weight:700;line-height:1.2}
+.hub-ctx .ck{font-size:16px;color:#cdb87a}
+.hub-ctx .wt{font-size:14.5px;color:#9fc6e8}
 .hub-nav{position:absolute;left:0;right:0;bottom:0;display:flex;background:rgba(8,12,17,.88);border-top:1px solid rgba(232,201,106,.35);padding:10px 8px 18px;pointer-events:auto;backdrop-filter:blur(4px)}
 .hub-nav button{flex:1;background:none;border:none;color:#9a937f;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:15.5px;padding:8px 0 4px;border-radius:14px;cursor:pointer}
 .hub-nav button svg{width:30px;height:30px}
@@ -135,11 +139,13 @@ function questsHtml(tab: string): string {
 
 export interface HubHandle { destroy: () => void; }
 
-export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; onLogout: () => void }): HubHandle {
+export interface HubHudInfo { mapLabel: string; weatherLabel: string; startMinutes: number; players: number; }
+export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hud: HubHudInfo; onLogout: () => void }): HubHandle {
   const p = opts.profile;
   const regionName = p.currentRegion.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-  const avatar = p.avatarId === "wanderer_female" ? "assets/chars/wanderer-female-v3.png" : "assets/chars/wanderer-v3.png";
+  const avatar = p.avatarId === "wanderer_female" ? "assets/chars/wanderer-female-v4.png" : "assets/chars/wanderer-v4.png";
   const html = `<style>${CSS}</style><div class="hub-root">
+    <div class="hub-ctx"><div class="mp">${opts.hud.mapLabel}</div><div class="ck" id="hub-clock"></div><div class="wt">${opts.hud.weatherLabel} · <span id="hub-players">${opts.hud.players}</span> người chơi</div></div>
     <div class="hub-top"><img src="${avatar}" alt=""/>
       <div><div class="nm">${p.displayName}</div><div class="lv">Cấp ${p.level}</div><div class="xp">EXP ${p.experience} · ${regionName}</div></div></div>
     <section class="hub-panel" id="hub-panel"><header><div><h2 id="hub-title"></h2><div class="sub" id="hub-sub"></div></div><button class="x" id="hub-close">✕</button></header><div class="hub-body" id="hub-body"></div></section>
@@ -169,6 +175,19 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; on
   const syncTimer = window.setInterval(sync, 600);
   window.addEventListener("resize", sync);
   const root = overlay;
+  // Live world clock (+0.4 game-min per real second, same rate as the world)
+  // and player count via the game's hud:players event.
+  let minutes = opts.hud.startMinutes;
+  const clockEl = root.querySelector("#hub-clock") as HTMLElement;
+  const playersEl = root.querySelector("#hub-players") as HTMLElement;
+  const drawClock = () => {
+    const h = Math.floor(minutes / 60) % 24, m = Math.floor(minutes % 60);
+    clockEl.textContent = `Giờ thế giới: ${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+  };
+  drawClock();
+  const clockTimer = window.setInterval(() => { minutes = (minutes + 0.4) % 1440; drawClock(); }, 1000);
+  const onPlayers = (n: number) => { playersEl.textContent = String(n); };
+  scene.game.events.on("hud:players", onPlayers);
   const panel = root.querySelector("#hub-panel") as HTMLElement;
   const title = root.querySelector("#hub-title") as HTMLElement;
   const sub = root.querySelector("#hub-sub") as HTMLElement;
@@ -260,6 +279,8 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; on
   root.querySelector("#hub-close")!.addEventListener("click", () => setTab("world"));
   return {
     destroy: () => {
+      window.clearInterval(clockTimer);
+      scene.game.events.off("hud:players", onPlayers);
       window.clearInterval(syncTimer);
       window.removeEventListener("resize", sync);
       overlay.remove();

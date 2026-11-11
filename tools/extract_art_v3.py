@@ -43,14 +43,14 @@ def extract(img: Image.Image, tol=26) -> Image.Image:
     bbox = im.getbbox()
     return im.crop(bbox) if bbox else im
 
-def finish(im: Image.Image, target_h: int, colors=110) -> Image.Image:
-    from PIL import ImageFilter
+def finish(im: Image.Image, target_h: int, colors=64) -> Image.Image:
     w, h = im.size
     scale = target_h / h
-    im = im.resize((max(1, round(w * scale)), target_h), Image.LANCZOS)
+    full_w = max(2, round(w * scale))
+    small = im.resize((max(1, full_w // 2), max(1, target_h // 2)), Image.LANCZOS)
+    im = small.resize((full_w, target_h), Image.NEAREST)
     alpha = im.getchannel("A")
-    rgb = im.convert("RGB").filter(ImageFilter.UnsharpMask(radius=2, percent=68, threshold=2))
-    q = rgb.quantize(colors=colors, method=Image.MEDIANCUT).convert("RGB")
+    q = im.convert("RGB").quantize(colors=colors, method=Image.MEDIANCUT).convert("RGB")
     out = q.convert("RGBA"); out.putalpha(alpha)
     return out
 
@@ -153,13 +153,17 @@ tiles = [grass_variants[0], stone, water, flower, tint(grass, 0.6, 0.03),
          grass_variants[1], grass_variants[2], grass_variants[3], dark_variants[0], dark_variants[1]]
 sheet_out = Image.new("RGBA", (320, 64), (0, 0, 0, 0))
 for i, t in enumerate(tiles): sheet_out.paste(t, ((i % 5) * 64, (i // 5) * 32), t)
-sheet_out.save(f"{OUT_T}/verdant-v4.png")
-finish(raw["house"], 200).save(f"{OUT_P}/house-v3.png")
-finish(raw["tree"], 180).save(f"{OUT_P}/tree-v3.png")
-finish(raw["pine"], 190).save(f"{OUT_P}/pine-v3.png")
-finish(raw["rock"], 70).save(f"{OUT_P}/rock-v3.png")
-finish(raw["bush"], 66).save(f"{OUT_P}/bush-v3.png")
-finish(raw["crystal"], 90).save(f"{OUT_P}/crystal-v3.png")
+for _i in range(10):
+    _x, _y = (_i % 5) * 64, (_i // 5) * 32
+    _fr = sheet_out.crop((_x, _y, _x + 64, _y + 32)).resize((32, 16), Image.LANCZOS).resize((64, 32), Image.NEAREST)
+    sheet_out.paste(_fr, (_x, _y))
+sheet_out.save(f"{OUT_T}/verdant-v5.png")
+finish(raw["house"], 200).save(f"{OUT_P}/house-v4.png")
+finish(raw["tree"], 180).save(f"{OUT_P}/tree-v4.png")
+finish(raw["pine"], 190).save(f"{OUT_P}/pine-v4.png")
+finish(raw["rock"], 70).save(f"{OUT_P}/rock-v4.png")
+finish(raw["bush"], 66).save(f"{OUT_P}/bush-v4.png")
+finish(raw["crystal"], 90).save(f"{OUT_P}/crystal-v4.png")
 print("tileset + props v3 done")
 # ---------- Wanderer sheets (1920x1280, cream bg): front panel ----------
 male = Image.open(f"{AC}/media-generation-eidolith-wanderer-v1-0-c45c94c6-3405-4e6a-8c69-13cfba2c5406.webp")
@@ -167,8 +171,8 @@ female = Image.open(f"{AC}/media-generation-eidolith-wanderer-female-v1-0-b6bb5f
 m = extract(male.crop((30, 60, 600, 1240)), tol=22)
 f = extract(female.crop((20, 40, 580, 1240)), tol=22)
 print("wanderer crops:", m.size, f.size)
-finish(m, 208).save(f"{OUT_C}/wanderer-v3.png")
-finish(f, 208).save(f"{OUT_C}/wanderer-female-v3.png")
+finish(m, 208).save(f"{OUT_C}/wanderer-v4.png")
+finish(f, 208).save(f"{OUT_C}/wanderer-female-v4.png")
 # ---------- Creatures sheet (2736x912, cream bg): 4 in a row ----------
 cre = Image.open(f"{AC}/media-generation-eidolith-creatures-v1-0-ad253a18-8d36-4c07-aff9-3271edf0b4ef.webp")
 names = ["emberling", "mossling", "aquafin", "zephy"]
@@ -176,12 +180,12 @@ for i, name in enumerate(names):
     cell = cre.crop((i * 684, 60, (i + 1) * 684, 880))
     c = extract(cell, tol=22)
     print(name, c.size)
-    finish(c, 170).save(f"{OUT_CR}/{name}-v1.png")
+    finish(c, 170).save(f"{OUT_CR}/{name}-v2.png")
 print("ALL v3 extraction done")
 
 # ---------- NPC sheet (1920x1280, cream bg): 3 figures in a row ----------
 npc_sheet = Image.open(f"{AC}/media-generation-eidolith-npcs-v1-0-9b0c18d2-7b51-4ee6-97a6-e6381c2a1ef7.webp")
-for i, name in enumerate(["npc-rowan-v4", "npc-mira-v4", "npc-kael-v4"]):
+for i, name in enumerate(["npc-rowan-v5", "npc-mira-v5", "npc-kael-v5"]):
     cell = npc_sheet.crop((i * 640 + 10, 40, (i + 1) * 640 - 10, 1240))
     c = extract(cell, tol=22)
     print(name, c.size)
