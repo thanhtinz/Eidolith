@@ -65,6 +65,9 @@ export class WorldScene extends Phaser.Scene {
         weatherLabel: weatherVi[snap.world.weather] ?? snap.world.weather,
         startMinutes: snap.world.time.hour * 60 + snap.world.time.minute,
         players: snap.players.length + 1,
+        mapId: snap.world.mapId,
+        mapW: (MAP_JSON[snap.world.mapId] as TiledMap).width,
+        mapH: (MAP_JSON[snap.world.mapId] as TiledMap).height,
       },
       onLogout: () => {
         void network.request("POST", "/auth/logout").catch(() => undefined);
@@ -74,6 +77,7 @@ export class WorldScene extends Phaser.Scene {
       },
     });
     this.events.once("shutdown", () => { this.hub?.destroy(); this.hub = undefined; });
+    this.game.events.emit("hud:pos", { x: this.gridPos.x, y: this.gridPos.y });
     void network.request<{ gold: number; crystal: number }>("GET", "/player/wallet")
       .then(w => this.hub?.setWallet(w)).catch(() => undefined);
     this.subscribeWorld();
@@ -322,6 +326,7 @@ export class WorldScene extends Phaser.Scene {
   private sendPosition(now: number): void {
     if (now - this.lastSentAt < 150) return;
     this.lastSentAt = now;
+    this.game.events.emit("hud:pos", { x: this.gridPos.x, y: this.gridPos.y });
     network.send("world.player.move", { x: Math.round(this.gridPos.x * 100) / 100, y: Math.round(this.gridPos.y * 100) / 100 });
   }
 

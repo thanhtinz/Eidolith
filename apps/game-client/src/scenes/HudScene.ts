@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 import { joyState } from "../state";
 /** HUD overlay scene — only the virtual joystick remains here; all player/map
- *  information lives in the hub top bar (ui/hub.ts) so the top of the screen
- *  has exactly one HUD layer. */
+ *  information lives in the DOM hub (ui/hub.ts, HUD v2) so the screen has
+ *  exactly one HUD layer. */
 export interface HudData { mapLabel: string; weatherLabel: string; nameLevel: string; startMinutes: number; players: number; }
 export class HudScene extends Phaser.Scene {
   constructor() { super("Hud"); }
@@ -12,10 +12,16 @@ export class HudScene extends Phaser.Scene {
   private buildJoystick(): void {
     const bx = 96, by = this.scale.height - 228;
     const base = this.add.graphics();
-    base.fillStyle(0x000000, 0.25).fillCircle(bx, by, 54);
-    base.lineStyle(2, 0xffffff, 0.35).strokeCircle(bx, by, 54);
+    base.fillStyle(0x06090c, 0.38).fillCircle(bx, by, 56);
+    base.lineStyle(3, 0xe8c96a, 0.5).strokeCircle(bx, by, 56);
+    base.lineStyle(1, 0xffffff, 0.18).strokeCircle(bx, by, 44);
     const knob = this.add.graphics();
-    const drawKnob = (dx: number, dy: number) => { knob.clear(); knob.fillStyle(0xffffff, 0.45).fillCircle(bx + dx, by + dy, 23); };
+    const drawKnob = (dx: number, dy: number) => {
+      knob.clear();
+      knob.fillStyle(0x0b0f14, 0.55).fillCircle(bx + dx, by + dy, 24);
+      knob.lineStyle(2, 0xe8c96a, 0.65).strokeCircle(bx + dx, by + dy, 24);
+      knob.fillStyle(0xffffff, 0.5).fillCircle(bx + dx, by + dy, 9);
+    };
     drawKnob(0, 0);
     const zone = this.add.zone(bx, by, 140, 140).setInteractive();
     zone.on("pointerdown", (pointer: Phaser.Input.Pointer) => { joyState.active = true; joyState.pointerId = pointer.id; joyState.vec = { x: 0, y: 0 }; });

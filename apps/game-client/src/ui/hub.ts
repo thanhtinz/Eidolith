@@ -48,38 +48,44 @@ const MENU_ICONS: Record<string, string> = {
 const CSS = `
 .hub-root{position:relative;width:1280px;height:720px;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#e8e4d8;pointer-events:none}
 .hub-root *{box-sizing:border-box;margin:0;padding:0}
-.hudbar{position:absolute;top:12px;left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(8,13,18,.66);border:1px solid rgba(232,201,106,.35);border-radius:18px;padding:8px 12px;pointer-events:auto;backdrop-filter:blur(3px)}
-.hud-id{display:flex;align-items:center;gap:11px;min-width:0}
-.hud-av{position:relative;flex:none}
-.hud-av img{width:50px;height:60px;object-fit:cover;object-position:top;border-radius:10px;background:#20303a;display:block}
-.hud-badge{position:absolute;right:-7px;bottom:-7px;min-width:26px;height:26px;border-radius:50%;background:#e8c96a;color:#231a05;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #0b0f14;padding:0 4px}
-.hud-meta{min-width:0}
-.hud-meta .nm{font-size:20px;font-weight:700;line-height:1.15;display:flex;align-items:center;gap:8px;white-space:nowrap}
-.hud-exp{position:relative;width:196px;height:17px;background:rgba(255,255,255,.10);border-radius:9px;margin-top:5px;overflow:hidden}
+.pcluster{position:absolute;top:14px;left:14px;display:flex;align-items:center;gap:12px;background:rgba(8,13,18,.55);border:1px solid rgba(232,201,106,.28);border-radius:999px;padding:7px 20px 7px 7px;pointer-events:auto;backdrop-filter:blur(3px)}
+.pav{position:relative;flex:none}
+.pav img{width:58px;height:58px;object-fit:cover;object-position:top;border-radius:50%;border:2px solid #e8c96a;background:#20303a;display:block}
+.hud-badge{position:absolute;right:-5px;bottom:-5px;min-width:24px;height:24px;border-radius:50%;background:#e8c96a;color:#231a05;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #0b0f14;padding:0 4px}
+.pmeta{min-width:0}
+.pmeta .nm{font-size:19px;font-weight:700;line-height:1.15;white-space:nowrap}
+.hud-exp{position:relative;width:186px;height:16px;background:rgba(255,255,255,.10);border-radius:9px;margin-top:5px;overflow:hidden}
 .hud-exp i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#2fae9b,#7fd4c1);border-radius:9px}
-.hud-exp span{position:absolute;inset:0;font-size:11.5px;line-height:17px;text-align:center;color:#eaf6f2;text-shadow:0 1px 2px rgba(0,0,0,.6)}
-.hud-right{display:flex;align-items:center;gap:8px;flex:none}
-.cur{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:7px 13px 7px 9px;font-size:16.5px;font-weight:700}
-.cur svg{width:20px;height:20px}
+.hud-exp span{position:absolute;inset:0;font-size:11px;line-height:16px;text-align:center;color:#eaf6f2;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.cur{display:flex;align-items:center;gap:7px;background:rgba(8,13,18,.55);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:7px 13px 7px 9px;font-size:16.5px;font-weight:700;backdrop-filter:blur(3px)}
 .cur i{font-size:19px}
 .cur.gold{color:#f2cf6b}.cur.gem{color:#8fd8ff}
 .cur span{color:#e8e4d8}
-.hbtn{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#cdb87a;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.hbtn svg{width:22px;height:22px}
-.hudrow{position:absolute;top:96px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
-.qtrack{display:flex;align-items:center;gap:8px;background:rgba(8,13,18,.55);border:1px solid rgba(232,201,106,.25);border-radius:999px;color:#e8e4d8;font-size:14.5px;padding:7px 14px 7px 10px;cursor:pointer;pointer-events:auto;max-width:400px}
-.qtrack svg{width:17px;height:17px;color:#e8c96a;flex:none}
-.qtrack i{font-size:15px;color:#e8c96a}
-.qtrack span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hub-ctx{text-align:right;background:rgba(8,13,18,.55);border:1px solid rgba(232,201,106,.25);border-radius:14px;padding:7px 13px;pointer-events:auto}
-.hub-ctx .mp{font-size:15.5px;font-weight:700;line-height:1.2}
-.hub-ctx .ck{font-size:13.5px;color:#cdb87a}
-.hub-ctx .wt{font-size:13px;color:#9fc6e8}
-.hub-nav{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;background:rgba(8,12,17,.88);border:1px solid rgba(232,201,106,.35);border-radius:20px;padding:10px 8px;pointer-events:auto;backdrop-filter:blur(4px)}
-.hub-nav button{width:78px;background:none;border:none;color:#9a937f;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13.5px;padding:9px 0 7px;border-radius:14px;cursor:pointer}
-.hub-nav button svg{width:30px;height:30px}
-.hub-nav button i{font-size:26px}
-.hub-nav button.on{color:#e8c96a;background:rgba(232,201,106,.10)}
+.qcard-top{position:absolute;top:96px;left:14px;display:flex;align-items:center;gap:11px;background:rgba(8,13,18,.55);border:1px solid rgba(232,201,106,.25);border-left:3px solid #e8c96a;border-radius:14px;color:#e8e4d8;padding:9px 16px 9px 12px;cursor:pointer;pointer-events:auto;max-width:330px;text-align:left;backdrop-filter:blur(3px)}
+.qcard-top i{font-size:19px;color:#e8c96a;flex:none}
+.qcard-top .qarc{font-size:11.5px;letter-spacing:1.2px;color:#cdb87a;font-weight:700}
+.qcard-top .qobj-t{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topright{position:absolute;top:14px;right:14px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
+.currencies{display:flex;gap:8px;pointer-events:auto}
+.minimap{position:relative;width:154px;border:1px solid rgba(232,201,106,.45);border-radius:14px;overflow:hidden;background:#22331f;pointer-events:auto;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.minimap img{width:154px;height:154px;display:block;image-rendering:pixelated}
+.mdot{position:absolute;width:11px;height:11px;border-radius:50%;background:#ffd94a;border:2px solid #201a04;transform:translate(-50%,-50%);box-shadow:0 0 7px rgba(255,217,74,.9);z-index:2}
+.mname{position:absolute;left:0;right:0;bottom:0;background:rgba(6,9,12,.72);color:#e8e4d8;font-size:12.5px;font-weight:700;text-align:center;padding:3.5px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mmeta{font-size:13px;color:#d8d2c0;background:rgba(8,13,18,.55);border:1px solid rgba(232,201,106,.22);border-radius:999px;padding:5px 12px;pointer-events:auto}
+.mmeta #hub-clock{color:#cdb87a}
+.party{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:10px;pointer-events:auto}
+.pslot{position:relative;width:58px;height:58px;border-radius:50%;background:rgba(8,13,18,.6);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(3px)}
+.pslot img{width:52px;height:52px;object-fit:contain;border-radius:50%}
+.pslot .ph{font-size:24px;font-weight:800}
+.pslot.empty{border-style:dashed;color:#8a8474}
+.pslot.empty i{font-size:21px}
+.pslot .plv{position:absolute;right:-4px;bottom:-4px;background:#e8c96a;color:#231a05;font-size:11.5px;font-weight:800;border-radius:999px;padding:1px 6px;border:2px solid #0b0f14}
+.hub-nav{position:absolute;right:14px;bottom:14px;display:flex;flex-direction:column;gap:11px;pointer-events:auto}
+.hub-nav button{width:64px;background:none;border:none;color:#b6b0a0;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;cursor:pointer;padding:0}
+.hub-nav button .nico{width:54px;height:54px;border-radius:50%;background:rgba(8,12,17,.78);border:2px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px);box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.hub-nav button i{font-size:23px}
+.hub-nav button.on{color:#e8c96a}
+.hub-nav button.on .nico{border-color:#e8c96a;color:#e8c96a;background:rgba(60,45,10,.85)}
 .hub-panel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(950px,calc(100% - 150px));max-height:656px;display:none;flex-direction:column;background:rgba(10,16,22,.96);border:1px solid rgba(232,201,106,.4);border-radius:22px;pointer-events:auto;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.55)}
 .hub-panel.open{display:flex}
 .hub-panel header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 10px}
@@ -148,7 +154,7 @@ const CSS = `
 .bagrow{display:flex;align-items:center;gap:13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:13px 15px;margin-bottom:10px}
 .bagrow i{font-size:24px;color:#e8c96a}
 .bagrow .qty{margin-left:auto;font-weight:800;font-size:18px;color:#e8c96a}
-.toast{position:absolute;left:50%;transform:translateX(-50%);bottom:26px;background:rgba(8,12,17,.92);border:1px solid rgba(232,201,106,.5);color:#e8e4d8;padding:11px 20px;border-radius:12px;font-size:16px;display:none;pointer-events:none;white-space:nowrap}
+.toast{position:absolute;left:50%;transform:translateX(-50%);bottom:92px;background:rgba(8,12,17,.92);border:1px solid rgba(232,201,106,.5);color:#e8e4d8;padding:11px 20px;border-radius:12px;font-size:16px;display:none;pointer-events:none;white-space:nowrap}
 `;
 
 function dexCard(c: (typeof CREATURES)[number]): string {
@@ -191,36 +197,36 @@ export interface HubHandle {
   openEncounter: (enc: EncounterUi) => void;
 }
 
-export interface HubHudInfo { mapLabel: string; weatherLabel: string; startMinutes: number; players: number; }
+export interface HubHudInfo { mapLabel: string; weatherLabel: string; startMinutes: number; players: number; mapId: string; mapW: number; mapH: number; }
 export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hud: HubHudInfo; onLogout: () => void }): HubHandle {
   const p = opts.profile;
   const regionName = p.currentRegion.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   const avatar = p.avatarId === "wanderer_female" ? "assets/chars/wanderer-female-v4.png" : "assets/chars/wanderer-v4.png";
   const html = `<style>${CSS}</style><div class="hub-root">
-    <div class="hudbar">
-      <div class="hud-id">
-        <div class="hud-av"><img src="${avatar}" alt=""/><span class="hud-badge">${p.level}</span></div>
-        <div class="hud-meta"><div class="nm">${p.displayName}</div>
-          <div class="hud-exp"><i style="width:${Math.min(100, Math.round((p.experience / (100 * p.level)) * 100))}%"></i><span>EXP ${p.experience}/${100 * p.level}</span></div></div>
-      </div>
-      <div class="hud-right">
+    <div class="pcluster">
+      <div class="pav"><img src="${avatar}" alt=""/><span class="hud-badge">${p.level}</span></div>
+      <div class="pmeta"><div class="nm">${p.displayName}</div>
+        <div class="hud-exp"><i style="width:${Math.min(100, Math.round((p.experience / (100 * p.level)) * 100))}%"></i><span>EXP ${p.experience}/${100 * p.level}</span></div></div>
+    </div>
+    <button class="qcard-top" id="hub-qtrack"><i class="fa-solid fa-scroll"></i><span><span class="qarc">ARC 0 · NHIỆM VỤ CHÍNH</span><br/><span class="qobj-t">Nói chuyện với Elder Rowan</span></span></button>
+    <div class="topright">
+      <div class="currencies">
         <div class="cur gold">${TOP_ICONS.coin}<span id="w-gold">—</span></div>
         <div class="cur gem">${TOP_ICONS.gem}<span id="w-crystal">—</span></div>
       </div>
+      <div class="minimap"><img src="assets/maps/minimap-${opts.hud.mapId}.png" alt=""/><span class="mdot" id="hub-mdot" style="left:50%;top:50%"></span><div class="mname">${opts.hud.mapLabel}</div></div>
+      <div class="mmeta"><span id="hub-clock"></span> · ${opts.hud.weatherLabel} · <span id="hub-players">${opts.hud.players}</span> người chơi</div>
     </div>
-    <div class="hudrow">
-      <button class="qtrack" id="hub-qtrack">${TOP_ICONS.quest}<span>Arc 0 · Nói chuyện với Elder Rowan</span></button>
-      <div class="hub-ctx"><div class="mp">${opts.hud.mapLabel}</div><div class="ck" id="hub-clock"></div><div class="wt">${opts.hud.weatherLabel} · <span id="hub-players">${opts.hud.players}</span> người chơi</div></div>
-    </div>
+    <div class="party" id="hub-party"></div>
     <section class="hub-panel" id="hub-panel"><header><div><h2 id="hub-title"></h2><div class="sub" id="hub-sub"></div></div><button class="x" id="hub-close"><i class="fa-solid fa-xmark"></i></button></header><div class="hub-body" id="hub-body"></div></section>
     <div class="enc" id="hub-enc" hidden></div>
     <div class="toast" id="hub-toast"></div>
     <nav class="hub-nav">
-      <button data-tab="world" class="on">${ICONS.world}<span>Thế giới</span></button>
-      <button data-tab="eidolons">${ICONS.eidolons}<span>Eidolons</span></button>
-      <button data-tab="sanctuary">${ICONS.sanctuary}<span>Sanctuary</span></button>
-      <button data-tab="quests">${ICONS.quests}<span>Nhiệm vụ</span></button>
-      <button data-tab="menu">${ICONS.menu}<span>Menu</span></button>
+      <button data-tab="world" class="on"><span class="nico">${ICONS.world}</span><span>Thế giới</span></button>
+      <button data-tab="eidolons"><span class="nico">${ICONS.eidolons}</span><span>Eidolons</span></button>
+      <button data-tab="sanctuary"><span class="nico">${ICONS.sanctuary}</span><span>Sanctuary</span></button>
+      <button data-tab="quests"><span class="nico">${ICONS.quests}</span><span>Nhiệm vụ</span></button>
+      <button data-tab="menu"><span class="nico">${ICONS.menu}</span><span>Menu</span></button>
     </nav></div>`;
   // Plain fixed overlay positioned over the canvas by its own bounding rect.
   // (Phaser's DOM plugin applies its own scale/origin math that misplaces a
@@ -253,6 +259,12 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   const clockTimer = window.setInterval(() => { minutes = (minutes + 0.4) % 1440; drawClock(); }, 1000);
   const onPlayers = (n: number) => { playersEl.textContent = String(n); };
   scene.game.events.on("hud:players", onPlayers);
+  const mdot = root.querySelector("#hub-mdot") as HTMLElement;
+  const onPos = (pos: { x: number; y: number }) => {
+    mdot.style.left = `${((pos.x + 0.5) / opts.hud.mapW) * 100}%`;
+    mdot.style.top = `${((pos.y + 0.5) / opts.hud.mapH) * 100}%`;
+  };
+  scene.game.events.on("hud:pos", onPos);
   // Top-bar wiring: real wallet values, connection dot, shortcut buttons.
   const fmt = (n: number) => n.toLocaleString("vi-VN");
   const goldEl = root.querySelector("#w-gold") as HTMLElement;
@@ -281,6 +293,24 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     return sp ? `<img src="${sp}" style="width:${size}px;height:${size}px;object-fit:contain" alt=""/>`
       : `<span class="ph" style="font-size:${Math.round(size * 0.55)}px;line-height:${size}px;color:${ELEMENT_COLOR[def?.element ?? ""] ?? "#9a937f"}">${(def?.name ?? "?").charAt(0)}</span>`;
   };
+  const partyEl = root.querySelector("#hub-party") as HTMLElement;
+  const renderParty = (items: OwnedCreature[]): void => {
+    const team = items.slice(0, 5);
+    partyEl.innerHTML = [
+      ...team.map(it => {
+        const def = CREATURES.find(c => c.id === it.creatureId);
+        const sp = SPRITES[it.creatureId];
+        const color = ELEMENT_COLOR[def?.element ?? ""] ?? "#9a937f";
+        return `<div class="pslot" data-party title="${it.name} · Lv.${it.level}" style="border-color:${color}">${sp ? `<img src="${sp}" alt=""/>` : `<span class="ph" style="color:${color}">${it.name.charAt(0)}</span>`}<span class="plv">${it.level}</span></div>`;
+      }),
+      ...Array(Math.max(0, 5 - team.length)).fill(`<div class="pslot empty" data-party><i class="fa-solid fa-paw"></i></div>`),
+    ].join("");
+    partyEl.querySelectorAll("[data-party]").forEach(el => el.addEventListener("click", () => setTab("eidolons")));
+  };
+  const refreshParty = (): void => {
+    void network.request<{ items: OwnedCreature[] }>("GET", "/creatures").then(({ items }) => { if (root.isConnected) renderParty(items); }).catch(() => undefined);
+  };
+  refreshParty();
   const renderBag = (): void => {
     title.textContent = "Túi đồ"; sub.textContent = "Vật phẩm đang có";
     body.innerHTML = `<p style="font-size:15.5px;color:#9a937f">Đang tải…</p>`;
@@ -327,6 +357,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
           pity = { ...pity, sinceRare: res.pity.sinceRare, sinceEpic: res.pity.sinceEpic };
           crystalEl2.textContent = crystal.toLocaleString("vi-VN");
           crystalEl.textContent = crystal.toLocaleString("vi-VN");
+          refreshParty();
           resultsEl.innerHTML = `<div class="hub-sec">Kết quả</div><div class="sumres">${res.results.map(r => {
             const def = CREATURES.find(c => c.id === r.creatureId);
             return `<div class="cell">${artFor(r.creatureId, 96)}<div style="font-weight:700;margin-top:4px">${def?.name ?? r.creatureId}</div>
@@ -469,6 +500,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
             msg.textContent = `Bắt thành công! ${def.name} đã vào bộ sưu tập.`;
             msg.className = "enc-msg good";
             showToast(`Đã thu thập ${def.name}!`);
+            refreshParty();
             window.setTimeout(close, 1700);
           } else if (res.fled) {
             over = true;
@@ -495,6 +527,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     destroy: () => {
       window.clearInterval(clockTimer);
       scene.game.events.off("hud:players", onPlayers);
+    scene.game.events.off("hud:pos", onPos);
       window.clearInterval(syncTimer);
       window.removeEventListener("resize", sync);
       overlay.remove();
