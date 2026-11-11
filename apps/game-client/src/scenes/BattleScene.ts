@@ -34,12 +34,24 @@ interface UnitVis {
  * entry fall back to a sprite-based cut-in band. */
 const ULT_ART: Record<string, string> = {
   "EID-001": "assets/battle/ult-eid-001-v2.png",
+  "EID-002": "assets/battle/ult-eid-002-v1.png",
+  "EID-003": "assets/battle/ult-eid-003-v1.png",
+  "EID-004": "assets/battle/ult-eid-004-v1.png",
+  "EID-005": "assets/battle/ult-eid-005-v1.png",
+  "EID-006": "assets/battle/ult-eid-006-v1.png",
+  "EID-011": "assets/battle/ult-eid-011-v1.png",
 };
 /** Animated ultimate cinematics (image-to-video from the splash art).
  * Species listed here get a real animated cut-in; the rest use the
  * splash/band presentation. */
 const ULT_VIDEO: Record<string, string> = {
   "EID-001": "assets/battle/ult-eid-001-v4.mp4",
+  "EID-002": "assets/battle/ult-eid-002-v1.mp4",
+  "EID-003": "assets/battle/ult-eid-003-v1.mp4",
+  "EID-004": "assets/battle/ult-eid-004-v1.mp4",
+  "EID-005": "assets/battle/ult-eid-005-v1.mp4",
+  "EID-006": "assets/battle/ult-eid-006-v1.mp4",
+  "EID-011": "assets/battle/ult-eid-011-v1.mp4",
 };
 
 export class BattleScene extends Phaser.Scene {

@@ -140,3 +140,7 @@ Luật biểu cảm cho video ult: **mở đầu giữ nguyên khuôn mặt chib
 ### 10.4 ĐÍNH CHÍNH: dễ thương từ đầu đến cuối (Tín chốt lại 2026-11-11)
 
 Mục 10.3 bị THAY THẾ: Tín chốt lại là ult phải **dễ thương từ đầu đến cuối** — không chuyển mặt dữ ở cao trào. Bản dữ v3 đã gỡ khỏi game; bản đang dùng là `ult-eid-001-v4.mp4` (= bản dựng dễ thương của v2: gầm dễ thương → lao tới → bùng nổ, mặt chibi tròn mắt to suốt clip). Luật biểu cảm cuối cùng cho mọi ult: chibi dễ thương toàn trình, kịch tính đến từ chuyển động/lửa/hiệu ứng chứ không từ nét mặt hung dữ.
+
+### 10.5 Hoàn tất ult cho cả 7 loài có sprite (2026-11-11)
+
+Theo lệnh của Tín, 6 loài còn lại đã có đủ splash chibi + video ult dễ thương từ đầu đến cuối, dựng theo cùng pipeline Emberling (splash từ sprite của loài → image-to-video → dựng cắt còn ~3–3,6s, nén H.264 1,2–2,1MB): Mossling – Forest Blessing, Aquafin – Tidal Wave, Pebblit – Earthquake, Zephy – Cyclone, Glowmoth – Celestial Veil, Rootusk – Nature Wall. File: `public/assets/battle/ult-eid-00{2,3,4,5,6}-v1.*` và `ult-eid-011-v1.*`, đã đăng ký đủ trong `ULT_ART`/`ULT_VIDEO`. Kiểm chứng Chrome thật: một trận bắt được 8 ult, trong đó Cyclone/Tidal Wave/Earthquake/Nature Wall/Celestial Veil đều chạy bản video (chụp giữa hoạt ảnh của Glowmoth rất rõ). 13 loài chưa có sprite vẫn dùng band sprite như cũ — có sprite là có ult video theo pipeline này.
