@@ -1,0 +1,85 @@
+import { Router } from "express";
+import bcrypt from "bcryptjs";
+import { isValidEmail, isValidPassword, isValidUsername } from "@eidolith/validation";
+import type { RegisterRequest, LoginRequest, RefreshRequest, AuthTokens, LoginResponse, RegisterResponse } from "@eidolith/shared-types";
+import { query, pool } from "../db.js";
+import { Errors } from "../http.js";
+import { ok } from "../http.js";
+import { createSession, hashToken } from "../auth-core.js";
+import { rateLimit, requireAuth, type AuthedRequest } from "../middleware.js";
+export const authRouter = Router();
+const loginLimiter = rateLimit(10, 60_000);
+
+authRouter.post("/register", async (req, res, next) => {
+  try {
+    const body = req.body as RegisterRequest;
+    const details: Record<string, unknown> = {};
+    if (!isValidEmail(body.email ?? "")) details.email = "Email không hợp lệ";
+    if (!isValidUsername(body.username ?? "")) details.username = "Username 3–32 ký tự, chỉ chữ/số/_";
+    if (!isValidPassword(body.password ?? "")) details.password = "Mật khẩu tối thiểu 8 ký tự, gồm chữ và số";
+    if (Object.keys(details).length) throw Errors.validation(details);
+    const existing = await query(`SELECT id FROM auth.users WHERE lower(email)=lower($1) OR lower(username)=lower($2)`, [body.email, body.username]);
+    if (existing.rows.length) {
+      const row = await query<{ email: string; username: string }>(`SELECT email, username FROM auth.users WHERE lower(email)=lower($1) OR lower(username)=lower($2)`, [body.email, body.username]);
+      throw row.rows[0].email.toLowerCase() === body.email.toLowerCase() ? Errors.emailTaken() : Errors.usernameTaken();
+    }
+    const passwordHash = await bcrypt.hash(body.password, 12);
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      const { rows } = await client.query<{ id: string }>(
+        `INSERT INTO auth.users (email, username, password_hash) VALUES ($1,$2,$3) RETURNING id`, [body.email, body.username, passwordHash]);
+      const userId = rows[0].id;
+      const { rows: profileRows } = await client.query<{ id: string }>(
+        `INSERT INTO players.player_profiles (user_id, display_name) VALUES ($1,$2) RETURNING id`, [userId, body.username]);
+      const playerId = profileRows[0].id;
+      await client.query(`INSERT INTO players.player_settings (player_id) VALUES ($1)`, [playerId]);
+      await client.query(`INSERT INTO players.player_progress (player_id) VALUES ($1)`, [playerId]);
+      await client.query("COMMIT");
+      const response: RegisterResponse = { userId, emailVerificationRequired: true };
+      ok(req, res, response, 201);
+    } catch (e) { await client.query("ROLLBACK"); throw e; } finally { client.release(); }
+  } catch (e) { next(e); }
+});
+
+authRouter.post("/login", loginLimiter, async (req, res, next) => {
+  try {
+    const body = req.body as LoginRequest;
+    if (!body.email || !body.password) throw Errors.validation({ credentials: "Thiếu email hoặc mật khẩu" });
+    const { rows } = await query<{ id: string; username: string; password_hash: string; status: string }>(
+      `SELECT id, username, password_hash, status FROM auth.users WHERE lower(email)=lower($1)`, [body.email]);
+    const user = rows[0];
+    if (!user || !(await bcrypt.compare(body.password, user.password_hash))) throw Errors.invalidCredentials();
+    if (user.status === "banned" || user.status === "suspended") throw Errors.accountBanned();
+    if (user.status === "deleted") throw Errors.invalidCredentials();
+    await query(`UPDATE auth.users SET last_login_at = now() WHERE id = $1`, [user.id]);
+    const tokens = await createSession(user.id, body.deviceId);
+    const response: LoginResponse = { ...tokens, user: { id: user.id, username: user.username } };
+    ok(req, res, response);
+  } catch (e) { next(e); }
+});
+
+authRouter.post("/refresh", async (req, res, next) => {
+  try {
+    const body = req.body as RefreshRequest;
+    if (!body.refreshToken) throw Errors.unauthorized();
+    const { rows } = await query<{ id: string; user_id: string; expires_at: string; revoked_at: string | null }>(
+      `SELECT id, user_id, expires_at, revoked_at FROM players.player_sessions WHERE refresh_token_hash = $1`, [hashToken(body.refreshToken)]);
+    const session = rows[0];
+    if (!session) throw Errors.unauthorized();
+    if (session.revoked_at) throw Errors.tokenRevoked();
+    if (new Date(session.expires_at) < new Date()) throw Errors.tokenExpired();
+    // Rotation: revoke the old session, issue a fresh pair (API Part 6 §3.3).
+    await query(`UPDATE players.player_sessions SET revoked_at = now() WHERE id = $1`, [session.id]);
+    const tokens = await createSession(session.user_id);
+    const response: AuthTokens = tokens;
+    ok(req, res, response);
+  } catch (e) { next(e); }
+});
+
+authRouter.post("/logout", requireAuth, async (req: AuthedRequest, res, next) => {
+  try {
+    await query(`UPDATE players.player_sessions SET revoked_at = now() WHERE id = $1 AND user_id = $2`, [req.sessionId, req.userId]);
+    ok(req, res, { loggedOut: true });
+  } catch (e) { next(e); }
+});

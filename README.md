@@ -43,4 +43,4 @@ Người chơi vào vai **Wanderer** khám phá thế giới **Aetheria**, thu p
 ## Trạng thái
 
 - 2026-11-10: Nhận đủ 17 phần tài liệu — GDS Part 1–3, TDD Part 4, DDD Part 5, API Part 6, Combat Part 7, World Part 8, Collection Part 9, Quest/Story Part 10, Economy Part 11, Multiplayer Part 12, UI/UX Part 13, Art Part 14, Audio/VFX Part 15, Admin Part 16, QA/Release Part 17. Đã lưu tài liệu + lập kế hoạch MVP.
-- Chưa bắt đầu code — chờ chốt các điểm mở trong `docs/KE-HOACH-MVP.md` mục 4.
+- 2026-11-10: **Phase 1 – Foundation XONG**: monorepo (7 packages + game-client/game-server/content-tools/admin-panel), migration PostgreSQL account/player, API auth đủ bộ (register/login/refresh rotation/logout) + player profile/progress/statistics, game-data 20 Eidolon có validator + checksum, client Phaser Boot→Preload→Login→World. Đã kiểm chứng sống end-to-end trên PG thật + trình duyệt thật (đăng ký → đăng nhập → vào Meadow Village).

@@ -19,7 +19,7 @@ Mục này là tài liệu làm việc của Bé — phần 4 là các điểm G
 
 ## 2. Lộ trình triển khai (gộp M1–M8 của GDS §17 với 7 phase của TDD §21)
 
-**Phase 1 – Foundation**
+**Phase 1 – Foundation** ✅ XONG 2026-11-10 (kiểm chứng sống: auth E2E trên PostgreSQL thật, client build + đăng nhập vào world trên trình duyệt thật)
 Monorepo đúng cấu trúc TDD §3.1 (apps/game-client, game-server, admin-panel, content-tools; packages/shared-types, game-data, combat-core, navigation-core, protocol, validation, math-utils). Server modular monolith + PG migration 001–005 (auth/players/creatures/world/combat) + Redis. Auth đủ bộ theo API §3 (register/login/refresh rotation/logout, session hash). Client: Boot/Preload/Login/Character scenes, Network Manager theo API §26.
 *Mốc nghiệm thu:* DB-001, API-001/002, TDD-001 — đăng ký, đăng nhập, vào được game.
 

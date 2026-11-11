@@ -1,0 +1,14 @@
+{
+  "name": "eidolith",
+  "version": "0.1.0",
+  "private": true,
+  "description": "EIDOLITH – The Forgotten Wilds — monorepo (Phaser 3 client, Node.js server, PostgreSQL)",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "validate:data": "npm run validate --workspace @eidolith/content-tools",
+    "dev:server": "npm run dev --workspace @eidolith/game-server",
+    "dev:client": "npm run dev --workspace @eidolith/game-client"
+  },
+  "engines": { "node": ">=20" }
+}
