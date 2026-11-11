@@ -1,13 +1,14 @@
 import Phaser from "phaser";
-/** Preload: art v2 "Premium Pixel" (approved docs/ART-DIRECTION-v1.md), generated pixel-native
- *  by tools/gen_art_v2.py at in-game sizes. */
+/** Preload: art v3 — assets extracted DIRECTLY from the approved concept sheets
+ *  (tools/extract_art_v3.py) so the game matches the approved mockups.
+ *  NPC sprites remain the v2 set until their own sheets are generated. */
 export class PreloadScene extends Phaser.Scene {
   constructor() { super("Preload"); }
   preload(): void {
-    this.load.spritesheet("verdant", "assets/tilesets/verdant-v2.png", { frameWidth: 64, frameHeight: 32 });
-    for (const prop of ["tree", "pine", "house", "rock", "bush"]) this.load.image(prop, `assets/props/${prop}-v2.png`);
-    this.load.image("wanderer", "assets/chars/wanderer-v2.png");
-    this.load.image("wanderer_f", "assets/chars/wanderer-female-v2.png");
+    this.load.spritesheet("verdant", "assets/tilesets/verdant-v4.png", { frameWidth: 64, frameHeight: 32 });
+    for (const prop of ["tree", "pine", "house", "rock", "bush"]) this.load.image(prop, `assets/props/${prop}-v3.png`);
+    this.load.image("wanderer", "assets/chars/wanderer-v3.png");
+    this.load.image("wanderer_f", "assets/chars/wanderer-female-v3.png");
     this.load.image("npc_rowan", "assets/chars/npc-rowan-v2.png");
     this.load.image("npc_mira", "assets/chars/npc-mira-v2.png");
     this.load.image("npc_kael", "assets/chars/npc-kael-v2.png");
