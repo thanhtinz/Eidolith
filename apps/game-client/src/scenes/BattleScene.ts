@@ -6,6 +6,7 @@ import Phaser from "phaser";
 import type { BattleResponse, BattleTeamUnit } from "@eidolith/shared-types";
 import { network } from "../net/NetworkManager";
 import { skillsOf } from "@eidolith/game-data";
+import { sfxUlt, sfxSting, sfxHit, sfxHeal, sfxDefeat, sfxEnd } from "../ui/sfx";
 
 const sx = (x: number) => 215 + (x / 16) * 850;
 const sy = (y: number) => 180 + (y / 10) * 360;
@@ -30,8 +31,9 @@ interface UnitVis {
   statuses: Map<string, number>;
 }
 
-/** Approved ultimate splash art, keyed by creature id. Species without an
- * entry fall back to a sprite-based cut-in band. */
+/** Ultimate splash art, keyed by creature id. On an ult the splash
+ * flashes up briefly, vanishes, and the caster's in-arena VFX erupts.
+ * Species without an entry skip the flash and go straight to the VFX. */
 const ULT_ART: Record<string, string> = {
   "EID-001": "assets/battle/ult-eid-001-v2.png",
   "EID-002": "assets/battle/ult-eid-002-v1.png",
@@ -40,18 +42,6 @@ const ULT_ART: Record<string, string> = {
   "EID-005": "assets/battle/ult-eid-005-v1.png",
   "EID-006": "assets/battle/ult-eid-006-v1.png",
   "EID-011": "assets/battle/ult-eid-011-v1.png",
-};
-/** Animated ultimate cinematics (image-to-video from the splash art).
- * Species listed here get a real animated cut-in; the rest use the
- * splash/band presentation. */
-const ULT_VIDEO: Record<string, string> = {
-  "EID-001": "assets/battle/ult-eid-001-v4.mp4",
-  "EID-002": "assets/battle/ult-eid-002-v1.mp4",
-  "EID-003": "assets/battle/ult-eid-003-v1.mp4",
-  "EID-004": "assets/battle/ult-eid-004-v1.mp4",
-  "EID-005": "assets/battle/ult-eid-005-v1.mp4",
-  "EID-006": "assets/battle/ult-eid-006-v1.mp4",
-  "EID-011": "assets/battle/ult-eid-011-v1.mp4",
 };
 
 export class BattleScene extends Phaser.Scene {
@@ -66,9 +56,12 @@ export class BattleScene extends Phaser.Scene {
   private syncTimer?: number;
   private statusEl?: HTMLElement;
   private resultEl?: HTMLElement;
-  private cutinUntil = 0;
-  private cutinCont?: Phaser.GameObjects.Container;
-  private cutinEl?: HTMLElement;
+  private splashUntil = 0;
+  private splashCont?: Phaser.GameObjects.Container;
+  private fxObjs: Phaser.GameObjects.GameObject[] = [];
+  private fxUnit?: UnitVis;
+  private fxBaseDepth = 0;
+  private fxArtBase?: { sx: number; sy: number };
 
   constructor() { super("Battle"); }
 
@@ -76,7 +69,7 @@ export class BattleScene extends Phaser.Scene {
     this.battle = data.battle;
     this.teamIds = data.teamIds ?? [];
     this.units = new Map(); this.evIdx = 0; this.playTick = 0; this.done = false; this.speed = 1;
-    this.cutinUntil = 0; this.cutinCont = undefined;
+    this.splashUntil = 0; this.splashCont = undefined; this.fxObjs = []; this.fxUnit = undefined;
   }
 
   preload(): void {
@@ -88,10 +81,6 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create(): void {
-    for (const def of this.battle.teams) {
-      const vid = ULT_VIDEO[def.creatureId];
-      if (vid) void fetch(vid).catch(() => undefined); // warm the HTTP cache
-    }
     this.drawArena();
     for (const def of this.battle.teams) this.makeUnit(def);
     this.mountOverlay();
@@ -175,16 +164,6 @@ export class BattleScene extends Phaser.Scene {
         .bt-result p{margin:4px 0 14px;color:#c9b18a;font-size:15.5px}
         .bt-result .row{display:flex;gap:10px}
         .bt-result button{flex:1;padding:13px;border:none;border-radius:12px;font-size:16.5px;font-weight:700;cursor:pointer;font-family:'Baloo 2',sans-serif}
-        .bt-cutin{position:absolute;inset:0;background:#000;z-index:60;pointer-events:auto;overflow:hidden;cursor:pointer}
-        .bt-cutin video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-        .bt-cutin .bar{position:absolute;left:0;width:100%;height:86px;background:#000;z-index:2}
-        .bt-cutin .bar.t{top:0}.bt-cutin .bar.b{bottom:0}
-        .bt-cutin .ttl{position:absolute;left:70px;bottom:120px;z-index:3;animation:btcin .45s .15s cubic-bezier(.2,.9,.3,1) both}
-        .bt-cutin .who{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:21px;color:#ffd94a;letter-spacing:1.5px}
-        .bt-cutin .rule{width:340px;height:3px;background:#d4a437;margin:4px 0 6px}
-        .bt-cutin .skill{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:56px;line-height:1;color:#fff;text-shadow:0 4px 0 #1c0e02,0 6px 18px rgba(0,0,0,.6)}
-        .bt-cutin .flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:4;pointer-events:none}
-        @keyframes btcin{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
         .bt-again{background:linear-gradient(180deg,#e8a33d,#c8871e);color:#fff}
         .bt-exit{background:#171006;color:#e8c96a;border:1.5px solid #d4a437 !important}
       </style>
@@ -197,7 +176,6 @@ export class BattleScene extends Phaser.Scene {
           <button class="bt-pill bt-btn" id="bt-skip">Bỏ qua ▸▸</button>
           <button class="bt-pill bt-btn" id="bt-quit">Rời trận</button>
         </div>
-        <div id="bt-cutin-slot"></div>
         <div class="bt-result" id="bt-result" hidden>
           <h2 id="bt-title">THẮNG</h2>
           <p id="bt-sub"></p>
@@ -255,14 +233,14 @@ export class BattleScene extends Phaser.Scene {
   /* ---------------- playback ---------------- */
 
   update(_time: number, delta: number): void {
-    if (this.time.now < this.cutinUntil) return; // cut-in on stage: time stops
+    if (this.time.now < this.splashUntil) return; // ult splash on stage: time stops
     if (!this.done) {
       this.playTick += (delta / 100) * this.speed;
       const upto = Math.floor(this.playTick);
       while (this.evIdx < this.battle.events.length && this.battle.events[this.evIdx].tick <= upto) {
         this.process(this.battle.events[this.evIdx], false);
         this.evIdx++;
-        if (this.time.now < this.cutinUntil) break; // a cut-in just started
+        if (this.time.now < this.splashUntil) break; // an ult splash just started
       }
       if (this.statusEl && !this.done)
         this.statusEl.textContent = `Đang đấu · ${(Math.min(upto, this.battle.ticks) / 10).toFixed(0)}s`;
@@ -280,7 +258,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private skipAll(): void {
-    this.endCutin();
+    this.endSplash(); this.endFx();
     while (this.evIdx < this.battle.events.length) {
       this.process(this.battle.events[this.evIdx], true);
       this.evIdx++;
@@ -326,7 +304,7 @@ export class BattleScene extends Phaser.Scene {
         if (String(d.skill) && v) {
           const isUlt = this.isUlt(v, d);
           if (isUlt) v.energy = 0; else v.energy = Math.min(100, v.energy + 15);
-          if (isUlt && !instant && this.speed <= 2) this.startCutin(v, String(d.skill));
+          if (isUlt && !instant && this.speed <= 2) this.startSplash(v, String(d.skill));
           else this.floater(v.cont.x, v.cont.y - 84, String(d.skill), isUlt ? "#ffd94a" : "#f7ead0", isUlt ? 20 : 14.5, instant);
           if (!instant && v.art && "x" in v.art) {
             const target = vis(d.targetId);
@@ -354,6 +332,7 @@ export class BattleScene extends Phaser.Scene {
         const crit = Boolean(d.crit);
         const color = ELEMENT_CSS[String(d.element)] ?? "#ffffff";
         this.floater(t.cont.x, t.cont.y - 74, crit ? `${d.amount}!` : `${d.amount}`, crit ? "#ffd94a" : color, crit ? 23 : 16.5, instant);
+        if (!instant) sfxHit(crit);
         if (!instant && t.art instanceof Phaser.GameObjects.Image) {
           const img = t.art;
           img.setTintFill(0xffffff);
@@ -366,6 +345,7 @@ export class BattleScene extends Phaser.Scene {
         const t = vis(d.targetId); if (!t) break;
         t.hp = Math.min(t.def.maxHp, t.hp + Number(d.amount ?? 0));
         this.floater(t.cont.x, t.cont.y - 74, `+${d.amount}`, "#8fd96a", 15.5, instant);
+        if (!instant) sfxHeal();
         this.drawBar(t);
         break;
       }
@@ -394,6 +374,7 @@ export class BattleScene extends Phaser.Scene {
         v.dead = true; v.hp = 0;
         v.bar.clear();
         if (!instant) {
+          sfxDefeat();
           this.tweens.add({ targets: v.cont, alpha: 0.22, duration: 350 });
           this.tweens.add({ targets: v.cont, scaleX: 0.92, scaleY: 0.92, duration: 350 });
         } else { v.cont.setAlpha(0.22); v.cont.setScale(0.92); }
@@ -411,132 +392,128 @@ export class BattleScene extends Phaser.Scene {
   private isUlt(v: UnitVis, d: Record<string, unknown>): boolean {
     // An ultimate is exactly the creature's third skill (slot 3, energyCost
     // 100) in game-data. (An earlier energy-mirror heuristic drifted from
-    // the engine and fired cut-ins on ordinary skills — use the kit.)
+    // the engine and fired effects on ordinary skills — use the kit.)
     return skillsOf(v.def.creatureId)[2]?.name === String(d.skill);
   }
 
-  /* -------- ultimate cut-in (research note: docs/PHASE4-COMBAT-v1.md) ----
-   * Genre pattern (Persona / Epic Seven / Honkai: Star Rail): freeze the
-   * fight, dim the world, splash art sweeps in over letterbox bars, the
-   * skill name lands, a white flash releases back into the real hit.
-   * Kept short (~1.5 s at x1) and tap-to-skip so it never becomes a toll. */
-  private startCutin(v: UnitVis, skillName: string): void {
-    if (this.cutinCont || this.cutinEl) this.endCutin();
-    const vidSrc = ULT_VIDEO[v.def.creatureId];
-    if (vidSrc) { this.startVideoCutin(v, skillName, vidSrc); return; }
-    const dur = this.speed >= 2 ? 1000 : 1500;
-    this.cutinUntil = this.time.now + dur;
-    (window as unknown as Record<string, unknown>).__cutin = skillName;
-    const hex = ELEMENT_CSS[v.def.element] ?? "#ffb347";
-    const col = Phaser.Display.Color.HexStringToColor(hex).color;
-    const cont = this.add.container(0, 0).setDepth(9000);
-    this.cutinCont = cont;
-
-    const dim = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0).setDepth(0);
-    cont.add(dim);
-    this.tweens.add({ targets: dim, fillAlpha: 0.5, duration: 160 });
-
+  /* -------- ultimate presentation: splash flash -> in-arena VFX --------
+   * Tin's flow (2026-11-11): the ult's splash art flashes up briefly,
+   * vanishes — and at that exact moment the casting monster's own VFX
+   * erupts in the arena (element glow, light pillar, particle burst,
+   * pop + skill banner, camera shake) while the hit lands, with a
+   * synthesized element sound (ui/sfx.ts). The splash freezes playback
+   * for ~0.75s; the VFX itself does not freeze anything. */
+  private startSplash(v: UnitVis, skillName: string): void {
+    this.endSplash(); this.endFx();
     const key = `ult_${v.def.creatureId}`;
-    if (this.textures.exists(key)) {
-      const art = this.add.image(640, 360, key).setDepth(1);
-      const sc = Math.max(1280 / art.width, 720 / art.height);
-      art.setScale(sc * 1.09);
-      cont.add(art);
-      this.tweens.add({ targets: art, scaleX: sc, scaleY: sc, duration: dur, ease: "Quad.easeOut" });
-    } else {
-      const band = this.add.rectangle(640, 360, 1280, 360, col, 0.28).setDepth(1);
-      const glow = this.add.circle(905, 360, 190, col, 0.35).setDepth(1);
-      cont.add([band, glow]);
-      const tex = `cr_${v.def.creatureId}`;
-      if (this.textures.exists(tex)) {
-        const big = this.add.image(905, 368, tex).setDepth(2);
-        big.setDisplaySize(320 * (big.width / Math.max(1, big.height)), 320);
-        if (v.def.team === 1) big.setFlipX(true);
-        cont.add(big);
-        this.tweens.add({ targets: big, scaleX: big.scaleX * 1.06, scaleY: big.scaleY * 1.06, duration: dur, ease: "Quad.easeOut" });
-      }
-    }
-
-    const barT = this.add.rectangle(640, -43, 1280, 86, 0x000000, 1).setDepth(3);
-    const barB = this.add.rectangle(640, 763, 1280, 86, 0x000000, 1).setDepth(3);
-    cont.add([barT, barB]);
-    this.tweens.add({ targets: barT, y: 43, duration: 220, ease: "Quad.easeOut" });
-    this.tweens.add({ targets: barB, y: 677, duration: 220, ease: "Quad.easeOut" });
-
-    const who = this.add.text(74, 514, v.def.name.toUpperCase(), {
-      fontFamily: "\"Baloo 2\", sans-serif", fontSize: "21px", color: "#ffd94a", fontStyle: "bold",
-    }).setDepth(4).setAlpha(0);
-    const skill = this.add.text(70, 540, skillName.toUpperCase(), {
-      fontFamily: "\"Baloo 2\", sans-serif", fontSize: "56px", color: "#ffffff", fontStyle: "bold",
-    }).setDepth(4).setAlpha(0);
-    skill.setStroke("#1c0e02", 8).setShadow(0, 4, "rgba(0,0,0,.55)", 10);
-    const rule = this.add.rectangle(74, 536, 0, 3, 0xd4a437, 1).setOrigin(0, 0.5).setDepth(4);
-    cont.add([who, skill, rule]);
-    this.tweens.add({ targets: [who, skill], alpha: 1, x: "+=14", delay: 190, duration: 240, ease: "Quad.easeOut" });
-    this.tweens.add({ targets: rule, width: 340, delay: 190, duration: 300, ease: "Quad.easeOut" });
-
-    for (let i = 0; i < 24; i++) {
-      const sp = this.add.circle(880 + (Math.random() - 0.5) * 220, 380 + (Math.random() - 0.5) * 200,
-        2 + Math.random() * 3, i % 3 === 0 ? 0xffffff : col, 0.95).setDepth(5);
-      cont.add(sp);
-      this.tweens.add({
-        targets: sp, x: sp.x + (Math.random() - 0.5) * 460, y: sp.y - 60 - Math.random() * 180,
-        alpha: 0, duration: 620 + Math.random() * 480, delay: 120 + Math.random() * 260, ease: "Quad.easeOut",
+    const hasArt = this.textures.exists(key);
+    const dur = hasArt ? (this.speed >= 2 ? 500 : 750) : 420;
+    this.splashUntil = this.time.now + dur;
+    (window as unknown as Record<string, unknown>).__ultFx = skillName;
+    sfxSting();
+    if (hasArt) {
+      const cont = this.add.container(0, 0).setDepth(9000);
+      this.splashCont = cont;
+      cont.add(this.add.rectangle(640, 360, 1280, 720, 0x000000, 1));
+      const img = this.add.image(640, 360, key).setScale(1.07);
+      cont.add(img);
+      this.tweens.add({ targets: img, scale: 1.0, duration: dur, ease: "Quad.easeOut" });
+      const barT = this.add.rectangle(640, -43, 1280, 86, 0x000000, 1);
+      const barB = this.add.rectangle(640, 763, 1280, 86, 0x000000, 1);
+      cont.add([barT, barB]);
+      this.tweens.add({ targets: barT, y: 43, duration: 240, ease: "Quad.easeOut" });
+      this.tweens.add({ targets: barB, y: 677, duration: 240, ease: "Quad.easeOut" });
+      const who = this.add.text(70, 514, v.def.name.toUpperCase(), {
+        fontFamily: "'Baloo 2', sans-serif", fontSize: "21px", fontStyle: "bold", color: "#ffd94a",
       });
+      who.setLetterSpacing?.(1.5);
+      const rule = this.add.rectangle(70, 536, 340, 3, 0xd4a437, 1).setOrigin(0, 0.5);
+      const skill = this.add.text(70, 540, skillName.toUpperCase(), {
+        fontFamily: "'Baloo 2', sans-serif", fontSize: "56px", fontStyle: "bold", color: "#ffffff",
+        stroke: "#1c0e02", strokeThickness: 6,
+      });
+      who.setAlpha(0); rule.setAlpha(0); skill.setAlpha(0);
+      cont.add([who, rule, skill]);
+      this.tweens.add({ targets: [who, rule, skill], alpha: 1, duration: 160, delay: 90 });
     }
-
-    const flash = this.add.rectangle(640, 360, 1280, 720, 0xffffff, 0).setDepth(6);
-    cont.add(flash);
-    this.tweens.add({ targets: flash, fillAlpha: 0.8, delay: dur - 240, duration: 90, yoyo: true, onComplete: () => this.endCutin() });
-
-    this.input.once("pointerdown", () => this.endCutin());
+    this.time.delayedCall(dur, () => this.releaseUlt(v, skillName));
+    if (hasArt) this.input.once("pointerdown", () => this.releaseUlt(v, skillName));
   }
 
-  /** Animated cut-in: full-screen ultimate video (DOM layer above the
-   * canvas), letterbox bars + title, white flash into the real hit.
-   * Tap anywhere to skip. Full length at x1, 1.5x rate at x2. */
-  private startVideoCutin(v: UnitVis, skillName: string, src: string): void {
-    const slot = this.overlay?.querySelector("#bt-cutin-slot");
-    if (!slot) return;
-    const rate = this.speed >= 2 ? 1.5 : 1;
-    this.cutinUntil = this.time.now + 3600 / rate;
-    (window as unknown as Record<string, unknown>).__cutin = skillName;
-    const poster = ULT_ART[v.def.creatureId];
-    const el = document.createElement("div");
-    el.className = "bt-cutin";
-    el.innerHTML = `
-      <video src="${src}" ${poster ? `poster="${poster}"` : ""} autoplay muted playsinline></video>
-      <div class="bar t"></div><div class="bar b"></div>
-      <div class="ttl">
-        <div class="who">${v.def.name.toUpperCase()}</div>
-        <div class="rule"></div>
-        <div class="skill">${skillName.toUpperCase()}</div>
-      </div>
-      <div class="flash"></div>`;
-    slot.appendChild(el);
-    this.cutinEl = el;
-    const video = el.querySelector("video") as HTMLVideoElement;
-    video.playbackRate = rate;
-    void video.play().catch(() => undefined);
-    const flash = el.querySelector(".flash") as HTMLElement;
-    video.addEventListener("ended", () => {
-      flash.style.transition = "opacity .12s";
-      flash.style.opacity = "0.85";
-      window.setTimeout(() => this.endCutin(), 110);
-    });
-    el.addEventListener("pointerdown", () => this.endCutin());
+  /** The splash vanishes; the caster's VFX erupts and the hit lands. */
+  private releaseUlt(v: UnitVis, skillName: string): void {
+    if (this.splashUntil === 0 && !this.splashCont) return; // already released (tap-skip race)
+    if (this.splashCont) {
+      const flash = this.add.rectangle(640, 360, 1280, 720, 0xffffff, 0.85).setDepth(9500);
+      this.tweens.add({ targets: flash, alpha: 0, duration: 130, onComplete: () => flash.destroy() });
+    }
+    this.endSplash();
+    (window as unknown as Record<string, unknown>).__ultRelease = skillName;
+    this.spotlightFx(v, skillName);
   }
 
-  private endCutin(): void {
-    if (this.cutinCont) { this.cutinCont.destroy(); this.cutinCont = undefined; }
-    if (this.cutinEl) { this.cutinEl.remove(); this.cutinEl = undefined; }
-    this.cutinUntil = 0;
-    delete (window as unknown as Record<string, unknown>).__cutin;
+  private spotlightFx(v: UnitVis, skillName: string): void {
+    sfxUlt(v.def.element);
+    const css = ELEMENT_CSS[v.def.element] ?? "#ffd94a";
+    const color = Phaser.Display.Color.HexStringToColor(css).color;
+    const x = v.cont.x, y = v.cont.y;
+    this.fxUnit = v; this.fxBaseDepth = v.cont.depth;
+    v.cont.setDepth(460);
+    const dur = 700;
+    const track = <T extends Phaser.GameObjects.GameObject>(o: T): T => { this.fxObjs.push(o); return o; };
+    const dim = track(this.add.rectangle(640, 360, 1280, 720, 0x04060a, 0).setDepth(400));
+    this.tweens.add({ targets: dim, fillAlpha: 0.34, duration: 110 });
+    this.tweens.add({ targets: dim, fillAlpha: 0, delay: dur - 220, duration: 220, onComplete: () => this.endFx() });
+    const pillar = track(this.add.rectangle(x, y - 190, 58, 470, color, 0.16).setDepth(448));
+    pillar.setScale(1, 0.1);
+    this.tweens.add({ targets: pillar, scaleY: 1, alpha: 0, duration: dur, ease: "Quad.easeOut" });
+    const glow = track(this.add.circle(x, y - 4, 62, color, 0.3).setDepth(449));
+    glow.setScale(0.4);
+    this.tweens.add({ targets: glow, scale: 1.25, alpha: 0, duration: dur, ease: "Quad.easeOut" });
+    const ring = track(this.add.circle(x, y + 22, 30, color, 0).setDepth(449));
+    ring.setStrokeStyle(3, color, 0.9);
+    this.tweens.add({ targets: ring, scale: 3.1, alpha: 0, duration: 620, ease: "Quad.easeOut" });
+    for (let i = 0; i < 26; i++) {
+      const p = track(this.add.circle(x, y - 8, 2.5 + Math.random() * 3, i % 4 === 0 ? 0xffffff : color, 1).setDepth(455));
+      const ang = Math.random() * Math.PI * 2, dist = 60 + Math.random() * 110;
+      this.tweens.add({ targets: p, x: x + Math.cos(ang) * dist, y: y - 8 + Math.sin(ang) * dist - 22, alpha: 0, scale: 0.3, duration: 480 + Math.random() * 300, ease: "Quad.easeOut" });
+    }
+    if (v.art) {
+      this.fxArtBase = { sx: v.art.scaleX, sy: v.art.scaleY };
+      this.tweens.add({ targets: v.art, scaleX: this.fxArtBase.sx * 1.3, scaleY: this.fxArtBase.sy * 1.3, duration: 170, yoyo: true, ease: "Quad.easeOut" });
+    }
+    this.tweens.add({ targets: v.cont, y: y - 12, duration: 170, yoyo: true, ease: "Quad.easeOut" });
+    const banner = track(this.add.text(x, y - 104, skillName.toUpperCase(), {
+      fontFamily: "'Baloo 2', sans-serif", fontSize: "29px", fontStyle: "bold",
+      color: css, stroke: "#160d03", strokeThickness: 5,
+    }).setOrigin(0.5).setDepth(470));
+    banner.setScale(0.5); banner.setAlpha(0);
+    this.tweens.add({ targets: banner, scale: 1.05, alpha: 1, y: y - 114, duration: 170, ease: "Back.easeOut" });
+    this.tweens.add({ targets: banner, alpha: 0, delay: dur - 200, duration: 190 });
+    this.cameras.main.shake(130, 0.0032);
+  }
+
+  private endSplash(): void {
+    if (this.splashCont) { this.splashCont.destroy(); this.splashCont = undefined; }
+    this.splashUntil = 0;
+    delete (window as unknown as Record<string, unknown>).__ultFx;
+  }
+
+  private endFx(): void {
+    for (const o of this.fxObjs) { this.tweens.killTweensOf(o); o.destroy(); }
+    this.fxObjs = [];
+    if (this.fxUnit) {
+      if (this.fxUnit.art && this.fxArtBase) this.fxUnit.art.setScale(this.fxArtBase.sx, this.fxArtBase.sy);
+      this.fxUnit.cont.setDepth(this.fxBaseDepth);
+      this.fxUnit = undefined; this.fxArtBase = undefined;
+    }
+    delete (window as unknown as Record<string, unknown>).__ultRelease;
   }
 
   private showResult(): void {
     if (!this.resultEl || !this.overlay) return;
     const w = this.battle.winner;
+    sfxEnd(w === 0 ? true : w === 1 ? false : null);
     const title = this.overlay.querySelector("#bt-title") as HTMLElement;
     const sub = this.overlay.querySelector("#bt-sub") as HTMLElement;
     title.textContent = w === 0 ? "THẮNG!" : w === 1 ? "THUA" : "HOÀ";
