@@ -22,6 +22,14 @@ Người chơi vào vai **Wanderer** khám phá thế giới **Aetheria**, thu p
 | [docs/EIDOLITH-COMBAT-PART7-v1.0.md](docs/EIDOLITH-COMBAT-PART7-v1.0.md) | Part 7 — Combat System: 5v5 auto battle, Utility AI + FSM, skill/energy/ultimate, damage, element multiplier 1.25/1.00/0.80, status, 8 elemental reactions, boss phases, replay, balance |
 | [docs/EIDOLITH-WORLD-PART8-v1.0.md](docs/EIDOLITH-WORLD-PART8-v1.0.md) | Part 8 — World & Exploration: cấu trúc Aetheria, Verdant Plains, isometric tile 64×32, movement, NPC, spawn lifecycle, gathering, treasure, time 60 phút/chu kỳ, weather, world events, map pipeline |
 | [docs/EIDOLITH-COLLECTION-PART9-v1.0.md](docs/EIDOLITH-COLLECTION-PART9-v1.0.md) | Part 9 — Collection & Progression: capture, summoning + pity, level cap 50, growth curves, Bond 10 cấp, trait, evolution đa nhánh, duplicate→shard, roster 20 |
+| [docs/EIDOLITH-QUEST-PART10-v1.0.md](docs/EIDOLITH-QUEST-PART10-v1.0.md) | Part 10 — Quest, Story & Narrative: khung truyện Aetheria (Arc 0–4), quest taxonomy + data model + state machine, dialogue/choice, MVP: main story 4 khu vực, 12–18 side quest |
+| [docs/EIDOLITH-ECONOMY-PART11-v1.0.md](docs/EIDOLITH-ECONOMY-PART11-v1.0.md) | Part 11 — Economy, Shop, Monetization & Live Ops: 8 loại currency, wallet/ledger, shop, battle pass, purchase flow + receipt verification; MVP: Gold, Crystal, Bond Essence, Evolution Core |
+| [docs/EIDOLITH-MULTIPLAYER-PART12-v1.0.md](docs/EIDOLITH-MULTIPLAYER-PART12-v1.0.md) | Part 12 — Multiplayer, Guild, PvP, Trading & Co-op: presence, shared zones + AOI, party/co-op, guild, PvP, trading escrow, moderation; MVP: friends, party, shared starter zone, co-op boss, arena bất đồng bộ |
+| [docs/EIDOLITH-UIUX-PART13-v1.0.md](docs/EIDOLITH-UIUX-PART13-v1.0.md) | Part 13 — UI/UX Specification: navigation chính (World, Eidolons, Sanctuary, Quests, Menu), screen inventory, HUD, accessibility, localization VI+EN, design tokens |
+| [docs/EIDOLITH-ART-PART14-v1.0.md](docs/EIDOLITH-ART-PART14-v1.0.md) | Part 14 — Art & Animation Production Bible: isometric 2:1, tile 64×32, animation standards, VFX element language, naming convention, Tiled/Phaser pipeline |
+| [docs/EIDOLITH-AUDIO-VFX-PART15-v1.0.md](docs/EIDOLITH-AUDIO-VFX-PART15-v1.0.md) | Part 15 — Audio & VFX Design: soundscape theo region, adaptive music, combat sound, ngân sách hiệu năng mobile; MVP: VFX cho 6 nguyên tố |
+| [docs/EIDOLITH-ADMIN-PART16-v1.0.md](docs/EIDOLITH-ADMIN-PART16-v1.0.md) | Part 16 — Admin Panel & Live Operations: RBAC 7 role, content publishing workflow, player support, economy ops, moderation, LiveOps calendar, audit |
+| [docs/EIDOLITH-QA-RELEASE-PART17-v1.0.md](docs/EIDOLITH-QA-RELEASE-PART17-v1.0.md) | Part 17 — QA, Analytics, Release & Roadmap: chiến lược test, CI/CD, release gates A–E, lộ trình Prototype → Vertical Slice → Alpha → Closed Beta → Soft Launch → Global, milestones M1–M8 |
 | [docs/KE-HOACH-MVP.md](docs/KE-HOACH-MVP.md) | Kế hoạch triển khai MVP theo milestone M1–M8 + danh sách điểm chưa rõ cần chốt trong GDS |
 
 ## Phạm vi MVP (theo GDS §16 + Part 3 §40.2)
@@ -34,5 +42,5 @@ Người chơi vào vai **Wanderer** khám phá thế giới **Aetheria**, thu p
 
 ## Trạng thái
 
-- 2026-11-10: Nhận đủ 9 phần tài liệu — GDS Part 1 (v1.0), Part 2 (v1.1), Part 3 (v1.2), TDD Part 4 (v1.0), DDD Part 5 (v1.0), API Part 6 (v1.0), Combat Part 7 (v1.0), World Part 8 (v1.0), Collection Part 9 (v1.0). Đã lưu tài liệu + lập kế hoạch MVP.
+- 2026-11-10: Nhận đủ 17 phần tài liệu — GDS Part 1–3, TDD Part 4, DDD Part 5, API Part 6, Combat Part 7, World Part 8, Collection Part 9, Quest/Story Part 10, Economy Part 11, Multiplayer Part 12, UI/UX Part 13, Art Part 14, Audio/VFX Part 15, Admin Part 16, QA/Release Part 17. Đã lưu tài liệu + lập kế hoạch MVP.
 - Chưa bắt đầu code — chờ chốt các điểm mở trong `docs/KE-HOACH-MVP.md` mục 4.

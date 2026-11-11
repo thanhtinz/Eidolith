@@ -77,3 +77,26 @@ Admin panel (modules Part 2 §35, phân quyền + audit log), events/live ops, m
 - Không tự chế số liệu cân bằng rồi khóa cứng — số khởi điểm phải qua simulation và có bản trình duyệt (điểm mở số 5).
 - Asset creature: mỗi hình thái tiến hóa là sprite mới hẳn, cấm phóng to/đổi màu bản cũ (Part 3 §44.3); tên file theo quy ước `creature_{id}_{animation}_{direction}_{frame}.png` (Part 3 §49.5).
 - UI không dùng emoji, dùng icon asset/CSS theo luật chung của Tín.
+
+---
+
+## 6. Bổ sung từ Part 10–17 (nhận thêm 2026-11-10)
+
+Tám phần sau làm rõ thêm nhiều phạm vi MVP và giải quyết/chỉnh một số điểm mở ở mục 4:
+
+**Đã được chốt hẳn:**
+- *Điểm mở 1 (tile):* Part 14 §2 xác nhận lại tile tham chiếu **64×32**, isometric 2:1 — điểm này đóng.
+- *Economy MVP (Part 11 §12):* chỉ 4 currency đưa vào MVP — Gold, Crystal, Bond Essence, Evolution Core; Arena Token, Guild Coin, Research Data, Event Token để sau. Crystal tách paid/earned. MVP không có quảng cáo ép buộc. Battle Pass/Monthly Card có trong thiết kế monetization nhưng phạm vi MVP của Part 11 chỉ gồm wallet/ledger, cosmetic shop prototype, exchange shop, 1 banner có pity, purchase sandbox — Pass/Card xếp sau prototype.
+- *Multiplayer MVP (Part 12 §11):* nhẹ hơn Part 2 từng mô tả — friends, party, shared starter zone, chat cơ bản có moderation, co-op boss prototype, friendly battle, arena bất đồng bộ (asynchronous). Real-time PvP, Guild War/territory, auction house hoãn. Điều này khớp với Phase 6 của kế hoạch nhưng giảm tải: guild đầy đủ (treasury, weekly objective...) làm sau arena bất đồng bộ.
+- *Quest MVP (Part 10 §13):* main story qua 4 khu vực starter theo 5 arc (Arc 0 Awakening → Arc 4 Beyond the Plains), 12–18 side quests, 5 daily objectives, 3 Bond quest prototype, journal + tracker (tối đa 3 objective được ghim).
+- *Audio/VFX MVP (Part 15 §10):* 4 bộ ambience region, 3 music theme, VFX cho **6 nguyên tố MVP** — củng cố hướng cân bằng sâu 6 hệ ở điểm mở 2.
+- *Art MVP (Part 14 §12):* 20 Eidolon dạng gốc + 4 starter area + dungeon + boss arena + UI core; **dạng tiến hóa phát hành theo đợt**, không cần sản xuất đủ 41 nhánh trước prototype — giảm mạnh rủi ro nghẽn asset ở Phase 5.
+- *Admin MVP (Part 16 §11):* dashboard cơ bản, player lookup, content config, event/banner management, grant workflow có audit, moderation queue, maintenance toggle — khớp Phase 7.
+- *Lộ trình phát hành (Part 17 §9, §14):* Prototype → Vertical Slice → Alpha → Closed Beta → Soft Launch → Global, qua 5 release gate A–E (Core Loop, Integrity, Performance, Operations, Compliance). Milestone M1–M8 của Part 17 khớp thứ tự 7 phase trong kế hoạch này (M7 Economy & LiveOps tách riêng sau M6 Online).
+
+**Mâu thuẫn mới phát sinh (cần lưu ý khi code, chưa cần Tín chốt ngay):**
+- *Navigation chính:* Part 13 §2 chốt bottom navigation là **World · Eidolons · Sanctuary · Quests · Menu**; Part 1 §11.1 từng ghi Home · Eidolon · Explore · Arena · Social. Part 13 là tài liệu UI chuyên sâu và mới hơn — Bé theo Part 13.
+- *Cỡ party:* Part 12 §2 ghi party tối đa "4–5 người tùy mode"; Part 2 §29.2 ghi party 2–4. Bé tạm theo 2–4 cho dungeon/co-op thường và tối đa 5 chỉ khi mode yêu cầu đủ đội 5 Eidolon/người — sẽ chốt lại khi làm Phase 6.
+- *Tên file asset:* Part 14 §9 dùng mẫu `eidolon_emberling_idle_01.png`; Part 3 §49.5 dùng `creature_{id}_{animation}_{direction}_{frame}`. Bé sẽ thống nhất một quy ước trong content-tools ở Phase 1 (đề xuất giữ mẫu Part 3 vì có direction + id số, dễ validate).
+- *Tên NPC chính thức:* Part 10 §8 nói tên NPC chính "cần được chốt trong Character Bible" và chỉ liệt kê vai trò; Part 3 đã có sẵn tên (Elder Rowan, Mira, Kael, Elara). Bé giữ tên Part 3 làm tên làm việc cho tới khi có Character Bible riêng.
+- *Localization:* Part 13 §9 yêu cầu kiến trúc hỗ trợ **tiếng Việt + tiếng Anh** ngay từ đầu (mọi UI string qua localization key, font hỗ trợ dấu tiếng Việt) — đưa vào Phase 1 khi dựng UI framework, không để retrofit.
