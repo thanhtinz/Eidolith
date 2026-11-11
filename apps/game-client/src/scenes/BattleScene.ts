@@ -33,13 +33,13 @@ interface UnitVis {
 /** Approved ultimate splash art, keyed by creature id. Species without an
  * entry fall back to a sprite-based cut-in band. */
 const ULT_ART: Record<string, string> = {
-  "EID-001": "assets/battle/ult-eid-001-v1.png",
+  "EID-001": "assets/battle/ult-eid-001-v2.png",
 };
 /** Animated ultimate cinematics (image-to-video from the splash art).
  * Species listed here get a real animated cut-in; the rest use the
  * splash/band presentation. */
 const ULT_VIDEO: Record<string, string> = {
-  "EID-001": "assets/battle/ult-eid-001-v1.mp4",
+  "EID-001": "assets/battle/ult-eid-001-v2.mp4",
 };
 
 export class BattleScene extends Phaser.Scene {
@@ -487,7 +487,7 @@ export class BattleScene extends Phaser.Scene {
     const slot = this.overlay?.querySelector("#bt-cutin-slot");
     if (!slot) return;
     const rate = this.speed >= 2 ? 1.5 : 1;
-    this.cutinUntil = this.time.now + 3200 / rate;
+    this.cutinUntil = this.time.now + 3600 / rate;
     (window as unknown as Record<string, unknown>).__cutin = skillName;
     const poster = ULT_ART[v.def.creatureId];
     const el = document.createElement("div");

@@ -128,3 +128,7 @@ Nghiên cứu kỹ thuật các game cùng thể loại: khoảnh khắc ult "ki
 - BattleScene phát video ở lớp DOM phủ toàn màn hình (`startVideoCutin`): letterbox + khối tên dựng bằng CSS cùng phong cách, chớp trắng ở sự kiện `ended` của video rồi mới thả đòn; chạm để bỏ qua; ×1 phát trọn, ×2 phát nhanh 1,5×, ×4 tắt. Video được fetch làm ấm cache ngay khi vào trận.
 - Bản dùng: `public/assets/battle/ult-eid-001-v1.mp4` — 1280×720, H.264, 3,0s, 1,8MB (nén crf 26, bỏ track âm; nguồn thô ở `~/workspace/imagine_media/`). MP4 không vào git như mọi asset hình.
 - Kiểm chứng Chrome thật: chụp được khung hình video đang phát trong trận (toàn màn hình, letterbox + tên chiêu ở lớp DOM), và khung "muộn" 1,1s sau khi video kết thúc cho thấy trận đã thả tiếp ult khác — vòng đời cut-in khép đúng.
+
+### 10.2 Chuẩn style ult = CHIBI (Tín chốt 2026-11-11: "Đang chibi mà")
+
+Bản splash/video v1 bị bác vì tỉ lệ anime trưởng thành lệch hẳn sprite chibi trong game. Chuẩn từ nay: **mọi splash + video ult phải chibi** — đầu to tròn, mắt to long lanh, thân nhỏ mũm, đúng tỉ lệ sprite của loài đó. Emberling đã làm lại: splash chibi (`art-concepts/media-generation-ult-emberling-chibi-v2-0.webp` → `ult-eid-001-v2.png`) và video chibi (`ult-eid-001-v2.mp4`). Lưu ý sản xuất: video thô ra dài 10s — bản dùng trong game được dựng lại bằng ffmpeg: đoạn gầm + lao (0–2,0s) cắt thẳng vào đoạn bùng nổ cuối (8,5–10s), tổng 3,5s, 1,4MB. Registry đã trỏ sang v2; bản v1 giữ trên đĩa làm đối chứng.
