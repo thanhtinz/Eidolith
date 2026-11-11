@@ -99,3 +99,13 @@ Baseline theo role (multiplier tính trên ATK; cooldown tính bằng giây, quy
 3. Thời lượng trung vị ~59s vẫn dưới mục tiêu 90–120s của §2.1 — trận nhanh do đội hình mỏng; có thể nâng HP_SCALE tiếp nếu Tín muốn trận dài hơn.
 
 **Chưa làm (đúng phạm vi đã chốt)**: boss + telegraph (Phase 5 cùng Ancient Treant), phần thưởng/XP sau trận (Phase 5 Progression), nền đấu trường vẽ tranh (hiện là sân cỏ kẻ ô), bảng stat đầy đủ MATK/MDEF/CRIT/RES (Phase 5).
+
+## 9. Đợt sửa trình diễn (2026-11-11, sau phản hồi "ráp asset vào xấu quá")
+
+Bản đầu của BattleScene đúng là xấu thật: nền sân cỏ kẻ ô vẽ bằng hình vector phẳng, 10 unit dồn thành một cục ở góc, loài chưa có sprite là vòng tròn chữ to. Đã sửa tận gốc:
+
+- **Nền đấu trường vẽ tranh**: sinh một backdrop vẽ tay cùng style Premium Pixel của game (trảng cỏ + vòng đất nện viền đá, bụi cây/đá ở góc) — nguồn ở `art-concepts/media-generation-arena-backdrop-v1-*.png`, hậu kỳ pixel-lean (khối 2px + palette 64) giống hệt pipeline asset trong game, bản dùng ở `apps/game-client/public/assets/battle/arena-v1.png` (PNG không vào git như mọi asset khác; tái tạo bằng đúng prompt trong lịch sử sinh ảnh + bước hậu kỳ PIL ở đầu file này). BattleScene ánh xạ sân logic 16×10 vào đúng vòng đất (x 215..1065, y 180..540).
+- **Unit có thân**: SEPARATION_DIST 1.0→1.55 (lực đẩy 0.35→0.5), tầm đánh cận chiến 1.4→1.8/1.9 để unit đứng đánh ở mép thân thay vì chui vào nhau; sprite hiển thị 92→68px + nhịp thở nhẹ; nhãn tên chia 2 hàng theo chẵn/lẻ; xác chết mờ 0.22 + thu nhỏ 0.92 để quân sống đọc trước.
+- **AI bớt dồn cục**: trọng số Distance trong hồ sơ aggressive/protect/ranged tăng lên 0.40 (§8.3) — unit ưu tiên địch gần, trận tách thành nhiều cặp đấu cục bộ thay vì một bầy dồn vào con ít máu nhất; assassin giữ nguyên tính lao hậu tuyến. Knockback giảm 55% khi mục tiêu đã sát tường (bớt ghim trận vào góc).
+- **Đội địch ưu tiên loài có sprite** (khối lượng ×3 cho 7 loài đã có sprite trong battles.ts) để trận tập ít vòng tròn chữ nhất có thể; 13 loài chưa có sprite vẫn là nợ art đã ghi.
+- Số simulation sau đợt sửa: thắng 491/509, trung vị 68,1s, hết giờ 14,5%, reaction 5,0/trận; đội Epic/Rare thắng Common tăng 82→90/100 (hệ quả của targeting theo khoảng cách — đội mạnh phối hợp cục bộ tốt hơn; chấp nhận được, ghi lại để Tín biết).

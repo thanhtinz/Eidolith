@@ -28,8 +28,12 @@ const toTeamUnit = (u: BattleUnitInit): BattleTeamUnit => ({
 
 /** Practice opponent: same headcount as the player's team, species drawn
  * from the full roster, level near the player's average. */
+/** Species that already have in-game sprites (client CREATURE_SPRITES).
+ * Weighted ×3 so practice battles mostly show real art instead of the
+ * letter placeholders used for the 13 species still waiting for sprites. */
+const SPRITE_SPECIES = new Set(["EID-001", "EID-002", "EID-003", "EID-004", "EID-005", "EID-006", "EID-011"]);
 function buildEnemyTeam(count: number, avgLevel: number, rng: () => number): BattleUnitInit[] {
-  const pool = [...CREATURES];
+  const pool = CREATURES.flatMap(c => SPRITE_SPECIES.has(c.id) ? [c, c, c] : [c]);
   const picks: string[] = [];
   while (picks.length < count && pool.length) {
     const idx = Math.floor(rng() * pool.length);

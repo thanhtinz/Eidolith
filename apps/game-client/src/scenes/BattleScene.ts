@@ -6,9 +6,8 @@ import Phaser from "phaser";
 import type { BattleResponse, BattleTeamUnit } from "@eidolith/shared-types";
 import { network } from "../net/NetworkManager";
 
-const TILE = 72, OX = 64;
-const sx = (x: number) => OX + x * TILE;
-const sy = (y: number) => y * TILE;
+const sx = (x: number) => 215 + (x / 16) * 850;
+const sy = (y: number) => 180 + (y / 10) * 360;
 const ELEMENT_CSS: Record<string, string> = {
   Flame: "#ff8a5c", Tide: "#6ec1ff", Grove: "#8fd96a", Stone: "#d8a860", Gale: "#7fd4c1",
   Frost: "#bfeaff", Volt: "#ffd94a", Venom: "#b07fe8", Shade: "#9aa3d8", Astral: "#f2a7d4",
@@ -51,6 +50,10 @@ export class BattleScene extends Phaser.Scene {
     this.units = new Map(); this.evIdx = 0; this.playTick = 0; this.done = false; this.speed = 1;
   }
 
+  preload(): void {
+    this.load.image("arena_bg", "assets/battle/arena-v1.png");
+  }
+
   create(): void {
     this.drawArena();
     for (const def of this.battle.teams) this.makeUnit(def);
@@ -59,13 +62,12 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private drawArena(): void {
-    const g = this.add.graphics();
-    g.fillStyle(0x141c10, 1).fillRect(0, 0, 1280, 720);
-    for (let x = 0; x < 16; x++) for (let y = 0; y < 10; y++) {
-      g.fillStyle((x + y) % 2 === 0 ? 0x3d5c26 : 0x38531f, 1).fillRect(OX + x * TILE, y * TILE, TILE, TILE);
+    if (this.textures.exists("arena_bg")) {
+      this.add.image(640, 360, "arena_bg").setDisplaySize(1280, 720).setDepth(0);
+    } else {
+      const g = this.add.graphics();
+      g.fillStyle(0x3d5c26, 1).fillRect(0, 0, 1280, 720);
     }
-    g.lineStyle(3, 0xd4a437, 0.85).strokeRect(OX, 0, 16 * TILE, 720);
-    g.lineStyle(2, 0xffffff, 0.14).lineBetween(640, 8, 640, 712);
   }
 
   private makeUnit(def: BattleTeamUnit): void {
@@ -77,7 +79,8 @@ export class BattleScene extends Phaser.Scene {
     const key = `cr_${def.creatureId}`;
     if (this.textures.exists(key)) {
       const img = this.add.image(0, -6, key);
-      const h = 92; img.setDisplaySize(h * (img.width / Math.max(1, img.height)), h);
+      const h = 68; img.setDisplaySize(h * (img.width / Math.max(1, img.height)), h);
+      this.tweens.add({ targets: img, y: -3, duration: 850 + (Number(def.unitId.split("-")[1] ?? 0)) * 130, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
       if (def.team === 1) img.setFlipX(true);
       cont.add(img); art = img;
     } else {
@@ -85,7 +88,8 @@ export class BattleScene extends Phaser.Scene {
       const letter = this.add.text(0, -6, def.name.charAt(0), { fontSize: "26px", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
       cont.add([circle, letter]); art = circle;
     }
-    const name = this.add.text(0, -64, `${def.name} · Lv.${def.level}`, {
+    const nameY = Number(def.unitId.split("-")[1] ?? 0) % 2 === 0 ? -64 : -82;
+    const name = this.add.text(0, nameY, `${def.name} · Lv.${def.level}`, {
       fontSize: "12.5px", color: "#f7ead0", backgroundColor: "rgba(10,8,4,0.62)", padding: { x: 6, y: 2 },
       fontFamily: "'Be Vietnam Pro', sans-serif",
     }).setOrigin(0.5);
@@ -338,8 +342,9 @@ export class BattleScene extends Phaser.Scene {
         v.dead = true; v.hp = 0;
         v.bar.clear();
         if (!instant) {
-          this.tweens.add({ targets: v.cont, alpha: 0.35, duration: 350 });
-        } else { v.cont.setAlpha(0.35); }
+          this.tweens.add({ targets: v.cont, alpha: 0.22, duration: 350 });
+          this.tweens.add({ targets: v.cont, scaleX: 0.92, scaleY: 0.92, duration: 350 });
+        } else { v.cont.setAlpha(0.22); v.cont.setScale(0.92); }
         break;
       }
       case "BattleCompleted": {

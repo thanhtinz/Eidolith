@@ -257,7 +257,7 @@ export class BattleEngine {
         if (!a.alive || !b.alive) continue;
         const d = dist(a, b);
         if (d > 0.001 && d < COMBAT.SEPARATION_DIST) {
-          const push = (COMBAT.SEPARATION_DIST - d) * 0.35;
+          const push = (COMBAT.SEPARATION_DIST - d) * 0.5;
           const dx = (b.x - a.x) / d, dy = (b.y - a.y) / d;
           a.x = clamp(a.x - dx * push, 0.6, COMBAT.ARENA_W - 0.6);
           a.y = clamp(a.y - dy * push, 0.6, COMBAT.ARENA_H - 0.6);
@@ -352,8 +352,10 @@ export class BattleEngine {
     if (kind === "Knockback") {
       if (this.rng.next() >= chance) return;
       const d = Math.max(dist(src, tgt), 0.001);
-      tgt.x = clamp(tgt.x + (tgt.x - src.x) / d * COMBAT.KNOCKBACK_DIST, 0.6, COMBAT.ARENA_W - 0.6);
-      tgt.y = clamp(tgt.y + (tgt.y - src.y) / d * COMBAT.KNOCKBACK_DIST, 0.6, COMBAT.ARENA_H - 0.6);
+      const nearWall = tgt.x < 1.6 || tgt.x > COMBAT.ARENA_W - 1.6 || tgt.y < 1.6 || tgt.y > COMBAT.ARENA_H - 1.6;
+      const kb = COMBAT.KNOCKBACK_DIST * (nearWall ? 0.45 : 1);
+      tgt.x = clamp(tgt.x + (tgt.x - src.x) / d * kb, 0.6, COMBAT.ARENA_W - 0.6);
+      tgt.y = clamp(tgt.y + (tgt.y - src.y) / d * kb, 0.6, COMBAT.ARENA_H - 0.6);
       this.emit("StatusApplied", { targetId: tgt.init.unitId, status: kind, stacks: 0, durationTicks: 0 });
       this.emit("UnitMoved", { unitId: tgt.init.unitId, x: Math.round(tgt.x * 100) / 100, y: Math.round(tgt.y * 100) / 100 });
       return;

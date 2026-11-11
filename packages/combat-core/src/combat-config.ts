@@ -17,10 +17,10 @@ export const COMBAT = {
   MOVE_EMIT_EVERY: 3,
 
   /* Ranges in arena units. Melee roles close in; ranged roles keep distance. */
-  ROLE_RANGE: { Guardian: 1.4, Striker: 1.4, Specialist: 1.6, Controller: 3.2, Ranger: 4.2, Support: 4.0 } as Record<CombatRole, number>,
+  ROLE_RANGE: { Guardian: 1.8, Striker: 1.8, Specialist: 1.9, Controller: 3.4, Ranger: 4.4, Support: 4.2 } as Record<CombatRole, number>,
   SUPPORT_ACTION_RANGE: 5.5, // heal / shield reach
   MOVE_PER_SPD: 0.02, // units per tick per SPD point (BASELINE)
-  SEPARATION_DIST: 1.0,
+  SEPARATION_DIST: 1.55,
   SEPARATION_PUSH: 0.05,
 
   /* Basic attack (Part 7 §10.1): one hit every BASE × 15/SPD ticks. */
@@ -64,10 +64,10 @@ export const COMBAT = {
 /** Utility-AI target scoring weights (Part 7 §8.3) per AI profile.
  * Order: Threat, LowHP, Distance, RolePriority, Vulnerability. */
 export const AI_PROFILES = {
-  aggressive: { threat: 0.30, lowHp: 0.25, distance: 0.20, role: 0.15, vuln: 0.10 },
+  aggressive: { threat: 0.25, lowHp: 0.15, distance: 0.40, role: 0.10, vuln: 0.10 },
   assassin:   { threat: 0.10, lowHp: 0.40, distance: 0.10, role: 0.30, vuln: 0.10 },
-  protect:    { threat: 0.40, lowHp: 0.05, distance: 0.25, role: 0.20, vuln: 0.10 },
-  ranged:     { threat: 0.20, lowHp: 0.20, distance: 0.30, role: 0.20, vuln: 0.10 },
+  protect:    { threat: 0.30, lowHp: 0.05, distance: 0.40, role: 0.15, vuln: 0.10 },
+  ranged:     { threat: 0.15, lowHp: 0.15, distance: 0.40, role: 0.20, vuln: 0.10 },
 } as const;
 export type AiProfile = keyof typeof AI_PROFILES;
 export const ROLE_AI_PROFILE: Record<CombatRole, AiProfile> = {
