@@ -3,13 +3,13 @@
 Nghiên cứu theo lệnh của Tín "Nghiên cứu làm hud phía trên đi".
 
 ## Nguồn tham khảo
-- **Tài liệu của game (khóa cứng):** Part 13 §4 — vùng trên cùng của World HUD gồm: trạng thái người chơi, tóm tắt tiền tệ, chỉ báo kết nối; tracker nhiệm vụ là thành phần ngữ cảnh (thu gọn được). Part 5 §7 — ví gồm `currency_types` + `player_wallets` (BIGINT), 4 tiền tệ MVP: Gold, Crystal, Bond Essence, Evolution Core (Part 11 §12).
+- **Tài liệu của game (khóa cứng):** Part 13 §4 — vùng trên cùng của World HUD gồm: trạng thái người chơi, tóm tắt tiền tệ; tracker nhiệm vụ là thành phần ngữ cảnh (thu gọn được). Part 5 §7 — ví gồm `currency_types` + `player_wallets` (BIGINT), 4 tiền tệ MVP: Gold, Crystal, Bond Essence, Evolution Core (Part 11 §12).
 - **Game mobile cùng thể loại (Pokémon GO, Nexomon, các game gacha mobile):** mẫu chung đã thành chuẩn — cụm trái là chân dung nhân vật có huy hiệu cấp + tên + thanh EXP mảnh; cụm phải là các chip tiền tệ dạng pill (icon + số, bấm + để nạp/mở shop) và nút tròn cho Thư/Cài đặt. Mọi thứ nằm trong một thanh duy nhất cao ~1/14 màn hình, nền tối mờ để không tranh với cảnh.
 - **Coromon:** thông tin trạng thái đội/người chơi luôn gọn ở viền, giữa màn hình tuyệt đối không có overlay thường trực.
 
 ## Quyết định cho Eidolith
 1. **Một thanh HUD duy nhất** ở trên cùng (thay hai chip rời trước đây):
-   - Trái: avatar trong khung bo góc + huy hiệu cấp tròn ở góc dưới-phải avatar; tên nhân vật (kèm chấm kết nối xanh khi WebSocket đang mở); dưới tên là **thanh EXP** mảnh màu teal kèm số EXP.
+   - Trái: avatar trong khung bo góc + huy hiệu cấp tròn ở góc dưới-phải avatar; tên nhân vật (— chấm chỉ báo kết nối đã bị bỏ theo lệnh của Tín 2026-11-11); dưới tên là **thanh EXP** mảnh màu teal kèm số EXP.
    - Phải: chip **Gold** và chip **Crystal** (icon SVG xu/gem, số định dạng phân cách nghìn kiểu 1.250), nút tròn **Thư** và **Cài đặt** — bấm mở panel Menu của hub (Cài đặt mở thẳng mục cài đặt).
 2. **Hàng hai (ngữ cảnh, nhỏ và nhẹ):** trái là tracker nhiệm vụ dạng pill ("Arc 0 · Nói chuyện với Elder Rowan", bấm mở panel Nhiệm vụ); phải là chip ngữ cảnh (tên map · giờ thế giới · thời tiết · số người chơi) — giữ nguyên dữ liệu sống như trước.
 3. **Tiền tệ phải là số thật:** dựng ví theo Part 5 §7 (migration 002: `economy.currency_types`, `economy.player_wallets`, `economy.currency_transactions`) + API `GET /player/wallet`. Tài khoản mới nhận quà khởi đầu **500 Gold + 30 Crystal** (mức baseline MVP do Bé đặt vì tài liệu không ghi số khởi đầu — có ghi transaction `starter_grant` để kiểm toán, chỉnh sau nếu Tín muốn mức khác). Tài khoản cũ được cấp ví khi migration chạy.

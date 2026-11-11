@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import type { PlayerProfile } from "@eidolith/shared-types";
-import { network } from "../net/NetworkManager";
 import { CREATURES, ELEMENTS } from "@eidolith/game-data";
 /** Hub UI (Part 13 §2): top player bar + bottom navigation
  *  World · Eidolons · Sanctuary · Quests · Menu with bottom-sheet panels.
@@ -56,8 +55,6 @@ const CSS = `
 .hud-badge{position:absolute;right:-7px;bottom:-7px;min-width:26px;height:26px;border-radius:50%;background:#e8c96a;color:#231a05;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #0b0f14;padding:0 4px}
 .hud-meta{min-width:0}
 .hud-meta .nm{font-size:20px;font-weight:700;line-height:1.15;display:flex;align-items:center;gap:8px;white-space:nowrap}
-.dot{width:10px;height:10px;border-radius:50%;background:#5a6672;flex:none}
-.dot.on{background:#57d977;box-shadow:0 0 6px #57d977}
 .hud-exp{position:relative;width:196px;height:17px;background:rgba(255,255,255,.10);border-radius:9px;margin-top:5px;overflow:hidden}
 .hud-exp i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#2fae9b,#7fd4c1);border-radius:9px}
 .hud-exp span{position:absolute;inset:0;font-size:11.5px;line-height:17px;text-align:center;color:#eaf6f2;text-shadow:0 1px 2px rgba(0,0,0,.6)}
@@ -176,7 +173,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     <div class="hudbar">
       <div class="hud-id">
         <div class="hud-av"><img src="${avatar}" alt=""/><span class="hud-badge">${p.level}</span></div>
-        <div class="hud-meta"><div class="nm">${p.displayName}<span class="dot" id="hub-conn"></span></div>
+        <div class="hud-meta"><div class="nm">${p.displayName}</div>
           <div class="hud-exp"><i style="width:${Math.min(100, Math.round((p.experience / (100 * p.level)) * 100))}%"></i><span>EXP ${p.experience}/${100 * p.level}</span></div></div>
       </div>
       <div class="hud-right">
@@ -232,10 +229,6 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   const fmt = (n: number) => n.toLocaleString("vi-VN");
   const goldEl = root.querySelector("#w-gold") as HTMLElement;
   const crystalEl = root.querySelector("#w-crystal") as HTMLElement;
-  const connEl = root.querySelector("#hub-conn") as HTMLElement;
-  const drawConn = () => connEl.classList.toggle("on", network.worldConnected);
-  drawConn();
-  const connTimer = window.setInterval(drawConn, 2000);
   (root.querySelector("#hub-qtrack") as HTMLElement).addEventListener("click", () => setTab("quests"));
   const panel = root.querySelector("#hub-panel") as HTMLElement;
   const title = root.querySelector("#hub-title") as HTMLElement;
@@ -333,7 +326,6 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       crystalEl.textContent = fmt(w.crystal);
     },
     destroy: () => {
-      window.clearInterval(connTimer);
       window.clearInterval(clockTimer);
       scene.game.events.off("hud:players", onPlayers);
       window.clearInterval(syncTimer);
