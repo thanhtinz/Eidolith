@@ -4,12 +4,12 @@ import { PreloadScene } from "./scenes/PreloadScene";
 import { LoginScene } from "./scenes/LoginScene";
 import { WorldScene } from "./scenes/WorldScene";
 import { HudScene } from "./scenes/HudScene";
-// TDD Part 4: logical resolution 720x1280 portrait, Scale FIT, pixelArt.
+// Landscape 1280x720 (Tín, 2026-11-11 — overrides the Part 4 portrait lock), Scale FIT, pixelArt.
 new Phaser.Game({
   type: Phaser.AUTO,
   parent: "game",
-  width: 720,
-  height: 1280,
+  width: 1280,
+  height: 720,
   backgroundColor: "#1a2418",
   pixelArt: true,
   roundPixels: true,

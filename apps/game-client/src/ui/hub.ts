@@ -46,7 +46,7 @@ const MENU_ICONS: Record<string, string> = {
 };
 
 const CSS = `
-.hub-root{position:relative;width:720px;height:1280px;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#e8e4d8;pointer-events:none}
+.hub-root{position:relative;width:1280px;height:720px;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#e8e4d8;pointer-events:none}
 .hub-root *{box-sizing:border-box;margin:0;padding:0}
 .hudbar{position:absolute;top:12px;left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(8,13,18,.66);border:1px solid rgba(232,201,106,.35);border-radius:18px;padding:8px 12px;pointer-events:auto;backdrop-filter:blur(3px)}
 .hud-id{display:flex;align-items:center;gap:11px;min-width:0}
@@ -75,12 +75,12 @@ const CSS = `
 .hub-ctx .mp{font-size:15.5px;font-weight:700;line-height:1.2}
 .hub-ctx .ck{font-size:13.5px;color:#cdb87a}
 .hub-ctx .wt{font-size:13px;color:#9fc6e8}
-.hub-nav{position:absolute;left:0;right:0;bottom:0;display:flex;background:rgba(8,12,17,.88);border-top:1px solid rgba(232,201,106,.35);padding:10px 8px 18px;pointer-events:auto;backdrop-filter:blur(4px)}
-.hub-nav button{flex:1;background:none;border:none;color:#9a937f;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:15.5px;padding:8px 0 4px;border-radius:14px;cursor:pointer}
+.hub-nav{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;background:rgba(8,12,17,.88);border:1px solid rgba(232,201,106,.35);border-radius:20px;padding:10px 8px;pointer-events:auto;backdrop-filter:blur(4px)}
+.hub-nav button{width:78px;background:none;border:none;color:#9a937f;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13.5px;padding:9px 0 7px;border-radius:14px;cursor:pointer}
 .hub-nav button svg{width:30px;height:30px}
 .hub-nav button i{font-size:26px}
 .hub-nav button.on{color:#e8c96a;background:rgba(232,201,106,.10)}
-.hub-panel{position:absolute;left:12px;right:12px;bottom:104px;max-height:760px;display:none;flex-direction:column;background:rgba(10,16,22,.94);border:1px solid rgba(232,201,106,.4);border-radius:22px;pointer-events:auto;overflow:hidden}
+.hub-panel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(950px,calc(100% - 150px));max-height:656px;display:none;flex-direction:column;background:rgba(10,16,22,.96);border:1px solid rgba(232,201,106,.4);border-radius:22px;pointer-events:auto;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.55)}
 .hub-panel.open{display:flex}
 .hub-panel header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 10px}
 .hub-panel header h2{font-size:23px;color:#e8c96a}
@@ -90,7 +90,7 @@ const CSS = `
 .hub-sec{font-size:16px;color:#7fd4c1;letter-spacing:.4px;margin:14px 0 8px;text-transform:uppercase}
 .slots{display:flex;gap:10px}
 .slot{flex:1;height:86px;border:1.5px dashed rgba(232,228,216,.35);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#6a7264;font-size:14px;text-align:center;padding:4px}
-.dex{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dex{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .card{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:12px;display:flex;gap:12px;align-items:center}
 .card .art{width:74px;height:74px;flex:none;border-radius:12px;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.14),rgba(255,255,255,.02));display:flex;align-items:center;justify-content:center;overflow:hidden}
 .card .art img{width:74px;height:74px;object-fit:contain}
@@ -126,11 +126,11 @@ const CSS = `
 .tgl.on{background:#3f9e63}.tgl.on::after{left:30px}
 .logout{width:100%;margin-top:18px;padding:15px;border:none;border-radius:14px;background:#8c2f2f;color:#fff;font-size:17.5px;font-weight:700;cursor:pointer}
 .logout.confirm{background:#c33}
-.enc{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;background:rgba(4,6,9,.45);pointer-events:auto;z-index:5}
+.enc{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(4,6,9,.45);pointer-events:auto;z-index:5}
 .enc[hidden]{display:none}
-.enc-card{position:relative;width:100%;background:rgba(10,15,21,.96);border-top:1px solid rgba(232,201,106,.45);border-radius:26px 26px 0 0;padding:26px 26px 34px;text-align:center}
-.enc-card img{width:190px;height:190px;object-fit:contain}
-.enc-card .ph{font-size:110px;font-weight:800;line-height:190px}
+.enc-card{position:relative;width:520px;background:rgba(10,15,21,.97);border:1px solid rgba(232,201,106,.45);border-radius:26px;padding:22px 26px 26px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.55)}
+.enc-card img{width:150px;height:150px;object-fit:contain}
+.enc-card .ph{font-size:88px;font-weight:800;line-height:150px}
 .enc-card h3{font-size:27px;margin-top:6px}
 .enc-card .meta{display:flex;gap:8px;justify-content:center;margin-top:9px;font-size:15.5px;color:#9a937f}
 .enc-msg{min-height:26px;font-size:17px;margin:14px 0 6px;color:#e8e4d8}
@@ -148,7 +148,7 @@ const CSS = `
 .bagrow{display:flex;align-items:center;gap:13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:13px 15px;margin-bottom:10px}
 .bagrow i{font-size:24px;color:#e8c96a}
 .bagrow .qty{margin-left:auto;font-weight:800;font-size:18px;color:#e8c96a}
-.toast{position:absolute;left:50%;transform:translateX(-50%);bottom:196px;background:rgba(8,12,17,.92);border:1px solid rgba(232,201,106,.5);color:#e8e4d8;padding:11px 20px;border-radius:12px;font-size:16px;display:none;pointer-events:none;white-space:nowrap}
+.toast{position:absolute;left:50%;transform:translateX(-50%);bottom:26px;background:rgba(8,12,17,.92);border:1px solid rgba(232,201,106,.5);color:#e8e4d8;padding:11px 20px;border-radius:12px;font-size:16px;display:none;pointer-events:none;white-space:nowrap}
 `;
 
 function dexCard(c: (typeof CREATURES)[number]): string {
@@ -227,14 +227,14 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   // full-screen overlay on high-DPI displays; plain CSS transform is exact.)
   const overlay = document.createElement("div");
   overlay.innerHTML = html;
-  overlay.style.cssText = "position:fixed;left:0;top:0;width:720px;height:1280px;transform-origin:0 0;z-index:30;pointer-events:none";
+  overlay.style.cssText = "position:fixed;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;z-index:30;pointer-events:none";
   document.body.appendChild(overlay);
   const canvas = scene.game.canvas;
   const sync = () => {
     const r = canvas.getBoundingClientRect();
     overlay.style.left = `${r.left}px`;
     overlay.style.top = `${r.top}px`;
-    overlay.style.transform = `scale(${r.width / 720})`;
+    overlay.style.transform = `scale(${r.width / 1280})`;
   };
   sync();
   const syncTimer = window.setInterval(sync, 600);
@@ -442,7 +442,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     encEl.hidden = false;
     encEl.innerHTML = `<div class="enc-card">
       <button class="x enc-x" id="enc-close"><i class="fa-solid fa-xmark"></i></button>
-      ${artFor(enc.creatureId, 190)}
+      ${artFor(enc.creatureId, 150)}
       <h3>${def.name}</h3>
       <div class="meta"><span class="chip" style="background:${ELEMENT_COLOR[def.element]};color:#10131a;padding:2px 10px;border-radius:999px;font-weight:700">${ELEMENT_VI[def.element] ?? def.element}</span>
       <span style="color:${RARITY_COLOR[def.rarity]}">${RARITY_VI[def.rarity]}</span><span>Cấp ${enc.level}</span></div>

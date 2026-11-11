@@ -193,11 +193,27 @@ for i, name in enumerate(["npc-rowan-v5", "npc-mira-v5", "npc-kael-v5"]):
 print("NPC v4 done")
 
 # ---------- Forest creatures sheet: Pebblit / Glowmoth / Rootusk ----------
+def keep_largest(img):
+    """Drop detached fragments (neighbour art bleeding into the cell, stray
+    curls) — keep only the largest connected opaque component."""
+    import numpy as np
+    from scipy import ndimage
+    a = np.array(img.split()[3]) > 10
+    lab, n = ndimage.label(a)
+    if n <= 1:
+        return img
+    sizes = ndimage.sum(a, lab, range(1, n + 1))
+    keep = 1 + int(np.argmax(sizes))
+    out = np.array(img)
+    out[..., 3] = np.where(lab == keep, out[..., 3], 0)
+    from PIL import Image as _Im
+    return _Im.fromarray(out)
+
 fc = Image.open(f"{AC}/media-generation-eidolith-forest-creatures-v1-0-cd43d367-245f-4b6a-a05f-87ba8626e6ab.webp")
 _fw, _fh = fc.size
 for i, name in enumerate(["pebblit", "glowmoth", "rootusk"]):
     cell = fc.crop((i * _fw // 3 + 8, 20, (i + 1) * _fw // 3 - 8, _fh - 20))
-    c = extract(cell, tol=22)
+    c = keep_largest(extract(cell, tol=22))
     print(name, c.size)
     finish(c, 170).save(f"{OUT_CR}/{name}-v1.png")
 print("forest creatures done")

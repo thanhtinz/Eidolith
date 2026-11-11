@@ -18,3 +18,10 @@ Nghiên cứu nhanh trước khi dựng, theo lệnh của Tín "Nghiên cứu l
    - *Nhiệm vụ:* tab Chính tuyến / Hằng ngày / Phụ; Arc 0 với 3 mục tiêu đầu; 5 mục tiêu ngày theo Part 10 §13.
    - *Menu:* thẻ hồ sơ + lưới 8 mục theo Part 13; Cài đặt dùng được ngay (bật/tắt nhạc & hiệu ứng, lưu máy); Đăng xuất hoạt động thật; các mục còn lại báo rõ "mở ở giai đoạn sau" thay vì làm giả.
 6. HUD cũ bỏ chip tên người chơi ở góc dưới-phải (đã chuyển lên thanh trên của hub) để tránh trùng lặp; joystick nâng lên trên nav.
+
+## Bổ sung 2026-11-11 — CHUYỂN NGANG 1280×720 (lệnh của Tín, ghi đè khóa dọc 9:16 của Part 4)
+- Phaser logical size đổi 720×1280 → **1280×720** (Scale FIT giữ nguyên); hub DOM root đổi tương ứng.
+- **Điều hướng chính**: bỏ thanh đáy, thành **rail dọc ở mép phải** (5 mục giữ nguyên thứ tự/icon Font Awesome, nhãn dưới icon, mục đang chọn vàng) — vùng giữa màn hình hoàn toàn dành cho thế giới.
+- **Panel**: bỏ bottom-sheet, thành **hộp thoại giữa màn hình** (rộng tối đa 950, cao tối đa 656, chừa rail phải), nền tối .96 + bóng đổ; sổ loài 3 cột.
+- **Thẻ encounter**: thẻ giữa màn hình rộng 520, art 150px.
+- Thanh trên, tracker nhiệm vụ, chip ngữ cảnh, joystick trái-dưới giữ nguyên vị trí tương đối. Toast chuyển xuống đáy giữa.
