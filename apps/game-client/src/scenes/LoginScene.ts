@@ -45,10 +45,11 @@ export class LoginScene extends Phaser.Scene {
   private async enterWorld(): Promise<void> {
     try {
       const profile = await network.request<PlayerProfile>("GET", "/player/me");
-      this.scene.start("World", { profile });
+      const snapshot = await network.connect();
+      this.scene.start("World", { profile, snapshot });
     } catch {
       network.clearTokens();
-      this.showForm(false);
+      if (this.scene.isActive()) this.showForm(false);
     }
   }
 }

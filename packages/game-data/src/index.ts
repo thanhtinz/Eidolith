@@ -105,3 +105,4 @@ export function validateGameData(): string[] {
 export function contentChecksum(): string {
   return fnv1a(JSON.stringify({ v: CONTENT_VERSION, creatures: CREATURES, elements: ELEMENTS, reactions: REACTIONS })).toString(16);
 }
+export * from "./maps.js";

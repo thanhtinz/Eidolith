@@ -5,6 +5,7 @@ export interface WsEnvelope<T = unknown> {
 export const WsClientEvents = {
   Authenticate: "auth.authenticate",
   PlayerMove: "world.player.move",
+  ChangeMap: "world.change_map",
   ChatSend: "chat.send",
   Ping: "system.ping",
 } as const;

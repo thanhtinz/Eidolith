@@ -23,7 +23,7 @@ Mục này là tài liệu làm việc của Bé — phần 4 là các điểm G
 Monorepo đúng cấu trúc TDD §3.1 (apps/game-client, game-server, admin-panel, content-tools; packages/shared-types, game-data, combat-core, navigation-core, protocol, validation, math-utils). Server modular monolith + PG migration 001–005 (auth/players/creatures/world/combat) + Redis. Auth đủ bộ theo API §3 (register/login/refresh rotation/logout, session hash). Client: Boot/Preload/Login/Character scenes, Network Manager theo API §26.
 *Mốc nghiệm thu:* DB-001, API-001/002, TDD-001 — đăng ký, đăng nhập, vào được game.
 
-**Phase 2 – Isometric World**
+**Phase 2 – Isometric World** ✅ XONG 2026-11-10 (kiểm chứng sống: validator map, WS 2 client incl. anti-teleport, Chrome thật tap-to-move + đi qua portal + resume vị trí)
 Tiled pipeline + map validator (World §20.3), render isometric 64×32 + depth sorting, tap-to-move + joystick, A* trên navigation grid, collision, camera follow/bounds, chuyển map. Hai map đầu: meadow_village (P0) + whispering_forest (P0). World networking: zone instance, AOI, snapshot, reconnect/resume (API §22). Thời gian server 60 phút/chu kỳ + weather đồng bộ.
 *Mốc nghiệm thu:* WORLD-001→007, 012, 013, 015, 016; TDD-002/003/004/005.
 

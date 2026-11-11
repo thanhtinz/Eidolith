@@ -3,3 +3,5 @@ dist/
 .env
 *.log
 shots/
+# Art sinh bằng tools/gen_art.py (chạy lại để tái tạo, seed cố định)
+apps/game-client/public/assets/**/*.png

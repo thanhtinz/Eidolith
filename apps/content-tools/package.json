@@ -1,3 +1,17 @@
-{ "name": "@eidolith/content-tools", "version": "0.1.0", "private": true, "type": "module",
-  "scripts": { "validate": "tsx src/validate-data.ts" },
-  "dependencies": { "@eidolith/game-data": "*" }, "devDependencies": { "tsx": "^4.19.2", "typescript": "^5.7.2" } }
+{
+  "name": "@eidolith/content-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "tsx src/validate-data.ts && tsx src/validate-maps.ts"
+  },
+  "dependencies": {
+    "@eidolith/game-data": "*",
+    "@eidolith/navigation-core": "*"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
