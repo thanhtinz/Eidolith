@@ -136,3 +136,7 @@ Bản splash/video v1 bị bác vì tỉ lệ anime trưởng thành lệch hẳ
 ### 10.3 Nhịp mặt ult: dễ thương → dữ (Tín chốt 2026-11-11)
 
 Luật biểu cảm cho video ult: **mở đầu giữ nguyên khuôn mặt chibi dễ thương như splash, càng về cuối càng dữ** — mày xếch xuống, mắt loé lửa, nhe nanh, kết bằng cận mặt dữ rồi mới bùng nổ. Emberling v3 đạt nhịp này bằng cách dựng hai nguồn: nửa đầu lấy từ video chibi v2 (mặt dễ thương, lửa dâng), cắt thẳng ở 1,5s sang nửa cuối của bản quay "dữ" (cận mặt mắt lửa + bùng nổ) — tổng 3,0s (`ult-eid-001-v3.mp4`, registry đã trỏ v3). Khi làm ult cho loài khác: brief quay phải ghi rõ nhịp biểu cảm này, và nếu bản quay lệch nhịp thì dựng lại bằng cắt nối như trên.
+
+### 10.4 ĐÍNH CHÍNH: dễ thương từ đầu đến cuối (Tín chốt lại 2026-11-11)
+
+Mục 10.3 bị THAY THẾ: Tín chốt lại là ult phải **dễ thương từ đầu đến cuối** — không chuyển mặt dữ ở cao trào. Bản dữ v3 đã gỡ khỏi game; bản đang dùng là `ult-eid-001-v4.mp4` (= bản dựng dễ thương của v2: gầm dễ thương → lao tới → bùng nổ, mặt chibi tròn mắt to suốt clip). Luật biểu cảm cuối cùng cho mọi ult: chibi dễ thương toàn trình, kịch tính đến từ chuyển động/lửa/hiệu ứng chứ không từ nét mặt hung dữ.
