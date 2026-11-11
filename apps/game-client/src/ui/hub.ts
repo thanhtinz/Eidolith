@@ -27,23 +27,23 @@ const ELEMENT_COLOR: Record<string, string> = {
 };
 
 const ICONS = {
-  world: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z" fill="currentColor" stroke="none"/></svg>',
-  eidolons: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/><path d="M3.5 12h6M14.5 12h6"/></svg>',
-  sanctuary: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/><path d="M12 20v-5"/></svg>',
-  quests: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 4h11a1 1 0 011 1v13a2 2 0 01-2 2H7"/><path d="M7 4a2 2 0 00-2 2v1h4"/><path d="M9.5 9h6M9.5 13h6"/></svg>',
-  menu: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.6"/></svg>',
+  world: '<i class="fa-solid fa-compass"></i>',
+  eidolons: '<i class="fa-solid fa-paw"></i>',
+  sanctuary: '<i class="fa-solid fa-house"></i>',
+  quests: '<i class="fa-solid fa-scroll"></i>',
+  menu: '<i class="fa-solid fa-grip"></i>',
 };
 
 
 const MENU_ICONS: Record<string, string> = {
-  bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1.2 12a2 2 0 01-2 1.8H8.2a2 2 0 01-2-1.8L5 8z"/><path d="M8.5 10V6.5a3.5 3.5 0 017 0V10"/></svg>',
-  summon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>',
-  shop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7l1.2-3.5h13.6L20 7"/><path d="M4 7h16v2a2.8 2.8 0 01-5.5 0 2.8 2.8 0 01-5 0A2.8 2.8 0 014 9V7z"/><path d="M5.5 12.5V20h13v-7.5"/></svg>',
-  friends: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.4"/><path d="M3.5 19.5c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 15.2c2.3.2 3.6 1.6 4 4.3"/></svg>',
-  guild: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 2.5v5.2c0 4.6-3 8.4-7 10.3-4-1.9-7-5.7-7-10.3V5.5L12 3z"/></svg>',
-  arena: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4l11 11M19 4L8 15"/><path d="M14.5 3.5L20.5 3.5 20.5 9.5M3.5 14.5L3.5 20.5 9.5 20.5"/></svg>',
-  settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8l1.2 2.7 2.9-.6 1 2.8 2.9.8-1 2.8 1 2.8-2.9.8-1 2.8-2.9-.6L12 20l-1.2-2.7-2.9.6-1-2.8-2.9-.8 1-2.8-1-2.8 2.9-.8 1-2.8 2.9.6L12 2.8z" stroke-linejoin="round"/></svg>',
-  mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>',
+  bag: '<i class="fa-solid fa-bag-shopping"></i>',
+  summon: '<i class="fa-solid fa-wand-magic-sparkles"></i>',
+  shop: '<i class="fa-solid fa-store"></i>',
+  friends: '<i class="fa-solid fa-user-group"></i>',
+  guild: '<i class="fa-solid fa-shield-halved"></i>',
+  arena: '<i class="fa-solid fa-trophy"></i>',
+  settings: '<i class="fa-solid fa-gear"></i>',
+  mail: '<i class="fa-solid fa-envelope"></i>',
 };
 
 const CSS = `
@@ -64,6 +64,7 @@ const CSS = `
 .hud-right{display:flex;align-items:center;gap:8px;flex:none}
 .cur{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:7px 13px 7px 9px;font-size:16.5px;font-weight:700}
 .cur svg{width:20px;height:20px}
+.cur i{font-size:19px}
 .cur.gold{color:#f2cf6b}.cur.gem{color:#8fd8ff}
 .cur span{color:#e8e4d8}
 .hbtn{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#cdb87a;display:flex;align-items:center;justify-content:center;cursor:pointer}
@@ -71,6 +72,7 @@ const CSS = `
 .hudrow{position:absolute;top:96px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
 .qtrack{display:flex;align-items:center;gap:8px;background:rgba(8,13,18,.55);border:1px solid rgba(232,201,106,.25);border-radius:999px;color:#e8e4d8;font-size:14.5px;padding:7px 14px 7px 10px;cursor:pointer;pointer-events:auto;max-width:400px}
 .qtrack svg{width:17px;height:17px;color:#e8c96a;flex:none}
+.qtrack i{font-size:15px;color:#e8c96a}
 .qtrack span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hub-ctx{text-align:right;background:rgba(8,13,18,.55);border:1px solid rgba(232,201,106,.25);border-radius:14px;padding:7px 13px;pointer-events:auto}
 .hub-ctx .mp{font-size:15.5px;font-weight:700;line-height:1.2}
@@ -79,6 +81,7 @@ const CSS = `
 .hub-nav{position:absolute;left:0;right:0;bottom:0;display:flex;background:rgba(8,12,17,.88);border-top:1px solid rgba(232,201,106,.35);padding:10px 8px 18px;pointer-events:auto;backdrop-filter:blur(4px)}
 .hub-nav button{flex:1;background:none;border:none;color:#9a937f;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:15.5px;padding:8px 0 4px;border-radius:14px;cursor:pointer}
 .hub-nav button svg{width:30px;height:30px}
+.hub-nav button i{font-size:26px}
 .hub-nav button.on{color:#e8c96a;background:rgba(232,201,106,.10)}
 .hub-panel{position:absolute;left:12px;right:12px;bottom:104px;max-height:760px;display:none;flex-direction:column;background:rgba(10,16,22,.94);border:1px solid rgba(232,201,106,.4);border-radius:22px;pointer-events:auto;overflow:hidden}
 .hub-panel.open{display:flex}
@@ -119,6 +122,7 @@ const CSS = `
 .mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .mgrid button{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:16px;color:#e8e4d8;padding:16px 4px 12px;font-size:15.5px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer}
 .mgrid button svg{width:30px;height:30px;color:#7fd4c1}
+.mgrid button i{font-size:27px;color:#7fd4c1}
 .setrow{display:flex;align-items:center;justify-content:space-between;padding:13px 2px;border-bottom:1px solid rgba(255,255,255,.07);font-size:17px}
 .tgl{width:58px;height:32px;border-radius:99px;background:rgba(255,255,255,.14);position:relative;cursor:pointer;flex:none}
 .tgl::after{content:'';position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#e8e4d8;transition:left .15s}
@@ -157,10 +161,9 @@ function questsHtml(tab: string): string {
 }
 
 const TOP_ICONS = {
-  coin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.4"/></svg>',
-  gem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10l3.5 5.5L12 20 3.5 9.5 7 4z"/><path d="M3.5 9.5h17M12 20L8.8 9.5 12 4l3.2 5.5L12 20"/></svg>',
-  mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>',
-  quest: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 3.5h12v17l-3-2.2L12 20.5l-3-2.2-3 2.2v-17z" stroke-linejoin="round"/><path d="M9.5 8h5M9.5 11.5h5"/></svg>',
+  coin: '<i class="fa-solid fa-coins"></i>',
+  gem: '<i class="fa-solid fa-gem"></i>',
+  quest: '<i class="fa-solid fa-scroll"></i>',
 };
 export interface HubHandle { destroy: () => void; setWallet: (w: { gold: number; crystal: number } | null) => void; }
 
@@ -179,15 +182,13 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       <div class="hud-right">
         <div class="cur gold">${TOP_ICONS.coin}<span id="w-gold">—</span></div>
         <div class="cur gem">${TOP_ICONS.gem}<span id="w-crystal">—</span></div>
-        <button class="hbtn" id="hb-mail" title="Thư">${MENU_ICONS.mail}</button>
-        <button class="hbtn" id="hb-settings" title="Cài đặt">${MENU_ICONS.settings}</button>
       </div>
     </div>
     <div class="hudrow">
       <button class="qtrack" id="hub-qtrack">${TOP_ICONS.quest}<span>Arc 0 · Nói chuyện với Elder Rowan</span></button>
       <div class="hub-ctx"><div class="mp">${opts.hud.mapLabel}</div><div class="ck" id="hub-clock"></div><div class="wt">${opts.hud.weatherLabel} · <span id="hub-players">${opts.hud.players}</span> người chơi</div></div>
     </div>
-    <section class="hub-panel" id="hub-panel"><header><div><h2 id="hub-title"></h2><div class="sub" id="hub-sub"></div></div><button class="x" id="hub-close">✕</button></header><div class="hub-body" id="hub-body"></div></section>
+    <section class="hub-panel" id="hub-panel"><header><div><h2 id="hub-title"></h2><div class="sub" id="hub-sub"></div></div><button class="x" id="hub-close"><i class="fa-solid fa-xmark"></i></button></header><div class="hub-body" id="hub-body"></div></section>
     <div class="toast" id="hub-toast"></div>
     <nav class="hub-nav">
       <button data-tab="world" class="on">${ICONS.world}<span>Thế giới</span></button>
@@ -235,11 +236,6 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   const drawConn = () => connEl.classList.toggle("on", network.worldConnected);
   drawConn();
   const connTimer = window.setInterval(drawConn, 2000);
-  (root.querySelector("#hb-mail") as HTMLElement).addEventListener("click", () => setTab("menu"));
-  (root.querySelector("#hb-settings") as HTMLElement).addEventListener("click", () => {
-    setTab("menu");
-    (root.querySelector('[data-m="settings"]') as HTMLElement | null)?.click();
-  });
   (root.querySelector("#hub-qtrack") as HTMLElement).addEventListener("click", () => setTab("quests"));
   const panel = root.querySelector("#hub-panel") as HTMLElement;
   const title = root.querySelector("#hub-title") as HTMLElement;
