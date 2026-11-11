@@ -121,3 +121,10 @@ Nghiên cứu kỹ thuật các game cùng thể loại: khoảnh khắc ult "ki
 - Thời lượng 1,5s ở ×1, 1,0s ở ×2, tắt ở ×4/Bỏ qua; chạm màn hình để bỏ qua ngay.
 - Mẫu vàng: Emberling — Fire Burst. Nguồn art `art-concepts/media-generation-ult-emberling-v1-*.png` (sinh từ chính sprite trong game làm tham chiếu), bản dùng `public/assets/battle/ult-eid-001-v1.png` 1280×720 (PNG không vào git như mọi asset; xem §9 về hậu kỳ).
 - Kiểm chứng Chrome thật: bắt được Fire Burst (splash), Tidal Wave + Celestial Veil (band) — đúng chiêu cuối, không bắt nhầm chiêu thường nữa. Ghi chú: engine có thể ult sớm hơn tưởng khi một con bị dồn đòn (năng lượng +8/đòn trúng) — Tidal Wave ở tick 41 là đúng luật engine, không phải lỗi.
+
+### 10.1 Bản hoạt ảnh (Tín lệnh 2026-11-11: "Phải hoạt ảnh luôn chứ ko phải ảnh ko")
+
+- Cut-in có **3 tầng**: (1) **video hoạt ảnh** nếu loài có — sinh bằng image-to-video từ chính splash art của loài (Emberling: cáo lửa gầm, lao về phía camera, vòng lửa bùng nổ, ngọc ngực loé sáng, kết bằng chớp lửa); (2) splash tĩnh có chuyển động máy quay nhẹ; (3) band sprite.
+- BattleScene phát video ở lớp DOM phủ toàn màn hình (`startVideoCutin`): letterbox + khối tên dựng bằng CSS cùng phong cách, chớp trắng ở sự kiện `ended` của video rồi mới thả đòn; chạm để bỏ qua; ×1 phát trọn, ×2 phát nhanh 1,5×, ×4 tắt. Video được fetch làm ấm cache ngay khi vào trận.
+- Bản dùng: `public/assets/battle/ult-eid-001-v1.mp4` — 1280×720, H.264, 3,0s, 1,8MB (nén crf 26, bỏ track âm; nguồn thô ở `~/workspace/imagine_media/`). MP4 không vào git như mọi asset hình.
+- Kiểm chứng Chrome thật: chụp được khung hình video đang phát trong trận (toàn màn hình, letterbox + tên chiêu ở lớp DOM), và khung "muộn" 1,1s sau khi video kết thúc cho thấy trận đã thả tiếp ult khác — vòng đời cut-in khép đúng.

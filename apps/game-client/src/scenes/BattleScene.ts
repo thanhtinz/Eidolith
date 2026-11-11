@@ -35,6 +35,12 @@ interface UnitVis {
 const ULT_ART: Record<string, string> = {
   "EID-001": "assets/battle/ult-eid-001-v1.png",
 };
+/** Animated ultimate cinematics (image-to-video from the splash art).
+ * Species listed here get a real animated cut-in; the rest use the
+ * splash/band presentation. */
+const ULT_VIDEO: Record<string, string> = {
+  "EID-001": "assets/battle/ult-eid-001-v1.mp4",
+};
 
 export class BattleScene extends Phaser.Scene {
   private battle!: BattleResponse;
@@ -50,6 +56,7 @@ export class BattleScene extends Phaser.Scene {
   private resultEl?: HTMLElement;
   private cutinUntil = 0;
   private cutinCont?: Phaser.GameObjects.Container;
+  private cutinEl?: HTMLElement;
 
   constructor() { super("Battle"); }
 
@@ -69,6 +76,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create(): void {
+    for (const def of this.battle.teams) {
+      const vid = ULT_VIDEO[def.creatureId];
+      if (vid) void fetch(vid).catch(() => undefined); // warm the HTTP cache
+    }
     this.drawArena();
     for (const def of this.battle.teams) this.makeUnit(def);
     this.mountOverlay();
@@ -152,6 +163,16 @@ export class BattleScene extends Phaser.Scene {
         .bt-result p{margin:4px 0 14px;color:#c9b18a;font-size:15.5px}
         .bt-result .row{display:flex;gap:10px}
         .bt-result button{flex:1;padding:13px;border:none;border-radius:12px;font-size:16.5px;font-weight:700;cursor:pointer;font-family:'Baloo 2',sans-serif}
+        .bt-cutin{position:absolute;inset:0;background:#000;z-index:60;pointer-events:auto;overflow:hidden;cursor:pointer}
+        .bt-cutin video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+        .bt-cutin .bar{position:absolute;left:0;width:100%;height:86px;background:#000;z-index:2}
+        .bt-cutin .bar.t{top:0}.bt-cutin .bar.b{bottom:0}
+        .bt-cutin .ttl{position:absolute;left:70px;bottom:120px;z-index:3;animation:btcin .45s .15s cubic-bezier(.2,.9,.3,1) both}
+        .bt-cutin .who{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:21px;color:#ffd94a;letter-spacing:1.5px}
+        .bt-cutin .rule{width:340px;height:3px;background:#d4a437;margin:4px 0 6px}
+        .bt-cutin .skill{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:56px;line-height:1;color:#fff;text-shadow:0 4px 0 #1c0e02,0 6px 18px rgba(0,0,0,.6)}
+        .bt-cutin .flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:4;pointer-events:none}
+        @keyframes btcin{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
         .bt-again{background:linear-gradient(180deg,#e8a33d,#c8871e);color:#fff}
         .bt-exit{background:#171006;color:#e8c96a;border:1.5px solid #d4a437 !important}
       </style>
@@ -164,6 +185,7 @@ export class BattleScene extends Phaser.Scene {
           <button class="bt-pill bt-btn" id="bt-skip">Bỏ qua ▸▸</button>
           <button class="bt-pill bt-btn" id="bt-quit">Rời trận</button>
         </div>
+        <div id="bt-cutin-slot"></div>
         <div class="bt-result" id="bt-result" hidden>
           <h2 id="bt-title">THẮNG</h2>
           <p id="bt-sub"></p>
@@ -387,7 +409,9 @@ export class BattleScene extends Phaser.Scene {
    * skill name lands, a white flash releases back into the real hit.
    * Kept short (~1.5 s at x1) and tap-to-skip so it never becomes a toll. */
   private startCutin(v: UnitVis, skillName: string): void {
-    if (this.cutinCont) this.endCutin();
+    if (this.cutinCont || this.cutinEl) this.endCutin();
+    const vidSrc = ULT_VIDEO[v.def.creatureId];
+    if (vidSrc) { this.startVideoCutin(v, skillName, vidSrc); return; }
     const dur = this.speed >= 2 ? 1000 : 1500;
     this.cutinUntil = this.time.now + dur;
     (window as unknown as Record<string, unknown>).__cutin = skillName;
@@ -456,8 +480,44 @@ export class BattleScene extends Phaser.Scene {
     this.input.once("pointerdown", () => this.endCutin());
   }
 
+  /** Animated cut-in: full-screen ultimate video (DOM layer above the
+   * canvas), letterbox bars + title, white flash into the real hit.
+   * Tap anywhere to skip. Full length at x1, 1.5x rate at x2. */
+  private startVideoCutin(v: UnitVis, skillName: string, src: string): void {
+    const slot = this.overlay?.querySelector("#bt-cutin-slot");
+    if (!slot) return;
+    const rate = this.speed >= 2 ? 1.5 : 1;
+    this.cutinUntil = this.time.now + 3200 / rate;
+    (window as unknown as Record<string, unknown>).__cutin = skillName;
+    const poster = ULT_ART[v.def.creatureId];
+    const el = document.createElement("div");
+    el.className = "bt-cutin";
+    el.innerHTML = `
+      <video src="${src}" ${poster ? `poster="${poster}"` : ""} autoplay muted playsinline></video>
+      <div class="bar t"></div><div class="bar b"></div>
+      <div class="ttl">
+        <div class="who">${v.def.name.toUpperCase()}</div>
+        <div class="rule"></div>
+        <div class="skill">${skillName.toUpperCase()}</div>
+      </div>
+      <div class="flash"></div>`;
+    slot.appendChild(el);
+    this.cutinEl = el;
+    const video = el.querySelector("video") as HTMLVideoElement;
+    video.playbackRate = rate;
+    void video.play().catch(() => undefined);
+    const flash = el.querySelector(".flash") as HTMLElement;
+    video.addEventListener("ended", () => {
+      flash.style.transition = "opacity .12s";
+      flash.style.opacity = "0.85";
+      window.setTimeout(() => this.endCutin(), 110);
+    });
+    el.addEventListener("pointerdown", () => this.endCutin());
+  }
+
   private endCutin(): void {
     if (this.cutinCont) { this.cutinCont.destroy(); this.cutinCont = undefined; }
+    if (this.cutinEl) { this.cutinEl.remove(); this.cutinEl = undefined; }
     this.cutinUntil = 0;
     delete (window as unknown as Record<string, unknown>).__cutin;
   }
