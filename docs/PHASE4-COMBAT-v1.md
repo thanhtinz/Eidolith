@@ -77,3 +77,25 @@ Baseline theo role (multiplier tính trên ATK; cooldown tính bằng giây, quy
 3. BattleScene client: chạy trận từ event stream (không tự tính), nút bắt đầu trận từ encounter/đội hình 5 ô đã có ở hub; tốc độ xem ×1/×2 (§17.4 — kiểm lại mục này khi code).
 4. Server: API tạo trận + validate đội hình §3.3 (sở hữu, không khóa, đủ số lượng), lưu replay (seed + đội hình + event hash).
 5. Simulation batch 1.000 trận (đội ngẫu nhiên theo role/rarity): kiểm determinism (cùng seed → cùng hash), thời lượng trận trong 90–120s, tỉ lệ thắng theo rarity không lệch quá mức — xuất bảng số để Tín duyệt trước khi khóa balance.
+
+## 8. Kết quả triển khai (2026-11-11)
+
+ĐÃ XONG và kiểm chứng sống:
+- **combat-core** viết đầy đủ theo §7: BattleState + step pipeline (status → chấm mục tiêu → hành động/di chuyển + separation → skill resolver → reaction → kết thúc), công thức §12.3 đúng thứ tự, AI utility 4 profile theo role, 10 status theo §5, đủ 8 reaction (mồi = status hệ trên mục tiêu + đòn hệ cặp), event §17.3 + hash replay (fnv1a trên toàn bộ event stream).
+- **game-data**: 60 SkillDefinition (mẫu §3), vòng khắc 6 hệ MVP (§6.2), statsAtLevel (+8%/cấp), validator mở rộng (đúng 3 skill/loài, slot 3 = ultimate). Checksum nội dung đổi `556c3491` → `9a634321` do chỉnh provisionalBaseStats (dưới đây).
+- **Server**: migration 004 (combat.battles), `POST /battles` (validate đội hình thuộc sở hữu, địch tập = số lượng bằng đội người chơi, cấp quanh cấp trung bình; chạy engine trên server, lưu replay) + `GET /battles/:id`. Test `tools/test-phase4.mjs`: **10/10 PASS**.
+- **Client**: BattleScene phát lại event (di chuyển nội suy, số sát thương theo hệ/crit, chip status, tên skill + chiêu cuối, thanh HP/khiên/năng lượng gương theo đúng luật engine), điều khiển ×1/×2/×4 + Bỏ qua + Đấu lại; điểm vào: Menu → Đấu trường (đội = 5 Eidolon đầu tiên). Kiểm chứng Chrome thật trọn vòng: vào trận → đánh → kết quả → về thế giới.
+
+**Simulation 1.000 trận** (đội ngẫu nhiên, cấp 3–6; `tools/sim-phase4.ts`):
+- Tất định: cùng seed → cùng hash: PASS; khác seed → khác hash: PASS.
+- Thắng đội 0/đội 1: 490/510 (đối xứng). Thời lượng: trung bình 66,6s · trung vị 58,7s · p90 120s · hết giờ 10,3% (phân thắng bằng %HP).
+- Độ hiếm: đội Epic/Rare thắng đội Common **82/100** ở cùng cấp (lợi thế rõ nhưng lật kèo được).
+- Reaction trung bình 5,3/trận; 6,2 unit hạ/trận; chiêu cuối xuất hiện đều.
+- Tinh chỉnh đã áp từ simulation: HP_SCALE 6.5→7.5 (combat-config), chu kỳ đòn thường 13 tick cơ số, hồi/khiên giảm (heal 14%/25%, shield 16%, regen 2%/s), và **chỉnh provisionalBaseStats**: SPD không còn nhân theo độ hiếm, ATK/DEF chỉ lấy 60% bonus hiếm (bản cũ nhân toàn bộ chỉ số khiến độ hiếm tự quyết định trận: Epic thắng 100/100).
+
+**Điểm chờ Tín duyệt** (đã ghi ở combat-config/game-data, đổi số là đổi meta):
+1. **Fatigue +2%/s sau 90s** — cơ chế chống kéo dài do Bé THÊM (Part 7 không có), chỉ tác động ~10% trận hòa-giằng co để mọi trận kết thúc trong cửa sổ 90–120s của §2.1.
+2. **Vòng khắc hệ** Flame→Grove→Stone→Frost→Gale→Tide→Flame (§6.2).
+3. Thời lượng trung vị ~59s vẫn dưới mục tiêu 90–120s của §2.1 — trận nhanh do đội hình mỏng; có thể nâng HP_SCALE tiếp nếu Tín muốn trận dài hơn.
+
+**Chưa làm (đúng phạm vi đã chốt)**: boss + telegraph (Phase 5 cùng Ancient Treant), phần thưởng/XP sau trận (Phase 5 Progression), nền đấu trường vẽ tranh (hiện là sân cỏ kẻ ô), bảng stat đầy đủ MATK/MDEF/CRIT/RES (Phase 5).

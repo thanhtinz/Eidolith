@@ -5,6 +5,7 @@ import { pool } from "./db.js";
 import { authRouter } from "./routes/auth.js";
 import { playerRouter } from "./routes/player.js";
 import { collectionRouter } from "./routes/collection.js";
+import { battlesRouter } from "./routes/battles.js";
 import { errorHandler } from "./middleware.js";
 import { createServer } from "node:http";
 import { attachWorldServer } from "./world.js";
@@ -18,6 +19,7 @@ app.get("/health", async (_req, res) => {
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/player", playerRouter);
 app.use("/api/v1", collectionRouter);
+app.use("/api/v1", battlesRouter);
 app.use(errorHandler);
 const server = createServer(app);
 attachWorldServer(server);

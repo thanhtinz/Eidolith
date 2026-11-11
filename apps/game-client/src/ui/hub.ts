@@ -206,7 +206,7 @@ export interface HubHandle {
 }
 
 export interface HubHudInfo { mapLabel: string; weatherLabel: string; startMinutes: number; players: number; mapId: string; mapW: number; mapH: number; }
-export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hud: HubHudInfo; onLogout: () => void }): HubHandle {
+export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hud: HubHudInfo; onLogout: () => void; onArena?: () => void }): HubHandle {
   const p = opts.profile;
   const regionName = p.currentRegion.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   const avatar = p.avatarId === "wanderer_female" ? "assets/chars/wanderer-female-v4.png" : "assets/chars/wanderer-v4.png";
@@ -438,6 +438,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       const extra = body.querySelector("#menu-extra") as HTMLElement;
       body.querySelectorAll("[data-m]").forEach(btn => btn.addEventListener("click", () => {
         const key = (btn as HTMLElement).dataset.m!;
+        if (key === "arena") { setTab("world"); opts.onArena?.(); return; }
         if (key === "bag") { renderBag(); return; }
         if (key === "summon") { renderSummon(); return; }
         if (key === "settings") {

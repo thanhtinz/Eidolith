@@ -1,0 +1,32 @@
+// Phase 4 API test: summon -> battle -> replay consistency.
+const BASE = "http://127.0.0.1:8787/api/v1";
+let pass = 0, fail = 0;
+const check = (name, cond) => { if (cond) { pass++; console.log("PASS", name); } else { fail++; console.log("FAIL", name); } };
+const call = async (method, path, token, body, headers = {}) => {
+  const r = await fetch(BASE + path, { method, headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...headers }, body: body ? JSON.stringify(body) : undefined });
+  return { status: r.status, json: await r.json().catch(() => null) };
+};
+const email = `p4_${Date.now()}@test.dev`;
+const username = `p4_${Date.now() % 100000}`;
+const reg = await call("POST", "/auth/register", null, { email, username, password: "SecurePass123" });
+const login = await call("POST", "/auth/login", null, { email, password: "SecurePass123" });
+const token = login.json?.data?.accessToken;
+check("register + login", (reg.status === 201 || reg.status === 200) && !!token);
+const pull = await call("POST", "/summoning/pull", token, { bannerId: "banner_standard", pullCount: 1 }, { "Idempotency-Key": crypto.randomUUID() });
+const instId = pull.json?.data?.results?.[0]?.creatureInstanceId;
+check("summon grants an instance", pull.status === 200 && !!instId);
+const bad = await call("POST", "/battles", token, { instanceIds: ["00000000-0000-0000-0000-000000000000"] });
+check("battle rejects foreign instance", bad.status === 422);
+const battle = await call("POST", "/battles", token, { instanceIds: [instId] });
+const d = battle.json?.data;
+check("battle created", battle.status === 200 && !!d?.battleId);
+check("battle has both teams", d?.teams?.length === 2);
+check("battle winner decided", [0, 1, 2].includes(d?.winner));
+check("battle events streamed", Array.isArray(d?.events) && d.events.length > 20 && d.events.at(-1)?.type === "BattleCompleted");
+check("battle ticks within cap", d?.ticks > 0 && d?.ticks <= 1200);
+const replay = await call("GET", `/battles/${d.battleId}`, token);
+check("replay matches (hash + ticks)", replay.json?.data?.hash === d.hash && replay.json?.data?.ticks === d.ticks);
+const unauth = await call("POST", "/battles", null, { instanceIds: [instId] });
+check("battle requires auth", unauth.status === 401);
+console.log(`\nPhase 4 API: ${pass} passed, ${fail} failed`);
+process.exit(fail ? 1 : 0);

@@ -48,3 +48,14 @@ export interface PlayerStatistics {
 export type ElementType = "Flame"|"Tide"|"Grove"|"Stone"|"Gale"|"Frost"|"Volt"|"Venom"|"Shade"|"Astral";
 export type Rarity = "Common"|"Uncommon"|"Rare"|"Epic"|"Legendary";
 export type CombatRole = "Guardian"|"Striker"|"Ranger"|"Support"|"Controller"|"Specialist";
+
+/* --- Combat (Phase 4) --- */
+export interface BattleTeamUnit {
+  unitId: string; team: 0 | 1; creatureId: string; name: string;
+  element: string; role: string; level: number; maxHp: number;
+}
+export interface BattleEventData { tick: number; type: string; data: Record<string, unknown>; }
+export interface BattleResponse {
+  battleId: string; seed: number; winner: 0 | 1 | 2; ticks: number; hash: string;
+  teams: BattleTeamUnit[]; events: BattleEventData[];
+}

@@ -5,6 +5,7 @@ import { mapById, creatureById } from "@eidolith/game-data";
 import { network, type RemotePlayer, type WorldSnapshot } from "../net/NetworkManager";
 import { joyState } from "../state";
 import { mountHub, type HubHandle } from "../ui/hub";
+import type { BattleResponse, OwnedCreature } from "@eidolith/shared-types";
 import type { HudData } from "./HudScene";
 import meadowVillage from "@eidolith/game-data/maps/meadow_village.json";
 import whisperingForest from "@eidolith/game-data/maps/whispering_forest.json";
@@ -69,6 +70,7 @@ export class WorldScene extends Phaser.Scene {
         mapW: (MAP_JSON[snap.world.mapId] as TiledMap).width,
         mapH: (MAP_JSON[snap.world.mapId] as TiledMap).height,
       },
+      onArena: () => { void this.startArenaBattle(); },
       onLogout: () => {
         void network.request("POST", "/auth/logout").catch(() => undefined);
         network.clearTokens();
@@ -248,6 +250,20 @@ export class WorldScene extends Phaser.Scene {
     w.container.destroy(); w.label.destroy();
     this.wilds.delete(spawnId);
   }
+  /** Phase 4: practice battle at the Arena — team = first 5 owned Eidolons,
+   * simulated on the server; BattleScene only plays the event stream. */
+  private async startArenaBattle(): Promise<void> {
+    try {
+      const { items } = await network.request<{ items: OwnedCreature[] }>("GET", "/creatures");
+      if (!items.length) { this.hint("Hãy bắt Eidolon đầu tiên ở Whispering Forest trước!"); return; }
+      const teamIds = items.slice(0, 5).map(c => c.instanceId);
+      const battle = await network.request<BattleResponse>("POST", "/battles", { instanceIds: teamIds });
+      this.scene.start("Battle", { battle, teamIds });
+    } catch (e) {
+      this.hint(e instanceof Error ? e.message : "Không mở được trận đấu");
+    }
+  }
+
   private hint(text: string): void {
     const p = this.worldFromGrid(this.gridPos.x, this.gridPos.y);
     const t = this.add.text(p.x, p.y - 120, text, { ...NAME_STYLE, fontSize: "16px", color: "#ffd9a8" }).setOrigin(0.5).setDepth(LABEL_DEPTH + 1);

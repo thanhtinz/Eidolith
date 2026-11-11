@@ -4,6 +4,7 @@ import { PreloadScene } from "./scenes/PreloadScene";
 import { LoginScene } from "./scenes/LoginScene";
 import { WorldScene } from "./scenes/WorldScene";
 import { HudScene } from "./scenes/HudScene";
+import { BattleScene } from "./scenes/BattleScene";
 // Landscape 1280x720 (Tín, 2026-11-11 — overrides the Part 4 portrait lock), Scale FIT, pixelArt.
 new Phaser.Game({
   type: Phaser.AUTO,
@@ -15,5 +16,5 @@ new Phaser.Game({
   roundPixels: true,
   scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
   dom: { createContainer: true },
-  scene: [BootScene, PreloadScene, LoginScene, WorldScene, HudScene],
+  scene: [BootScene, PreloadScene, LoginScene, WorldScene, HudScene, BattleScene],
 });
