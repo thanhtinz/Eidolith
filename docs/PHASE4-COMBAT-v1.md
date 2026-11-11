@@ -109,3 +109,15 @@ Bản đầu của BattleScene đúng là xấu thật: nền sân cỏ kẻ ô 
 - **AI bớt dồn cục**: trọng số Distance trong hồ sơ aggressive/protect/ranged tăng lên 0.40 (§8.3) — unit ưu tiên địch gần, trận tách thành nhiều cặp đấu cục bộ thay vì một bầy dồn vào con ít máu nhất; assassin giữ nguyên tính lao hậu tuyến. Knockback giảm 55% khi mục tiêu đã sát tường (bớt ghim trận vào góc).
 - **Đội địch ưu tiên loài có sprite** (khối lượng ×3 cho 7 loài đã có sprite trong battles.ts) để trận tập ít vòng tròn chữ nhất có thể; 13 loài chưa có sprite vẫn là nợ art đã ghi.
 - Số simulation sau đợt sửa: thắng 491/509, trung vị 68,1s, hết giờ 14,5%, reaction 5,0/trận; đội Epic/Rare thắng Common tăng 82→90/100 (hệ quả của targeting theo khoảng cách — đội mạnh phối hợp cục bộ tốt hơn; chấp nhận được, ghi lại để Tín biết).
+
+## 10. Ultimate cut-in (2026-11-11, theo lệnh nghiên cứu của Tín)
+
+Nghiên cứu kỹ thuật các game cùng thể loại: khoảnh khắc ult "kiểu phim" của game 2D là **cut-in** — Honkai: Star Rail dùng cinematic toàn màn hình để "bán" nhân vật; Epic Seven/Persona dùng mẫu: đóng băng trận → làm tối thế giới → splash art của chính con đó lướt vào trên hai dải letterbox → tên chiêu lớn → chớp trắng → thả về đòn thật (kèm slow-motion nhẹ). Bài học rút ra từ phản ứng cộng đồng: giữ NGẮN (~1,5s) và bấm để bỏ qua, không thì xem lại nhiều lần thành gánh nặng.
+
+Đã cài vào BattleScene (`startCutin`):
+- Kích hoạt đúng chiêu slot 3 (đối chiếu `skillsOf` của game-data — bản đoán theo gương năng lượng trước đó bắt nhầm cả chiêu thường, đã bỏ).
+- Đóng băng toàn bộ phát lại (cả di chuyển) trong lúc cut-in chạy; hai ult cùng tick thì ult sau thay sân khấu, không chồng container; xử lý sự kiện dừng ngay khi cut-in bắt đầu để đòn thật "thả" ra sau chớp trắng.
+- Splash art toàn màn hình nếu loài đã có art (registry `ULT_ART` trong BattleScene), chưa có thì bản band: sprite phóng to trên quầng sáng màu hệ + hạt tia lửa theo hệ.
+- Thời lượng 1,5s ở ×1, 1,0s ở ×2, tắt ở ×4/Bỏ qua; chạm màn hình để bỏ qua ngay.
+- Mẫu vàng: Emberling — Fire Burst. Nguồn art `art-concepts/media-generation-ult-emberling-v1-*.png` (sinh từ chính sprite trong game làm tham chiếu), bản dùng `public/assets/battle/ult-eid-001-v1.png` 1280×720 (PNG không vào git như mọi asset; xem §9 về hậu kỳ).
+- Kiểm chứng Chrome thật: bắt được Fire Burst (splash), Tidal Wave + Celestial Veil (band) — đúng chiêu cuối, không bắt nhầm chiêu thường nữa. Ghi chú: engine có thể ult sớm hơn tưởng khi một con bị dồn đòn (năng lượng +8/đòn trúng) — Tidal Wave ở tick 41 là đúng luật engine, không phải lỗi.

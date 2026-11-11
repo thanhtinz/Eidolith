@@ -5,6 +5,7 @@
 import Phaser from "phaser";
 import type { BattleResponse, BattleTeamUnit } from "@eidolith/shared-types";
 import { network } from "../net/NetworkManager";
+import { skillsOf } from "@eidolith/game-data";
 
 const sx = (x: number) => 215 + (x / 16) * 850;
 const sy = (y: number) => 180 + (y / 10) * 360;
@@ -29,6 +30,12 @@ interface UnitVis {
   statuses: Map<string, number>;
 }
 
+/** Approved ultimate splash art, keyed by creature id. Species without an
+ * entry fall back to a sprite-based cut-in band. */
+const ULT_ART: Record<string, string> = {
+  "EID-001": "assets/battle/ult-eid-001-v1.png",
+};
+
 export class BattleScene extends Phaser.Scene {
   private battle!: BattleResponse;
   private teamIds: string[] = [];
@@ -41,6 +48,8 @@ export class BattleScene extends Phaser.Scene {
   private syncTimer?: number;
   private statusEl?: HTMLElement;
   private resultEl?: HTMLElement;
+  private cutinUntil = 0;
+  private cutinCont?: Phaser.GameObjects.Container;
 
   constructor() { super("Battle"); }
 
@@ -48,10 +57,15 @@ export class BattleScene extends Phaser.Scene {
     this.battle = data.battle;
     this.teamIds = data.teamIds ?? [];
     this.units = new Map(); this.evIdx = 0; this.playTick = 0; this.done = false; this.speed = 1;
+    this.cutinUntil = 0; this.cutinCont = undefined;
   }
 
   preload(): void {
     this.load.image("arena_bg", "assets/battle/arena-v1.png");
+    for (const def of this.battle.teams) {
+      const art = ULT_ART[def.creatureId];
+      if (art) this.load.image(`ult_${def.creatureId}`, art);
+    }
   }
 
   create(): void {
@@ -207,12 +221,14 @@ export class BattleScene extends Phaser.Scene {
   /* ---------------- playback ---------------- */
 
   update(_time: number, delta: number): void {
+    if (this.time.now < this.cutinUntil) return; // cut-in on stage: time stops
     if (!this.done) {
       this.playTick += (delta / 100) * this.speed;
       const upto = Math.floor(this.playTick);
       while (this.evIdx < this.battle.events.length && this.battle.events[this.evIdx].tick <= upto) {
         this.process(this.battle.events[this.evIdx], false);
         this.evIdx++;
+        if (this.time.now < this.cutinUntil) break; // a cut-in just started
       }
       if (this.statusEl && !this.done)
         this.statusEl.textContent = `Đang đấu · ${(Math.min(upto, this.battle.ticks) / 10).toFixed(0)}s`;
@@ -230,6 +246,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private skipAll(): void {
+    this.endCutin();
     while (this.evIdx < this.battle.events.length) {
       this.process(this.battle.events[this.evIdx], true);
       this.evIdx++;
@@ -275,7 +292,8 @@ export class BattleScene extends Phaser.Scene {
         if (String(d.skill) && v) {
           const isUlt = this.isUlt(v, d);
           if (isUlt) v.energy = 0; else v.energy = Math.min(100, v.energy + 15);
-          this.floater(v.cont.x, v.cont.y - 84, String(d.skill), isUlt ? "#ffd94a" : "#f7ead0", isUlt ? 20 : 14.5, instant);
+          if (isUlt && !instant && this.speed <= 2) this.startCutin(v, String(d.skill));
+          else this.floater(v.cont.x, v.cont.y - 84, String(d.skill), isUlt ? "#ffd94a" : "#f7ead0", isUlt ? 20 : 14.5, instant);
           if (!instant && v.art && "x" in v.art) {
             const target = vis(d.targetId);
             if (target) {
@@ -357,11 +375,91 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private isUlt(v: UnitVis, d: Record<string, unknown>): boolean {
-    // Ultimates are the creature's third skill name; the scene doesn't carry
-    // the kit, so detect by energy: engine spends a full bar on ults — the
-    // playback mirrors energy, and an ult cast is the one taken at 100.
-    void d;
-    return v.energy >= 100;
+    // An ultimate is exactly the creature's third skill (slot 3, energyCost
+    // 100) in game-data. (An earlier energy-mirror heuristic drifted from
+    // the engine and fired cut-ins on ordinary skills — use the kit.)
+    return skillsOf(v.def.creatureId)[2]?.name === String(d.skill);
+  }
+
+  /* -------- ultimate cut-in (research note: docs/PHASE4-COMBAT-v1.md) ----
+   * Genre pattern (Persona / Epic Seven / Honkai: Star Rail): freeze the
+   * fight, dim the world, splash art sweeps in over letterbox bars, the
+   * skill name lands, a white flash releases back into the real hit.
+   * Kept short (~1.5 s at x1) and tap-to-skip so it never becomes a toll. */
+  private startCutin(v: UnitVis, skillName: string): void {
+    if (this.cutinCont) this.endCutin();
+    const dur = this.speed >= 2 ? 1000 : 1500;
+    this.cutinUntil = this.time.now + dur;
+    (window as unknown as Record<string, unknown>).__cutin = skillName;
+    const hex = ELEMENT_CSS[v.def.element] ?? "#ffb347";
+    const col = Phaser.Display.Color.HexStringToColor(hex).color;
+    const cont = this.add.container(0, 0).setDepth(9000);
+    this.cutinCont = cont;
+
+    const dim = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0).setDepth(0);
+    cont.add(dim);
+    this.tweens.add({ targets: dim, fillAlpha: 0.5, duration: 160 });
+
+    const key = `ult_${v.def.creatureId}`;
+    if (this.textures.exists(key)) {
+      const art = this.add.image(640, 360, key).setDepth(1);
+      const sc = Math.max(1280 / art.width, 720 / art.height);
+      art.setScale(sc * 1.09);
+      cont.add(art);
+      this.tweens.add({ targets: art, scaleX: sc, scaleY: sc, duration: dur, ease: "Quad.easeOut" });
+    } else {
+      const band = this.add.rectangle(640, 360, 1280, 360, col, 0.28).setDepth(1);
+      const glow = this.add.circle(905, 360, 190, col, 0.35).setDepth(1);
+      cont.add([band, glow]);
+      const tex = `cr_${v.def.creatureId}`;
+      if (this.textures.exists(tex)) {
+        const big = this.add.image(905, 368, tex).setDepth(2);
+        big.setDisplaySize(320 * (big.width / Math.max(1, big.height)), 320);
+        if (v.def.team === 1) big.setFlipX(true);
+        cont.add(big);
+        this.tweens.add({ targets: big, scaleX: big.scaleX * 1.06, scaleY: big.scaleY * 1.06, duration: dur, ease: "Quad.easeOut" });
+      }
+    }
+
+    const barT = this.add.rectangle(640, -43, 1280, 86, 0x000000, 1).setDepth(3);
+    const barB = this.add.rectangle(640, 763, 1280, 86, 0x000000, 1).setDepth(3);
+    cont.add([barT, barB]);
+    this.tweens.add({ targets: barT, y: 43, duration: 220, ease: "Quad.easeOut" });
+    this.tweens.add({ targets: barB, y: 677, duration: 220, ease: "Quad.easeOut" });
+
+    const who = this.add.text(74, 514, v.def.name.toUpperCase(), {
+      fontFamily: "\"Baloo 2\", sans-serif", fontSize: "21px", color: "#ffd94a", fontStyle: "bold",
+    }).setDepth(4).setAlpha(0);
+    const skill = this.add.text(70, 540, skillName.toUpperCase(), {
+      fontFamily: "\"Baloo 2\", sans-serif", fontSize: "56px", color: "#ffffff", fontStyle: "bold",
+    }).setDepth(4).setAlpha(0);
+    skill.setStroke("#1c0e02", 8).setShadow(0, 4, "rgba(0,0,0,.55)", 10);
+    const rule = this.add.rectangle(74, 536, 0, 3, 0xd4a437, 1).setOrigin(0, 0.5).setDepth(4);
+    cont.add([who, skill, rule]);
+    this.tweens.add({ targets: [who, skill], alpha: 1, x: "+=14", delay: 190, duration: 240, ease: "Quad.easeOut" });
+    this.tweens.add({ targets: rule, width: 340, delay: 190, duration: 300, ease: "Quad.easeOut" });
+
+    for (let i = 0; i < 24; i++) {
+      const sp = this.add.circle(880 + (Math.random() - 0.5) * 220, 380 + (Math.random() - 0.5) * 200,
+        2 + Math.random() * 3, i % 3 === 0 ? 0xffffff : col, 0.95).setDepth(5);
+      cont.add(sp);
+      this.tweens.add({
+        targets: sp, x: sp.x + (Math.random() - 0.5) * 460, y: sp.y - 60 - Math.random() * 180,
+        alpha: 0, duration: 620 + Math.random() * 480, delay: 120 + Math.random() * 260, ease: "Quad.easeOut",
+      });
+    }
+
+    const flash = this.add.rectangle(640, 360, 1280, 720, 0xffffff, 0).setDepth(6);
+    cont.add(flash);
+    this.tweens.add({ targets: flash, fillAlpha: 0.8, delay: dur - 240, duration: 90, yoyo: true, onComplete: () => this.endCutin() });
+
+    this.input.once("pointerdown", () => this.endCutin());
+  }
+
+  private endCutin(): void {
+    if (this.cutinCont) { this.cutinCont.destroy(); this.cutinCont = undefined; }
+    this.cutinUntil = 0;
+    delete (window as unknown as Record<string, unknown>).__cutin;
   }
 
   private showResult(): void {
