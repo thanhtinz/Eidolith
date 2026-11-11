@@ -38,6 +38,8 @@ authRouter.post("/register", async (req, res, next) => {
       // Wallet (Part 5 §7) + starter grant — MVP baseline amounts, audited as
       // currency_transactions with reason 'starter_grant' (see HUD-TOP-DESIGN-v1).
       const STARTER: [string, number][] = [["gold", 500], ["crystal", 30], ["bond_essence", 0], ["evolution_core", 0]];
+      await client.query(
+        `INSERT INTO inventory.player_inventory (player_id, item_id, quantity) VALUES ($1,'basic_capture_orb',5)`, [playerId]);
       for (const [currency, amount] of STARTER) {
         await client.query(`INSERT INTO economy.player_wallets (player_id, currency_id, balance) VALUES ($1,$2,$3)`, [playerId, currency, amount]);
         if (amount > 0) await client.query(

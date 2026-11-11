@@ -19,6 +19,24 @@ export interface PlayerProfile {
 export interface PlayerWallet {
   gold: number; crystal: number; bondEssence: number; evolutionCore: number;
 }
+export interface WildSpawnInfo {
+  spawnId: string; creatureId: string; level: number; x: number; y: number;
+}
+export interface OwnedCreature {
+  instanceId: string; creatureId: string; name: string; level: number;
+  rarity: Rarity; element: string; role: string; acquiredMethod: string; acquiredAt: string;
+}
+export interface InventoryStack {
+  itemId: string; name: string; category: string; rarity: string; description: string; quantity: number;
+}
+export interface SummonResultItem {
+  creatureId: string; rarity: Rarity; isDuplicate: boolean; creatureInstanceId: string | null; shardsGained: number;
+}
+export interface SummonPullResponse {
+  results: SummonResultItem[];
+  pity: { sinceRare: number; sinceEpic: number; guaranteeRareAt: number; guaranteeEpicAt: number };
+  remainingCrystal: number;
+}
 export interface PlayerProgress {
   mainStoryStage: string; tutorialCompleted: boolean;
   unlockedRegions: string[]; unlockedFeatures: string[];

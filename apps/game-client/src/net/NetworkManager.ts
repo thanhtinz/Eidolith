@@ -15,6 +15,7 @@ export class ApiClientError extends Error {
 export interface RemotePlayer { playerId: string; displayName: string; level: number; avatarId: string; x: number; y: number; mapId: string; }
 export interface WorldSnapshot {
   player: RemotePlayer; players: RemotePlayer[];
+  wilds?: import("@eidolith/shared-types").WildSpawnInfo[];
   world: { mapId: string; time: { hour: number; minute: number; cycleMinutes: number }; weather: string };
 }
 type Handler = (payload: never) => void;
@@ -37,17 +38,17 @@ export class NetworkManager {
     this.accessToken = null; this.refreshToken = null;
     localStorage.removeItem(LS_ACCESS); localStorage.removeItem(LS_REFRESH);
   }
-  async request<T>(method: string, path: string, body?: unknown, retry = true): Promise<T> {
+  async request<T>(method: string, path: string, body?: unknown, retry = true, headers: Record<string, string> = {}): Promise<T> {
     const res = await fetch(`${API_BASE}${path}`, {
       method,
-      headers: { "Content-Type": "application/json", ...(this.accessToken ? { Authorization: `Bearer ${this.accessToken}` } : {}) },
+      headers: { "Content-Type": "application/json", ...(this.accessToken ? { Authorization: `Bearer ${this.accessToken}` } : {}), ...headers },
       body: body !== undefined ? JSON.stringify(body) : undefined,
     });
     const json = (await res.json()) as ApiResponse<T>;
     if (!json.success) {
       if (retry && json.error.code === "AUTH_TOKEN_EXPIRED" && this.refreshToken) {
         await this.refresh();
-        return this.request<T>(method, path, body, false);
+        return this.request<T>(method, path, body, false, headers);
       }
       throw new ApiClientError(json.error.code, json.error.message, res.status);
     }

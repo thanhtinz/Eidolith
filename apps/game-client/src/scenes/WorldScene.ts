@@ -1,7 +1,7 @@
 import Phaser from "phaser";
-import type { PlayerProfile } from "@eidolith/shared-types";
+import type { PlayerProfile, WildSpawnInfo } from "@eidolith/shared-types";
 import { NavGrid, findPath, gridToIso, isoToGrid } from "@eidolith/navigation-core";
-import { mapById } from "@eidolith/game-data";
+import { mapById, creatureById } from "@eidolith/game-data";
 import { network, type RemotePlayer, type WorldSnapshot } from "../net/NetworkManager";
 import { joyState } from "../state";
 import { mountHub, type HubHandle } from "../ui/hub";
@@ -36,6 +36,7 @@ export class WorldScene extends Phaser.Scene {
   private gridPos = { x: 0, y: 0 };
   private path: { x: number; y: number }[] = [];
   private remotes = new Map<string, { container: Phaser.GameObjects.Container; label: Phaser.GameObjects.Text; target: { x: number; y: number } }>();
+  private wilds = new Map<string, { container: Phaser.GameObjects.Container; label: Phaser.GameObjects.Text; info: WildSpawnInfo }>();
   private lastSentAt = 0; private lastCellKey = "";
   private unsubs: (() => void)[] = [];
   private changingMap = false;
@@ -54,6 +55,7 @@ export class WorldScene extends Phaser.Scene {
     this.profile = data.profile;
     const snap = data.snapshot ?? network.lastSnapshot!;
     this.buildMap(snap.world.mapId, snap);
+    for (const w of snap.wilds ?? []) this.addWild(w);
     this.launchHud(snap);
     const weatherVi: Record<string, string> = { clear: "Quang đãng", cloudy: "Nhiều mây", rain: "Mưa" };
     this.hub = mountHub(this, {
@@ -77,7 +79,8 @@ export class WorldScene extends Phaser.Scene {
     this.subscribeWorld();
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => this.onTap(pointer));
     const w = window as unknown as { __eidolith?: unknown };
-    w.__eidolith = { scene: this, network, getPlayerGrid: () => ({ ...this.gridPos, mapId: this.mapId }), changeMap: (m: string, s: string) => this.doChangeMap(m, s) };
+    w.__eidolith = { scene: this, network, getPlayerGrid: () => ({ ...this.gridPos, mapId: this.mapId }), changeMap: (m: string, s: string) => this.doChangeMap(m, s),
+      getWilds: () => [...this.wilds.values()].map(x => x.info), tapWild: (id: string) => this.tryEncounter(id) };
   }
 
   private buildMap(mapId: string, snap: WorldSnapshot): void {
@@ -215,9 +218,65 @@ export class WorldScene extends Phaser.Scene {
     this.updateHudPlayers();
   }
 
+  private addWild(info: WildSpawnInfo): void {
+    if (this.wilds.has(info.spawnId)) return;
+    const def = creatureById(info.creatureId);
+    const p = this.worldFromGrid(info.x, info.y);
+    const parts: Phaser.GameObjects.GameObject[] = [];
+    if (this.textures.exists(`cr_${info.creatureId}`)) {
+      const img = this.add.image(0, 6, `cr_${info.creatureId}`).setOrigin(0.5, 1).setScale(0.42);
+      this.tweens.add({ targets: img, y: 0, duration: 850 + Math.random() * 500, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+      parts.push(img);
+    } else {
+      const g = this.add.graphics();
+      g.fillStyle(0x2c3e2f, 0.9).fillCircle(0, -18, 24);
+      g.lineStyle(2, 0xe8c96a, 0.8).strokeCircle(0, -18, 24);
+      const initial = this.add.text(0, -18, (def?.name ?? "?").charAt(0), { fontSize: "22px", color: "#e8c96a", fontStyle: "bold" }).setOrigin(0.5);
+      parts.push(g, initial);
+    }
+    const container = this.add.container(p.x, p.y, parts).setDepth(p.y);
+    const label = this.add.text(p.x, p.y - 82, `${def?.name ?? info.creatureId} · Lv.${info.level}`, { ...NAME_STYLE, color: "#ffe9a8" }).setOrigin(0.5).setDepth(LABEL_DEPTH);
+    this.wilds.set(info.spawnId, { container, label, info });
+  }
+  private removeWild(spawnId: string): void {
+    const w = this.wilds.get(spawnId);
+    if (!w) return;
+    w.container.destroy(); w.label.destroy();
+    this.wilds.delete(spawnId);
+  }
+  private hint(text: string): void {
+    const p = this.worldFromGrid(this.gridPos.x, this.gridPos.y);
+    const t = this.add.text(p.x, p.y - 120, text, { ...NAME_STYLE, fontSize: "16px", color: "#ffd9a8" }).setOrigin(0.5).setDepth(LABEL_DEPTH + 1);
+    this.tweens.add({ targets: t, y: p.y - 150, alpha: 0, duration: 1600, onComplete: () => t.destroy() });
+  }
+  private async tryEncounter(spawnId: string): Promise<void> {
+    const w = this.wilds.get(spawnId);
+    if (!w) return;
+    const dist = Math.max(Math.abs(w.info.x - Math.round(this.gridPos.x)), Math.abs(w.info.y - Math.round(this.gridPos.y)));
+    if (dist > 3) {
+      this.hint("Lại gần hơn để bắt!");
+      const from = { x: Math.round(this.gridPos.x), y: Math.round(this.gridPos.y) };
+      const candidates = [
+        { x: w.info.x + 1, y: w.info.y }, { x: w.info.x - 1, y: w.info.y },
+        { x: w.info.x, y: w.info.y + 1 }, { x: w.info.x, y: w.info.y - 1 },
+      ].filter(c => this.grid.walkable(c.x, c.y));
+      for (const c of candidates) { const f = findPath(this.grid, from, c); if (f) { this.path = f; break; } }
+      return;
+    }
+    try {
+      const res = await network.request<{ encounterId: string; creature: { creatureId: string; level: number }; expiresAt: string }>(
+        "POST", "/encounters/start", { spawnId });
+      this.hub?.openEncounter({ encounterId: res.encounterId, creatureId: res.creature.creatureId, level: res.creature.level });
+    } catch (e) {
+      this.hint(e instanceof Error ? e.message : "Không bắt đầu được encounter");
+    }
+  }
+
   private subscribeWorld(): void {
     this.unsubs.push(network.subscribe("world.player.joined", (p) => this.addRemote(p as RemotePlayer)));
     this.unsubs.push(network.subscribe("world.player.left", (p) => this.removeRemote((p as { playerId: string }).playerId)));
+    this.unsubs.push(network.subscribe("world.wild_spawned", (p) => this.addWild(p as WildSpawnInfo)));
+    this.unsubs.push(network.subscribe("world.wild_removed", (p) => this.removeWild((p as { spawnId: string }).spawnId)));
     this.unsubs.push(network.subscribe("world.player.moved", (p) => {
       const m = p as { playerId: string; x: number; y: number };
       const remote = this.remotes.get(m.playerId);
@@ -232,6 +291,9 @@ export class WorldScene extends Phaser.Scene {
     const worldPoint = pointer.positionToCamera(this.cameras.main) as Phaser.Math.Vector2;
     // Ignore taps on the joystick corner.
     if (pointer.x < 210 && pointer.y > this.scale.height - 310) return;
+    for (const w of this.wilds.values()) {
+      if (Math.hypot(worldPoint.x - w.container.x, worldPoint.y - (w.container.y - 30)) < 46) { void this.tryEncounter(w.info.spawnId); return; }
+    }
     const g = this.gridFromWorld(worldPoint.x, worldPoint.y);
     const tx = Math.round(g.x), ty = Math.round(g.y);
     if (!this.grid.walkable(tx, ty)) return;

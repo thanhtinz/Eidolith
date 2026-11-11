@@ -1,16 +1,16 @@
 import Phaser from "phaser";
-import type { PlayerProfile } from "@eidolith/shared-types";
+import type { PlayerProfile, OwnedCreature, InventoryStack, SummonPullResponse } from "@eidolith/shared-types";
 import { CREATURES, ELEMENTS } from "@eidolith/game-data";
+import { network } from "../net/NetworkManager";
+import { CREATURE_SPRITES } from "./sprites";
 /** Hub UI (Part 13 §2): top player bar + bottom navigation
  *  World · Eidolons · Sanctuary · Quests · Menu with bottom-sheet panels.
  *  Design: docs/HUB-DESIGN-v1.md. DOM overlay — the empty area lets touches
  *  pass through to the world; panels/nav capture their own touches. */
 
-const SPRITES: Record<string, string> = {
-  "EID-001": "assets/creatures/emberling-v2.png",
-  "EID-002": "assets/creatures/mossling-v2.png",
-  "EID-003": "assets/creatures/aquafin-v2.png",
-  "EID-005": "assets/creatures/zephy-v2.png",
+const SPRITES = CREATURE_SPRITES;
+const RARITY_COLOR: Record<string, string> = {
+  Common: "#9a937f", Uncommon: "#5dbb63", Rare: "#4a9fe8", Epic: "#b06ae8", Legendary: "#e8c94a",
 };
 const ROLE_VI: Record<string, string> = {
   Guardian: "Hộ vệ", Striker: "Tấn công", Ranger: "Xạ thủ",
@@ -126,6 +126,28 @@ const CSS = `
 .tgl.on{background:#3f9e63}.tgl.on::after{left:30px}
 .logout{width:100%;margin-top:18px;padding:15px;border:none;border-radius:14px;background:#8c2f2f;color:#fff;font-size:17.5px;font-weight:700;cursor:pointer}
 .logout.confirm{background:#c33}
+.enc{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;background:rgba(4,6,9,.45);pointer-events:auto;z-index:5}
+.enc[hidden]{display:none}
+.enc-card{position:relative;width:100%;background:rgba(10,15,21,.96);border-top:1px solid rgba(232,201,106,.45);border-radius:26px 26px 0 0;padding:26px 26px 34px;text-align:center}
+.enc-card img{width:190px;height:190px;object-fit:contain}
+.enc-card .ph{font-size:110px;font-weight:800;line-height:190px}
+.enc-card h3{font-size:27px;margin-top:6px}
+.enc-card .meta{display:flex;gap:8px;justify-content:center;margin-top:9px;font-size:15.5px;color:#9a937f}
+.enc-msg{min-height:26px;font-size:17px;margin:14px 0 6px;color:#e8e4d8}
+.enc-msg.good{color:#7fe3a0}.enc-msg.bad{color:#ff9a8a}
+.enc-btn{width:100%;padding:16px;border:none;border-radius:14px;background:linear-gradient(180deg,#e8a33d,#c8871e);color:#fff;font-size:18.5px;font-weight:700;cursor:pointer}
+.enc-btn:disabled{background:#4a4436;color:#9a937f;cursor:default}
+.enc-x{position:absolute;top:14px;right:14px}
+.enc.shake .enc-card{animation:shk .4s}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-9px)}75%{transform:translateX(9px)}}
+.owned-badge{background:#3f9e63;color:#eafff1;border-radius:999px;font-size:12.5px;padding:2.5px 9px;font-weight:700}
+.sumres{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.sumres .cell{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px;text-align:center}
+.sumres .cell img{width:96px;height:96px;object-fit:contain}
+.sumres .cell .ph{font-size:52px;font-weight:800;line-height:96px}
+.bagrow{display:flex;align-items:center;gap:13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:13px 15px;margin-bottom:10px}
+.bagrow i{font-size:24px;color:#e8c96a}
+.bagrow .qty{margin-left:auto;font-weight:800;font-size:18px;color:#e8c96a}
 .toast{position:absolute;left:50%;transform:translateX(-50%);bottom:196px;background:rgba(8,12,17,.92);border:1px solid rgba(232,201,106,.5);color:#e8e4d8;padding:11px 20px;border-radius:12px;font-size:16px;display:none;pointer-events:none;white-space:nowrap}
 `;
 
@@ -162,7 +184,12 @@ const TOP_ICONS = {
   gem: '<i class="fa-solid fa-gem"></i>',
   quest: '<i class="fa-solid fa-scroll"></i>',
 };
-export interface HubHandle { destroy: () => void; setWallet: (w: { gold: number; crystal: number } | null) => void; }
+export interface EncounterUi { encounterId: string; creatureId: string; level: number; }
+export interface HubHandle {
+  destroy: () => void;
+  setWallet: (w: { gold: number; crystal: number } | null) => void;
+  openEncounter: (enc: EncounterUi) => void;
+}
 
 export interface HubHudInfo { mapLabel: string; weatherLabel: string; startMinutes: number; players: number; }
 export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hud: HubHudInfo; onLogout: () => void }): HubHandle {
@@ -186,6 +213,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       <div class="hub-ctx"><div class="mp">${opts.hud.mapLabel}</div><div class="ck" id="hub-clock"></div><div class="wt">${opts.hud.weatherLabel} · <span id="hub-players">${opts.hud.players}</span> người chơi</div></div>
     </div>
     <section class="hub-panel" id="hub-panel"><header><div><h2 id="hub-title"></h2><div class="sub" id="hub-sub"></div></div><button class="x" id="hub-close"><i class="fa-solid fa-xmark"></i></button></header><div class="hub-body" id="hub-body"></div></section>
+    <div class="enc" id="hub-enc" hidden></div>
     <div class="toast" id="hub-toast"></div>
     <nav class="hub-nav">
       <button data-tab="world" class="on">${ICONS.world}<span>Thế giới</span></button>
@@ -247,12 +275,95 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   })() as { music: boolean; sfx: boolean };
   const saveSettings = () => localStorage.setItem("eidolith.settings", JSON.stringify(settings));
 
+  const artFor = (creatureId: string, size: number): string => {
+    const sp = SPRITES[creatureId];
+    const def = CREATURES.find(c => c.id === creatureId);
+    return sp ? `<img src="${sp}" style="width:${size}px;height:${size}px;object-fit:contain" alt=""/>`
+      : `<span class="ph" style="font-size:${Math.round(size * 0.55)}px;line-height:${size}px;color:${ELEMENT_COLOR[def?.element ?? ""] ?? "#9a937f"}">${(def?.name ?? "?").charAt(0)}</span>`;
+  };
+  const renderBag = (): void => {
+    title.textContent = "Túi đồ"; sub.textContent = "Vật phẩm đang có";
+    body.innerHTML = `<p style="font-size:15.5px;color:#9a937f">Đang tải…</p>`;
+    void network.request<{ items: InventoryStack[] }>("GET", "/inventory").then(({ items }) => {
+      if (!root.isConnected) return;
+      body.innerHTML = items.length === 0
+        ? `<div class="qcard"><h3>Túi đồ trống</h3><p>Chưa có vật phẩm nào.</p></div>`
+        : items.map(i => `<div class="bagrow"><i class="fa-solid ${i.category === "capture" ? "fa-circle-dot" : "fa-box"}"></i><div><div style="font-weight:700;font-size:16.5px">${i.name}</div><div style="font-size:13.5px;color:#9a937f">${i.description}</div></div><span class="qty">×${i.quantity}</span></div>`).join("");
+    }).catch(() => { body.innerHTML = `<div class="qcard"><h3>Không tải được túi đồ</h3></div>`; });
+  };
+  const renderSummon = (): void => {
+    title.textContent = "Triệu hồi"; sub.textContent = "Standard Resonance";
+    body.innerHTML = `<p style="font-size:15.5px;color:#9a937f">Đang tải banner…</p>`;
+    type BannerResp = { banners: { id: string; rates: Record<string, number>; pity: { sinceRare: number; sinceEpic: number; guaranteeRareAt: number; guaranteeEpicAt: number } }[] };
+    void Promise.all([
+      network.request<BannerResp>("GET", "/summoning/banners"),
+      network.request<{ gold: number; crystal: number }>("GET", "/player/wallet"),
+    ]).then(([b, w]) => {
+      if (!root.isConnected) return;
+      const banner = b.banners[0];
+      let crystal = w.crystal;
+      let pity = banner.pity;
+      const rateRows = Object.entries(banner.rates).map(([r, v]) =>
+        `<div class="qobj"><span style="color:${RARITY_COLOR[r]}">${RARITY_VI[r] ?? r}</span><span class="st">${Math.round(v * 100)}%</span></div>`).join("");
+      body.innerHTML = `<div class="qcard"><h3>Standard Resonance</h3>
+        <p>Triệu hồi Eidolon bằng Crystal. Trùng loài sẽ chuyển thành Mảnh + Bond Essence.</p>
+        ${rateRows}
+        <div class="qobj"><span>Bảo đảm Hiếm trở lên</span><span class="st">mỗi ${pity.guaranteeRareAt} lượt (đang ${pity.sinceRare})</span></div>
+        <div class="qobj"><span>Bảo đảm Sử thi</span><span class="st">tối đa ${pity.guaranteeEpicAt} lượt (đang ${pity.sinceEpic})</span></div>
+        <div class="qobj"><span>Crystal đang có</span><span class="st" id="sum-crystal">${crystal.toLocaleString("vi-VN")}</span></div></div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button class="enc-btn" id="sum-1" style="flex:1">Triệu hồi ×1 · 30</button>
+          <button class="enc-btn" id="sum-10" style="flex:1">Triệu hồi ×10 · 270</button>
+        </div>
+        <div id="sum-results"></div>`;
+      const resultsEl = body.querySelector("#sum-results") as HTMLElement;
+      const crystalEl2 = body.querySelector("#sum-crystal") as HTMLElement;
+      let pulling = false;
+      const pull = (count: number) => {
+        if (pulling) return;
+        pulling = true;
+        void network.request<SummonPullResponse>("POST", "/summoning/pull", { bannerId: banner.id, pullCount: count }, true, { "Idempotency-Key": crypto.randomUUID() }).then(res => {
+          crystal = res.remainingCrystal;
+          pity = { ...pity, sinceRare: res.pity.sinceRare, sinceEpic: res.pity.sinceEpic };
+          crystalEl2.textContent = crystal.toLocaleString("vi-VN");
+          crystalEl.textContent = crystal.toLocaleString("vi-VN");
+          resultsEl.innerHTML = `<div class="hub-sec">Kết quả</div><div class="sumres">${res.results.map(r => {
+            const def = CREATURES.find(c => c.id === r.creatureId);
+            return `<div class="cell">${artFor(r.creatureId, 96)}<div style="font-weight:700;margin-top:4px">${def?.name ?? r.creatureId}</div>
+              <div style="color:${RARITY_COLOR[r.rarity]};font-size:14px">${RARITY_VI[r.rarity] ?? r.rarity}</div>
+              <div style="font-size:13.5px;color:${r.isDuplicate ? "#9a937f" : "#7fe3a0"}">${r.isDuplicate ? `Trùng · +${r.shardsGained} Mảnh` : "MỚI!"}</div></div>`;
+          }).join("")}</div>`;
+        }).catch((e: Error) => { resultsEl.innerHTML = `<p class="enc-msg bad" style="margin-top:12px">${e.message}</p>`; })
+          .finally(() => { pulling = false; });
+      };
+      (body.querySelector("#sum-1") as HTMLButtonElement).addEventListener("click", () => pull(1));
+      (body.querySelector("#sum-10") as HTMLButtonElement).addEventListener("click", () => pull(10));
+    }).catch(() => { body.innerHTML = `<div class="qcard"><h3>Không tải được banner</h3></div>`; });
+  };
+
   const renderers: Record<string, () => void> = {
     eidolons: () => {
-      title.textContent = "Eidolons"; sub.textContent = "Bộ sưu tập · 0/20 đã thu thập";
-      body.innerHTML = `<div class="hub-sec">Đội hình (0/5)</div><div class="slots">${"<div class='slot'>Ô trống</div>".repeat(5)}</div>
-        <p style="font-size:15px;color:#9a937f;margin-top:10px">Bạn chưa có Eidolon nào. Eidolon hoang dã xuất hiện ở Whispering Forest.</p>
-        <div class="hub-sec">Sổ loài — Verdant Plains</div><div class="dex">${CREATURES.map(dexCard).join("")}</div>`;
+      title.textContent = "Eidolons"; sub.textContent = "Đang tải bộ sưu tập…";
+      body.innerHTML = `<p style="font-size:15.5px;color:#9a937f">Đang tải…</p>`;
+      void network.request<{ items: OwnedCreature[] }>("GET", "/creatures").then(({ items }) => {
+        if (!root.isConnected) return;
+        const ownedSpecies = new Map<string, number>();
+        for (const it of items) ownedSpecies.set(it.creatureId, (ownedSpecies.get(it.creatureId) ?? 0) + 1);
+        sub.textContent = `Bộ sưu tập · ${ownedSpecies.size}/20 loài · ${items.length} cá thể`;
+        const team = items.slice(0, 5);
+        const slots = [...team.map(it => {
+          const sp = SPRITES[it.creatureId];
+          return `<div class="slot" style="color:#e8e4d8">${sp ? `<img src="${sp}" style="width:52px;height:52px;object-fit:contain" alt=""/>` : ""}<span>${it.name}<br/>Lv.${it.level}</span></div>`;
+        }), ...Array(Math.max(0, 5 - team.length)).fill(`<div class="slot">Ô trống</div>`)].join("");
+        const dex = CREATURES.map(c => {
+          const n = ownedSpecies.get(c.id) ?? 0;
+          const card = dexCard(c);
+          return n > 0 ? card.replace('<div class="meta">', `<div class="meta"><span class="owned-badge">Đã có ×${n}</span></div><div class="meta">`) : card;
+        }).join("");
+        body.innerHTML = `<div class="hub-sec">Đội hình (${team.length}/5)</div><div class="slots">${slots}</div>
+          ${items.length === 0 ? `<p style="font-size:15px;color:#9a937f;margin-top:10px">Bạn chưa có Eidolon nào. Eidolon hoang dã xuất hiện ở Whispering Forest — lại gần và chạm vào chúng để bắt.</p>` : ""}
+          <div class="hub-sec">Sổ loài — Verdant Plains</div><div class="dex">${dex}</div>`;
+      }).catch(() => { sub.textContent = "Không tải được bộ sưu tập"; });
     },
     sanctuary: () => {
       title.textContent = "Sanctuary"; sub.textContent = "Nơi Eidolon nghỉ ngơi và gắn kết";
@@ -285,6 +396,8 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       const extra = body.querySelector("#menu-extra") as HTMLElement;
       body.querySelectorAll("[data-m]").forEach(btn => btn.addEventListener("click", () => {
         const key = (btn as HTMLElement).dataset.m!;
+        if (key === "bag") { renderBag(); return; }
+        if (key === "summon") { renderSummon(); return; }
         if (key === "settings") {
           extra.innerHTML = `<div class="hub-sec">Cài đặt</div>
             <div class="setrow"><span>Nhạc nền</span><div class="tgl ${settings.music ? "on" : ""}" data-s="music"></div></div>
@@ -319,7 +432,61 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   };
   root.querySelectorAll(".hub-nav button").forEach(b => b.addEventListener("click", () => setTab((b as HTMLElement).dataset.tab!)));
   root.querySelector("#hub-close")!.addEventListener("click", () => setTab("world"));
+  const encEl = root.querySelector("#hub-enc") as HTMLElement;
+  const openEncounter = (enc: EncounterUi): void => {
+    const def = CREATURES.find(c => c.id === enc.creatureId);
+    if (!def) return;
+    let orbs = 0;
+    let busy = false;
+    let over = false;
+    encEl.hidden = false;
+    encEl.innerHTML = `<div class="enc-card">
+      <button class="x enc-x" id="enc-close"><i class="fa-solid fa-xmark"></i></button>
+      ${artFor(enc.creatureId, 190)}
+      <h3>${def.name}</h3>
+      <div class="meta"><span class="chip" style="background:${ELEMENT_COLOR[def.element]};color:#10131a;padding:2px 10px;border-radius:999px;font-weight:700">${ELEMENT_VI[def.element] ?? def.element}</span>
+      <span style="color:${RARITY_COLOR[def.rarity]}">${RARITY_VI[def.rarity]}</span><span>Cấp ${enc.level}</span></div>
+      <p class="enc-msg" id="enc-msg">Một ${def.name} hoang dã xuất hiện!</p>
+      <button class="enc-btn" id="enc-throw" disabled>Đang tải Capture Orb…</button></div>`;
+    const msg = encEl.querySelector("#enc-msg") as HTMLElement;
+    const btn = encEl.querySelector("#enc-throw") as HTMLButtonElement;
+    const close = () => { encEl.hidden = true; encEl.innerHTML = ""; };
+    (encEl.querySelector("#enc-close") as HTMLElement).addEventListener("click", close);
+    const syncBtn = () => { btn.textContent = over ? "Đóng" : `Ném Capture Orb · còn ${orbs}`; btn.disabled = busy || (!over && orbs <= 0); if (!over && orbs <= 0) btn.textContent = "Hết Capture Orb"; };
+    void network.request<{ items: InventoryStack[] }>("GET", "/inventory").then(({ items }) => {
+      orbs = items.find(i => i.itemId === "basic_capture_orb")?.quantity ?? 0;
+      syncBtn();
+    }).catch(() => { msg.textContent = "Không tải được túi đồ"; });
+    btn.addEventListener("click", () => {
+      if (over) { close(); return; }
+      if (busy || orbs <= 0) return;
+      busy = true; syncBtn();
+      void network.request<{ captured: boolean; fled: boolean; orbsLeft: number }>("POST", `/encounters/${enc.encounterId}/capture`, { captureItemId: "basic_capture_orb" })
+        .then(res => {
+          orbs = res.orbsLeft;
+          if (res.captured) {
+            over = true;
+            msg.textContent = `Bắt thành công! ${def.name} đã vào bộ sưu tập.`;
+            msg.className = "enc-msg good";
+            showToast(`Đã thu thập ${def.name}!`);
+            window.setTimeout(close, 1700);
+          } else if (res.fled) {
+            over = true;
+            msg.textContent = `${def.name} đã bỏ chạy…`;
+            msg.className = "enc-msg bad";
+          } else {
+            msg.textContent = "Nó phá vỡ cầu và thoát ra! Ném tiếp đi.";
+            msg.className = "enc-msg bad";
+            encEl.classList.remove("shake"); void encEl.offsetWidth; encEl.classList.add("shake");
+          }
+        })
+        .catch((e: Error) => { msg.textContent = e.message; msg.className = "enc-msg bad"; if (/hết hạn|không hợp lệ|rời khỏi/i.test(e.message)) over = true; })
+        .finally(() => { busy = false; syncBtn(); });
+    });
+  };
+
   return {
+    openEncounter,
     setWallet: (w) => {
       if (!w) return;
       goldEl.textContent = fmt(w.gold);

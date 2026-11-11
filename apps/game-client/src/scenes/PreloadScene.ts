@@ -1,3 +1,4 @@
+import { CREATURE_SPRITES } from "../ui/sprites";
 import Phaser from "phaser";
 /** Preload: art v3 — assets extracted DIRECTLY from the approved concept sheets
  *  (tools/extract_art_v3.py) so the game matches the approved mockups.
@@ -12,6 +13,7 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image("npc_rowan", "assets/chars/npc-rowan-v5.png");
     this.load.image("npc_mira", "assets/chars/npc-mira-v5.png");
     this.load.image("npc_kael", "assets/chars/npc-kael-v5.png");
+    for (const [id, path] of Object.entries(CREATURE_SPRITES)) this.load.image(`cr_${id}`, path);
   }
   create(): void {
     const { width, height } = this.scale;

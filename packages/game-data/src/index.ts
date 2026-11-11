@@ -106,3 +106,16 @@ export function contentChecksum(): string {
   return fnv1a(JSON.stringify({ v: CONTENT_VERSION, creatures: CREATURES, elements: ELEMENTS, reactions: REACTIONS })).toString(16);
 }
 export * from "./maps.js";
+
+/** Wild encounter tables (Phase 3, docs/PHASE3-COLLECTION-v1.md). Weights are
+ *  relative; levels are inclusive ranges rolled by the server per spawn. */
+export interface EncounterEntry { creatureId: string; weight: number; minLevel: number; maxLevel: number; }
+export const ENCOUNTER_TABLES: Record<string, EncounterEntry[]> = {
+  whispering_forest: [
+    { creatureId: "EID-002", weight: 40, minLevel: 2, maxLevel: 4 },
+    { creatureId: "EID-005", weight: 20, minLevel: 2, maxLevel: 4 },
+    { creatureId: "EID-006", weight: 15, minLevel: 3, maxLevel: 5 },
+    { creatureId: "EID-004", weight: 15, minLevel: 2, maxLevel: 3 },
+    { creatureId: "EID-011", weight: 10, minLevel: 3, maxLevel: 5 },
+  ],
+};

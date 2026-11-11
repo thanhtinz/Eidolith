@@ -191,3 +191,13 @@ for i, name in enumerate(["npc-rowan-v5", "npc-mira-v5", "npc-kael-v5"]):
     print(name, c.size)
     finish(c, 208).save(f"{OUT_C}/{name}.png")
 print("NPC v4 done")
+
+# ---------- Forest creatures sheet: Pebblit / Glowmoth / Rootusk ----------
+fc = Image.open(f"{AC}/media-generation-eidolith-forest-creatures-v1-0-cd43d367-245f-4b6a-a05f-87ba8626e6ab.webp")
+_fw, _fh = fc.size
+for i, name in enumerate(["pebblit", "glowmoth", "rootusk"]):
+    cell = fc.crop((i * _fw // 3 + 8, 20, (i + 1) * _fw // 3 - 8, _fh - 20))
+    c = extract(cell, tol=22)
+    print(name, c.size)
+    finish(c, 170).save(f"{OUT_CR}/{name}-v1.png")
+print("forest creatures done")

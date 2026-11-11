@@ -67,9 +67,12 @@ playerRouter.get("/statistics", async (req: AuthedRequest, res, next) => {
     const profile = await loadProfile(req.userId!);
     const { rows } = await query<{ total_playtime_seconds: string }>(
       `SELECT total_playtime_seconds FROM players.player_progress WHERE player_id = $1`, [profile.id]);
+    const counts = await query<{ method: string; n: string }>(
+      `SELECT acquired_method AS method, COUNT(*) AS n FROM creatures.creature_instances WHERE player_id = $1 GROUP BY acquired_method`, [profile.id]);
+    const byMethod = (m: string) => Number(counts.rows.find(r => r.method === m)?.n ?? 0);
     const stats: PlayerStatistics = {
       totalPlaytimeSeconds: Number(rows[0].total_playtime_seconds), totalBattles: 0, wins: 0, losses: 0,
-      capturedEidolons: 0, summonedEidolons: 0, evolutionCount: 0, dungeonCompletions: 0,
+      capturedEidolons: byMethod("capture"), summonedEidolons: byMethod("summon"), evolutionCount: 0, dungeonCompletions: 0,
     };
     ok(req, res, stats);
   } catch (e) { next(e); }
