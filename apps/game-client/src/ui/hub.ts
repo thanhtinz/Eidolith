@@ -72,8 +72,8 @@ const CSS = `
 .minimap-wrap{position:relative;pointer-events:auto}
 .minimap{position:relative;width:158px;height:158px;border-radius:50%;overflow:hidden;background:#22331f;border:4px solid #232b36;outline:2px solid var(--sel);outline-offset:-9px;box-shadow:0 10px 26px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
 .tick{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--sel);border:1.5px solid #26303a;z-index:4}
-.minimap-inner{position:relative;width:113px;height:113px;flex:none}
-.minimap img{width:113px;height:113px;display:block;image-rendering:pixelated}
+.minimap-inner{position:absolute;inset:0}
+.minimap img{width:100%;height:100%;display:block;object-fit:cover}
 .mdot{position:absolute;width:11px;height:11px;border-radius:50%;background:var(--sel);border:2px solid #26303a;transform:translate(-50%,-50%);box-shadow:0 0 7px rgba(255,216,61,.9);z-index:2}
 .mname{position:absolute;right:-4px;bottom:-11px;background:var(--plate);color:#fff;font-size:12.5px;font-weight:700;text-align:center;padding:5px 14px;border:1px solid var(--line);border-radius:999px;white-space:nowrap;z-index:3;box-shadow:0 6px 14px rgba(0,0,0,.4)}
 .mmeta{font-size:12.5px;color:#fff;background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:6px 13px;pointer-events:auto;margin-top:15px;box-shadow:0 6px 14px rgba(0,0,0,.35)}
@@ -249,8 +249,8 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
         <div class="cur gold"><span class="coin">${TOP_ICONS.coin}</span><span id="w-gold">—</span></div>
         <div class="cur gem"><span class="coin">${TOP_ICONS.gem}</span><span id="w-crystal">—</span></div>
       </div>
-      <div class="minimap-wrap"><span class="tick" style="left:50%;top:-4px;transform:translateX(-50%)"></span><span class="tick" style="left:50%;bottom:-4px;transform:translateX(-50%)"></span><span class="tick" style="top:50%;left:-4px;transform:translateY(-50%)"></span><span class="tick" style="top:50%;right:-4px;transform:translateY(-50%)"></span><div class="minimap"><div class="minimap-inner"><img src="assets/maps/minimap-${opts.hud.mapId}.png" alt=""/><span class="mdot" id="hub-mdot" style="left:50%;top:50%"></span></div></div><div class="mname">${opts.hud.mapLabel}</div></div>
-      <div class="mmeta"><span id="hub-clock"></span><span class="wsep">|</span><i id="hub-wicon" class="fa-solid ${WEATHER_ICON[opts.hud.weatherKey] ?? "fa-cloud-sun"}"></i> ${opts.hud.weatherLabel} · <span id="hub-players">${opts.hud.players}</span> người chơi</div>
+      <div class="minimap-wrap"><span class="tick" style="left:50%;top:-4px;transform:translateX(-50%)"></span><span class="tick" style="left:50%;bottom:-4px;transform:translateX(-50%)"></span><span class="tick" style="top:50%;left:-4px;transform:translateY(-50%)"></span><span class="tick" style="top:50%;right:-4px;transform:translateY(-50%)"></span><div class="minimap"><div class="minimap-inner"><img src="assets/maps/minimap-${opts.hud.mapId}.png" alt=""/><span class="mdot" id="hub-mdot" style="left:50%;top:50%"></span></div></div></div>
+      <div class="mmeta"><span id="hub-clock"></span><span class="wsep">|</span><i id="hub-wicon" class="fa-solid ${WEATHER_ICON[opts.hud.weatherKey] ?? "fa-cloud-sun"}"></i> ${opts.hud.weatherLabel}</div>
     </div>
     <div class="party" id="hub-party"></div>
     <section class="hub-panel" id="hub-panel"><header><div><h2 id="hub-title"></h2><div class="sub" id="hub-sub"></div></div><button class="x" id="hub-close"><i class="fa-solid fa-xmark"></i></button></header><div class="hub-body" id="hub-body"></div></section>
@@ -264,7 +264,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       <button data-tab="sanctuary"><span class="nico">${ICONS.sanctuary}</span><span>Sanctuary</span></button>
       <button data-tab="menu"><span class="nico">${ICONS.menu}</span><span>Menu</span></button>
       </div>
-      <button class="toggle" id="hub-navtoggle"><span id="hub-navicon">${ICONS.world}</span><span class="chev"><i class="fa-solid fa-chevron-up"></i></span></button>
+      <button class="toggle" id="hub-navtoggle"><span id="hub-navicon"><i class="fa-solid fa-bars"></i></span><span class="chev"><i class="fa-solid fa-chevron-up"></i></span></button>
     </nav></div>`;
   // Plain fixed overlay positioned over the canvas by its own bounding rect.
   // (Phaser's DOM plugin applies its own scale/origin math that misplaces a
@@ -288,15 +288,12 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   // and player count via the game's hud:players event.
   let minutes = opts.hud.startMinutes;
   const clockEl = root.querySelector("#hub-clock") as HTMLElement;
-  const playersEl = root.querySelector("#hub-players") as HTMLElement;
   const drawClock = () => {
     const h = Math.floor(minutes / 60) % 24, m = Math.floor(minutes % 60);
     clockEl.textContent = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
   };
   drawClock();
   const clockTimer = window.setInterval(() => { minutes = (minutes + 0.4) % 1440; drawClock(); }, 1000);
-  const onPlayers = (n: number) => { playersEl.textContent = String(n); };
-  scene.game.events.on("hud:players", onPlayers);
   const mdot = root.querySelector("#hub-mdot") as HTMLElement;
   const onPos = (pos: { x: number; y: number }) => {
     mdot.style.left = `${((pos.x + 0.5) / opts.hud.mapW) * 100}%`;
@@ -566,12 +563,9 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   };
 
   const navEl = root.querySelector("#hub-nav") as HTMLElement;
-  const navIconEl = root.querySelector("#hub-navicon") as HTMLElement;
   (root.querySelector("#hub-navtoggle") as HTMLElement).addEventListener("click", () => navEl.classList.toggle("open"));
-  const TAB_ICONS: Record<string, string> = { world: ICONS.world, eidolons: ICONS.eidolons, sanctuary: ICONS.sanctuary, quests: ICONS.quests, menu: ICONS.menu };
   const setTab = (tab: string) => {
     navEl.classList.remove("open");
-    if (TAB_ICONS[tab]) navIconEl.innerHTML = TAB_ICONS[tab];
     root.querySelectorAll(".hub-nav button[data-tab]").forEach(b => b.classList.toggle("on", (b as HTMLElement).dataset.tab === tab));
     if (tab === "world") { panel.classList.remove("open"); return; }
     renderers[tab]?.();
@@ -642,7 +636,6 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     },
     destroy: () => {
       window.clearInterval(clockTimer);
-      scene.game.events.off("hud:players", onPlayers);
     scene.game.events.off("hud:pos", onPos);
       window.clearInterval(syncTimer);
       window.removeEventListener("resize", sync);

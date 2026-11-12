@@ -37,12 +37,15 @@ joystick (HudScene), form đăng nhập (LoginScene + `index.html`).
 - Tiền: hai loại gộp vào **một dải pill** duy nhất (icon + số), không kèm giờ.
 - **Giờ thế giới + thời tiết: tách riêng thành pill nhỏ nằm dưới minimap** —
   lệnh riêng của Tín, không gộp vào dải tiền. Định dạng pill (Tín chốt
-  2026-11-11 20:40): `HH:MM | <icon thời tiết> <nhãn>` rồi mới tới
-  `· N người chơi`. Icon theo loại thời tiết Part 8 §14 (fa-sun / fa-cloud /
-  fa-cloud-rain / fa-wind / fa-cloud-bolt / fa-smog / fa-snowflake);
+  2026-11-11 20:40, rút gọn 20:45): chỉ `HH:MM | <icon thời tiết> <nhãn>` —
+  KHÔNG kèm số người chơi. Icon theo loại thời tiết Part 8 §14 (fa-sun /
+  fa-cloud / fa-cloud-rain / fa-wind / fa-cloud-bolt / fa-smog / fa-snowflake);
   server đã bổ sung loại `wind` ("Gió mạnh") vào vòng quay thời tiết.
 - Minimap thành mặt la bàn: vòng vàng inset trong viền slate + 4 chấm
-  vàng ở 4 hướng; chấm vị trí người chơi giữ nguyên.
+  vàng ở 4 hướng; **ảnh map phủ kín khung tròn** (cover, không chừa vành
+  tối) và **không còn dải tên map** dưới minimap (Tín lệnh bỏ 20:45).
+- Nút mở menu góc dưới-phải: icon **burger (fa-bars)** cố định, không đổi
+  theo tab đang mở (Tín lệnh 20:49); huy hiệu chevron vàng giữ nguyên.
 
 ## Luật điều hướng nhiệm vụ (Tín lệnh 2026-11-11 19:45)
 
