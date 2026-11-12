@@ -8,10 +8,11 @@ import type { BattleResponse, OwnedCreature } from "@eidolith/shared-types";
 import type { HudData } from "./HudScene";
 import meadowVillage from "@eidolith/game-data/maps/meadow_village.json";
 import whisperingForest from "@eidolith/game-data/maps/whispering_forest.json";
+import ancientGrove from "@eidolith/game-data/maps/ancient_grove.json";
 // World — Phase 2: real isometric world (World Part 8). Tiled maps rendered at the locked
 // 64x32 tile, tap-to-move (tap anywhere to walk), A* pathfinding, camera follow/bounds,
 // portals between maps, other players via WebSocket snapshot/events, world clock + weather HUD.
-const MAP_JSON: Record<string, unknown> = { meadow_village: meadowVillage, whispering_forest: whisperingForest };
+const MAP_JSON: Record<string, unknown> = { meadow_village: meadowVillage, whispering_forest: whisperingForest, ancient_grove: ancientGrove };
 interface TiledObject { name: string; type: string; properties?: { name: string; value: unknown }[]; }
 interface TiledMap { width: number; height: number; layers: { name: string; data?: number[]; objects?: TiledObject[] }[]; }
 const prop = (o: TiledObject, n: string) => o.properties?.find(p => p.name === n)?.value;
@@ -28,6 +29,8 @@ export class WorldScene extends Phaser.Scene {
   private grid!: NavGrid;
   private originX = 0; private originY = 0;
   private portals = new Map<string, { targetMap: string; targetSpawn: string }>();
+  private npcSpots: { name: string; tx: number; ty: number; x: number; y: number }[] = [];
+  private bossSpot: { tx: number; ty: number; x: number; y: number } | null = null;
   private player!: Phaser.GameObjects.Container;
   private playerBody!: Phaser.GameObjects.Image;
   private playerLabel!: Phaser.GameObjects.Text;
@@ -70,6 +73,7 @@ export class WorldScene extends Phaser.Scene {
         mapH: (MAP_JSON[snap.world.mapId] as TiledMap).height,
       },
       onArena: () => { void this.startArenaBattle(); },
+      onBoss: () => { void this.startBossBattle(); },
       onLogout: () => {
         void network.request("POST", "/auth/logout").catch(() => undefined);
         network.clearTokens();
@@ -101,6 +105,8 @@ export class WorldScene extends Phaser.Scene {
     for (const o of objects) if (o.type === "npc") cells[Number(prop(o, "tileY")) * W + Number(prop(o, "tileX"))] = 1;
     this.grid = new NavGrid(W, H, cells);
     this.portals.clear();
+    this.npcSpots = [];
+    this.bossSpot = null;
     for (const o of objects) if (o.type === "portal") {
       this.portals.set(`${Number(prop(o, "tileX"))},${Number(prop(o, "tileY"))}`, { targetMap: String(prop(o, "targetMap")), targetSpawn: String(prop(o, "targetSpawn")) });
     }
@@ -146,6 +152,16 @@ export class WorldScene extends Phaser.Scene {
         const npcTex: Record<string, string> = { "Elder Rowan": "npc_rowan", "Mira": "npc_mira", "Kael": "npc_kael" };
         this.add.image(p.x, p.y + 14, npcTex[o.name] ?? "wanderer").setOrigin(0.5, 1).setScale(0.5).setDepth(p.y);
         this.add.text(p.x, p.y - 98, o.name, { ...NAME_STYLE, fontSize: "13px", color: "#cfe6ff" }).setOrigin(0.5).setDepth(LABEL_DEPTH);
+        this.npcSpots.push({ name: o.name, tx, ty, x: p.x, y: p.y });
+      } else if (o.type === "boss") {
+        // The Ancient Treant: a giant ancient tree over the arena (dedicated
+        // sprite is an art debt — see PHASE5B doc §2). Golden ring + label
+        // mark it as the boss; tap it to open the boss dialog.
+        const ring = this.add.ellipse(p.x, p.y + 18, 190, 52, 0xffd83d, 0.16).setDepth(p.y - 1);
+        ring.setStrokeStyle(3, 0xffd83d, 0.75);
+        this.add.image(p.x, p.y + 16, "tree").setOrigin(0.5, 1).setScale(2.7).setDepth(p.y);
+        this.add.text(p.x, p.y - 235, "Ancient Treant", { ...NAME_STYLE, fontSize: "17px", color: "#ffd83d" }).setOrigin(0.5).setDepth(LABEL_DEPTH);
+        this.bossSpot = { tx, ty, x: p.x, y: p.y };
       }
     }
     // Player.
@@ -268,6 +284,38 @@ export class WorldScene extends Phaser.Scene {
     const t = this.add.text(p.x, p.y - 120, text, { ...NAME_STYLE, fontSize: "16px", color: "#ffd9a8" }).setOrigin(0.5).setDepth(LABEL_DEPTH + 1);
     this.tweens.add({ targets: t, y: p.y - 150, alpha: 0, duration: 1600, onComplete: () => t.destroy() });
   }
+  /** Walk toward a tile-adjacent cell (used when tapping NPC/boss from afar). */
+  private walkToward(tx: number, ty: number): void {
+    const from = { x: Math.round(this.gridPos.x), y: Math.round(this.gridPos.y) };
+    const candidates = [
+      { x: tx + 1, y: ty }, { x: tx - 1, y: ty }, { x: tx, y: ty + 1 }, { x: tx, y: ty - 1 },
+      { x: tx + 2, y: ty }, { x: tx - 2, y: ty }, { x: tx, y: ty + 2 }, { x: tx, y: ty - 2 },
+    ].filter(c => this.grid.walkable(c.x, c.y));
+    for (const c of candidates) { const f = findPath(this.grid, from, c); if (f) { this.path = f; break; } }
+  }
+  private tapNpc(n: { name: string; tx: number; ty: number }): void {
+    const dist = Math.max(Math.abs(n.tx - Math.round(this.gridPos.x)), Math.abs(n.ty - Math.round(this.gridPos.y)));
+    if (dist > 3) { this.hint("Lại gần hơn để nói chuyện!"); this.walkToward(n.tx, n.ty); return; }
+    this.hub?.openNpc(n.name);
+  }
+  private tapBoss(): void {
+    if (!this.bossSpot) return;
+    const dist = Math.max(Math.abs(this.bossSpot.tx - Math.round(this.gridPos.x)), Math.abs(this.bossSpot.ty - Math.round(this.gridPos.y)));
+    if (dist > 5) { this.hint("Lại gần đấu trường hơn!"); this.walkToward(this.bossSpot.tx, this.bossSpot.ty + 3); return; }
+    this.hub?.openBoss();
+  }
+  private async startBossBattle(): Promise<void> {
+    try {
+      const { items } = await network.request<{ items: OwnedCreature[] }>("GET", "/creatures");
+      if (!items.length) { this.hint("Hãy bắt Eidolon đầu tiên ở Whispering Forest trước!"); return; }
+      const teamIds = items.slice(0, 5).map(c => c.instanceId);
+      const battle = await network.request<BattleResponse>("POST", "/battles", { instanceIds: teamIds, mode: "boss" });
+      this.scene.start("Battle", { battle, teamIds });
+    } catch (e) {
+      this.hint(e instanceof Error ? e.message : "Không mở được trận boss");
+    }
+  }
+
   private async tryEncounter(spawnId: string): Promise<void> {
     const w = this.wilds.get(spawnId);
     if (!w) return;
@@ -308,6 +356,10 @@ export class WorldScene extends Phaser.Scene {
   private onTap(pointer: Phaser.Input.Pointer): void {
     if (this.changingMap) return;
     const worldPoint = pointer.positionToCamera(this.cameras.main) as Phaser.Math.Vector2;
+    for (const n of this.npcSpots) {
+      if (Math.hypot(worldPoint.x - n.x, worldPoint.y - (n.y - 40)) < 58) { this.tapNpc(n); return; }
+    }
+    if (this.bossSpot && Math.hypot(worldPoint.x - this.bossSpot.x, worldPoint.y - (this.bossSpot.y - 60)) < 110) { this.tapBoss(); return; }
     for (const w of this.wilds.values()) {
       if (Math.hypot(worldPoint.x - w.container.x, worldPoint.y - (w.container.y - 30)) < 46) { void this.tryEncounter(w.info.spawnId); return; }
     }

@@ -98,20 +98,22 @@ export class BattleScene extends Phaser.Scene {
 
   private makeUnit(def: BattleTeamUnit): void {
     const cont = this.add.container(0, 0);
-    const shadow = this.add.ellipse(0, 26, 52, 14, 0x000000, 0.3);
-    const ring = this.add.ellipse(0, 26, 56, 16, def.team === 0 ? 0x3fa7c4 : 0xc0392b, 0.55);
+    const bossK = def.creatureId === "EID-B01" ? 1.75 : 1;
+    const shadow = this.add.ellipse(0, 26, 52 * bossK, 14 * bossK, 0x000000, 0.3);
+    const ring = this.add.ellipse(0, 26, 56 * bossK, 16 * bossK, def.team === 0 ? 0x3fa7c4 : 0xc0392b, 0.55);
     cont.add([shadow, ring]);
     let art: UnitVis["art"] = null;
     const key = `cr_${def.creatureId}`;
+    const bossScale = bossK; // boss presence (Phase 5b)
     if (this.textures.exists(key)) {
       const img = this.add.image(0, -6, key);
-      const h = 68; img.setDisplaySize(h * (img.width / Math.max(1, img.height)), h);
+      const h = 68 * bossScale; img.setDisplaySize(h * (img.width / Math.max(1, img.height)), h);
       this.tweens.add({ targets: img, y: -3, duration: 850 + (Number(def.unitId.split("-")[1] ?? 0)) * 130, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
       if (def.team === 1) img.setFlipX(true);
       cont.add(img); art = img;
     } else {
-      const circle = this.add.circle(0, -6, 30, Phaser.Display.Color.HexStringToColor(ELEMENT_CSS[def.element] ?? "#888888").color, 0.9);
-      const letter = this.add.text(0, -6, def.name.charAt(0), { fontSize: "26px", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+      const circle = this.add.circle(0, -6, 30 * bossScale, Phaser.Display.Color.HexStringToColor(ELEMENT_CSS[def.element] ?? "#888888").color, 0.9);
+      const letter = this.add.text(0, -6, def.name.charAt(0), { fontSize: `${Math.round(26 * bossScale)}px`, color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
       cont.add([circle, letter]); art = circle;
     }
     const nameY = Number(def.unitId.split("-")[1] ?? 0) % 2 === 0 ? -64 : -82;

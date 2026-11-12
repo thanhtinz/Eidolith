@@ -73,4 +73,22 @@ export interface QuestView {
   complete: boolean; claimed: boolean;
   rewards: { currency: string; amount: number }[];
 }
-export interface QuestStateResponse { day: string; arc: QuestView[]; daily: QuestView[]; }
+export interface SideQuestView {
+  key: string; title: string; npcName: string; npcRole: string;
+  giverText: string; progressText: string;
+  target: number; progress: number;
+  state: "available" | "active" | "complete" | "claimed";
+  rewards: { currency: string; amount: number }[];
+}
+export interface QuestStateResponse { day: string; arc: QuestView[]; daily: QuestView[]; side: SideQuestView[]; }
+/** Phase 5b Sanctuary (Part 6 §13). Accrued amounts are whole units ready
+ *  to collect; rates/caps live server-side. */
+export interface SanctuaryAssignmentView {
+  instanceId: string; creatureId: string; level: number; accrued: number;
+}
+export interface SanctuaryBuildingView {
+  id: string; nameVi: string; descVi: string; level: number;
+  kind: "bond" | "xp" | "info" | "locked"; slots: number;
+  assignments: SanctuaryAssignmentView[];
+}
+export interface SanctuaryStateResponse { buildings: SanctuaryBuildingView[]; }

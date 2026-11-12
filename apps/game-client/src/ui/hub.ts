@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import type { PlayerProfile, OwnedCreature, InventoryStack, SummonPullResponse, QuestStateResponse, QuestView } from "@eidolith/shared-types";
+import type { PlayerProfile, OwnedCreature, InventoryStack, SummonPullResponse, QuestStateResponse, QuestView, SideQuestView, SanctuaryStateResponse } from "@eidolith/shared-types";
 import { CREATURES, ELEMENTS, creatureById, statsAtLevel, skillsOf } from "@eidolith/game-data";
 import { network } from "../net/NetworkManager";
 import { CREATURE_SPRITES } from "./sprites";
@@ -190,6 +190,30 @@ const CSS = `
 .bagrow{display:flex;align-items:center;gap:13px;background:var(--plate2);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:10px}
 .bagrow i{font-size:24px;color:var(--sel)}
 .bagrow .qty{margin-left:auto;font-weight:800;font-size:18px;color:#fff}
+.slots.sanc{display:grid;grid-template-columns:1fr 1fr}
+.slots.sanc .slotempty{width:auto}
+.slotc{display:flex;align-items:center;gap:9px;background:var(--plate2);border:1px solid var(--sel);border-radius:12px;padding:7px 10px;min-width:0}
+.slotc img{width:40px;height:40px;object-fit:contain}
+.slotc .ph{font-size:24px;font-weight:800;width:40px;text-align:center}
+.slotc .snm{font-size:14.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slotc .smeta{font-size:12.5px;color:#aeb9c4;white-space:nowrap}
+.slotc .un{margin-left:auto;background:#3a2323;color:#ff9a9a;border:1px solid #6e3a3a;border-radius:8px;width:28px;height:28px;flex:none;cursor:pointer}
+.slotempty{border:1.5px dashed #4a586c;border-radius:12px;background:transparent;color:#9fb0c0;font:600 14px 'Be Vietnam Pro',sans-serif;padding:12px;cursor:pointer;width:100%}
+.pickrow{display:flex;align-items:center;gap:11px;width:100%;background:var(--plate2);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:8px;cursor:pointer;color:#fff;text-align:left;font-family:'Be Vietnam Pro',sans-serif}
+.pickrow:hover{border-color:var(--sel)}
+.pickrow img{width:44px;height:44px;object-fit:contain}
+.pickrow .ph{font-size:26px;font-weight:800;width:44px;text-align:center}
+.collectbtn{margin-top:10px;background:var(--sel);color:#191203;border:none;border-radius:11px;padding:10px 16px;font:800 15px 'Be Vietnam Pro',sans-serif;cursor:pointer}
+.dlg-card{text-align:left}
+.dlg-card h3{margin-top:0}
+.dlg-card .say{font-size:16.5px;line-height:1.5;color:#e8e2d2;margin:10px 0}
+.dlg-card .qmeta{font-size:14.5px;color:#aeb9c4;margin:6px 0 14px}
+.dlg-actions{display:flex;gap:10px;margin-top:8px}
+.dlg-actions .go{flex:1;background:var(--sel);color:#191203;border:none;border-radius:11px;padding:12px;font:800 16px 'Be Vietnam Pro',sans-serif;cursor:pointer}
+.dlg-actions .back{flex:1;background:#39424f;color:#fff;border:1px solid var(--line);border-radius:11px;padding:12px;font:700 16px 'Be Vietnam Pro',sans-serif;cursor:pointer}
+.qstate{font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px;background:#39424f;color:#cfe0ee;white-space:nowrap}
+.qstate.ok{background:#3f9e63;color:#fff}
+.qstate.done{background:#6b5a1e;color:#ffd83d}
 .toast{position:absolute;left:50%;transform:translateX(-50%);bottom:92px;background:rgba(27,33,43,.97);border:1px solid var(--line);color:#fff;padding:11px 20px;border-radius:999px;font-size:16px;font-weight:600;display:none;pointer-events:none;white-space:nowrap;box-shadow:0 10px 24px rgba(0,0,0,.45)}
 `;
 
@@ -207,6 +231,17 @@ function dexCard(c: (typeof CREATURES)[number]): string {
 }
 
 const CURRENCY_VI: Record<string, string> = { gold: "Gold", crystal: "Crystal", evolution_core: "Evolution Core", bond_essence: "Bond Essence" };
+function sideCard(q: SideQuestView): string {
+  const pct = Math.min(100, Math.round((q.progress / q.target) * 100));
+  const rew = q.rewards.map(r => `+${r.amount} ${CURRENCY_VI[r.currency] ?? r.currency}`).join(" · ");
+  const chip = q.state === "claimed" ? `<span class="qstate ok">Đã xong</span>`
+    : q.state === "complete" ? `<span class="qstate done">Về gặp ${q.npcName} nhận thưởng</span>`
+    : q.state === "active" ? `<span class="qstate">Đang làm ${q.progress}/${q.target}</span>`
+    : `<span class="qstate">Chưa nhận — gặp ${q.npcName}</span>`;
+  return `<div class="qcard"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><h3>${q.title}</h3>${chip}</div>
+    <p>${q.npcName} · ${q.npcRole} — Thưởng: ${rew}</p>
+    <div class="bar"><i style="width:${pct}%"></i></div></div>`;
+}
 function questCard(q: QuestView): string {
   const pct = Math.min(100, Math.round((q.progress / q.target) * 100));
   const rew = q.rewards.map(r => `+${r.amount} ${CURRENCY_VI[r.currency] ?? r.currency}`).join(" · ");
@@ -230,11 +265,13 @@ export interface HubHandle {
   destroy: () => void;
   setWallet: (w: { gold: number; crystal: number } | null) => void;
   openEncounter: (enc: EncounterUi) => void;
+  openNpc: (npcName: string) => void;
+  openBoss: () => void;
 }
 
 export interface HubHudInfo { mapLabel: string; weatherLabel: string; weatherKey: string; startMinutes: number; players: number; mapId: string; mapW: number; mapH: number; }
 const WEATHER_ICON: Record<string, string> = { clear: "fa-sun", cloudy: "fa-cloud", rain: "fa-cloud-rain", wind: "fa-wind", storm: "fa-cloud-bolt", fog: "fa-smog", snow: "fa-snowflake" };
-export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hud: HubHudInfo; onLogout: () => void; onArena?: () => void }): HubHandle {
+export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hud: HubHudInfo; onLogout: () => void; onArena?: () => void; onBoss?: () => void }): HubHandle {
   const p = opts.profile;
   const regionName = p.currentRegion.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   const avatar = p.avatarId === "wanderer_female" ? "assets/chars/wanderer-female-v4.png" : "assets/chars/wanderer-v4.png";
@@ -258,6 +295,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     <div class="party" id="hub-party"></div>
     <section class="hub-panel" id="hub-panel"><header><div><h2 id="hub-title"></h2><div class="sub" id="hub-sub"></div></div><button class="x" id="hub-close"><i class="fa-solid fa-xmark"></i></button></header><div class="hub-body" id="hub-body"></div></section>
     <div class="enc" id="hub-enc" hidden></div>
+    <div class="enc" id="hub-dlg" hidden></div>
     <div class="toast" id="hub-toast"></div>
     <nav class="hub-nav" id="hub-nav">
       <div class="nav-items">
@@ -491,11 +529,66 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     },
     sanctuary: () => {
       title.textContent = "Sanctuary"; sub.textContent = "Nơi Eidolon nghỉ ngơi và gắn kết";
-      const b = (name: string, desc: string, lv: string) => `<div class="bcard"><div class="bic">${ICONS.sanctuary}</div><div><h3>${name}</h3><p>${desc}</p></div><div class="blv">${lv}</div></div>`;
-      body.innerHTML = b("Nhà chính", "Trung tâm của Sanctuary — quản lý phân công và nâng cấp.", "Lv.1")
-        + b("Vườn gắn kết", "Eidolon ở đây tăng Bond theo thời gian.", "Chưa xây")
-        + b("Đài tiến hoá", "Dùng Evolution Core để tiến hoá Eidolon theo nhánh.", "Chưa xây")
-        + `<div class="hub-sec">Phân công (0/5)</div><div class="slots">${"<div class='slot'>Ô trống</div>".repeat(5)}</div>`;
+      body.innerHTML = `<p style="font-size:15.5px;color:#9a937f">Đang tải…</p>`;
+      void (async () => {
+        try {
+          const [state, owned] = await Promise.all([
+            network.request<SanctuaryStateResponse>("GET", "/sanctuary"),
+            network.request<{ items: OwnedCreature[] }>("GET", "/creatures"),
+          ]);
+          const byInstance = new Map(owned.items.map(c => [c.instanceId, c]));
+          const assignedIds = new Set(state.buildings.flatMap(bd => bd.assignments.map(a => a.instanceId)));
+          const defOf = (cid: string) => CREATURES.find(c => c.id === cid);
+          const thumb = (cid: string) => {
+            const sp = SPRITES[cid]; const d = defOf(cid);
+            return sp ? `<img src="${sp}" alt=""/>` : `<span class="ph" style="color:${ELEMENT_COLOR[d?.element ?? "Grove"]}">${(d?.name ?? "?").slice(0, 1)}</span>`;
+          };
+          let html = "";
+          for (const bd of state.buildings) {
+            const tag = bd.kind === "locked" ? "Chưa xây" : "Lv." + bd.level;
+            html += `<div class="bcard"><div class="bic">${ICONS.sanctuary}</div><div><h3>${bd.nameVi}</h3><p>${bd.descVi}</p></div><div class="blv">${tag}</div></div>`;
+            if (bd.slots > 0) {
+              const unit = bd.kind === "bond" ? "Bond" : "XP";
+              html += `<div class="slots sanc" style="margin:4px 0 2px">`;
+              for (const a of bd.assignments) {
+                const c = byInstance.get(a.instanceId); const d = defOf(a.creatureId);
+                html += `<div class="slotc">${thumb(a.creatureId)}<div style="min-width:0"><div class="snm">${d?.name ?? a.creatureId}</div><div class="smeta">Lv.${a.level}${c ? ` · Bond ${c.bondLevel}` : ""} · +${a.accrued} ${unit}</div></div><button class="un" data-unassign="${a.instanceId}" title="Rút về (phần chưa thu hoạch sẽ mất)"><i class="fa-solid fa-xmark"></i></button></div>`;
+              }
+              for (let i = bd.assignments.length; i < bd.slots; i++)
+                html += `<button class="slotempty" data-pick="${bd.id}">+ Phân công Eidolon</button>`;
+              html += `</div>`;
+              const total = bd.assignments.reduce((n, a) => n + a.accrued, 0);
+              if (total > 0) html += `<button class="collectbtn" data-collect="${bd.id}">Thu hoạch: +${total} ${unit}</button>`;
+            }
+          }
+          html += `<p style="font-size:13.5px;color:#8b93a0;margin-top:12px">Tích luỹ tối đa 8 giờ cho mỗi Eidolon. Rút về trước khi thu hoạch sẽ mất phần chưa thu.</p>`;
+          body.innerHTML = html;
+          body.querySelectorAll<HTMLElement>("[data-unassign]").forEach(btn => btn.addEventListener("click", () => {
+            void network.request("POST", "/sanctuary/unassign", { creatureInstanceId: btn.dataset.unassign }).then(() => { showToast("Đã rút Eidolon về"); renderers.sanctuary(); }).catch((e: Error) => showToast(e.message));
+          }));
+          body.querySelectorAll<HTMLElement>("[data-collect]").forEach(btn => btn.addEventListener("click", () => {
+            void network.request<{ gains: { amount: number }[] }>("POST", "/sanctuary/collect", { buildingId: btn.dataset.collect }).then(r => {
+              const total = r.gains.reduce((n, g) => n + g.amount, 0);
+              showToast(total > 0 ? `Thu hoạch xong: +${total}` : "Chưa có gì để thu hoạch");
+              renderers.sanctuary(); refreshParty();
+            }).catch((e: Error) => showToast(e.message));
+          }));
+          body.querySelectorAll<HTMLElement>("[data-pick]").forEach(btn => btn.addEventListener("click", () => {
+            const buildingId = btn.dataset.pick!;
+            const free = owned.items.filter(c => !assignedIds.has(c.instanceId));
+            body.innerHTML = `<div class="hub-sec">Chọn Eidolon phân công</div>` + (free.length
+              ? free.map(c => `<button class="pickrow" data-assign="${c.instanceId}">${thumb(c.creatureId)}<span><b>${defOf(c.creatureId)?.name ?? c.creatureId}</b> · Lv.${c.level} · Bond ${c.bondLevel}</span></button>`).join("")
+              : `<p style="font-size:15.5px;color:#9a937f">Mọi Eidolon đều đã được phân công.</p>`)
+              + `<button class="slotempty" id="pick-back">← Quay lại Sanctuary</button>`;
+            body.querySelector("#pick-back")?.addEventListener("click", () => renderers.sanctuary());
+            body.querySelectorAll<HTMLElement>("[data-assign]").forEach(b2 => b2.addEventListener("click", () => {
+              void network.request("POST", "/sanctuary/assign", { buildingId, creatureInstanceId: b2.dataset.assign }).then(() => { showToast("Đã phân công!"); renderers.sanctuary(); }).catch((e: Error) => showToast(e.message));
+            }));
+          }));
+        } catch (e) {
+          body.innerHTML = `<p style="font-size:15.5px;color:#e88">${e instanceof Error ? e.message : "Không tải được Sanctuary"}</p>`;
+        }
+      })();
     },
     quests: () => {
       title.textContent = "Nhiệm vụ"; sub.textContent = "Nhật ký nhiệm vụ";
@@ -503,7 +596,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       let state: QuestStateResponse | null = null;
       const draw = () => {
         const list = !state ? `<p style="font-size:15.5px;color:#9a937f">Đang tải…</p>`
-          : tab === "side" ? `<div class="qcard"><h3>Chưa có nhiệm vụ phụ</h3><p>Hãy nói chuyện với dân làng Meadow Village — nhiệm vụ phụ sẽ xuất hiện tại đây.</p></div>`
+          : tab === "side" ? (state.side.length ? state.side.map(sideCard).join("") : `<div class="qcard"><h3>Chưa có nhiệm vụ phụ</h3><p>Hãy nói chuyện với dân làng Meadow Village.</p></div>`)
           : (tab === "main" ? state.arc : state.daily).map(questCard).join("");
         body.innerHTML = `<div class="tabs">
           <button data-q="main" class="${tab === "main" ? "on" : ""}">Chính tuyến</button>
@@ -630,8 +723,61 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     });
   };
 
+  const dlgEl = root.querySelector("#hub-dlg") as HTMLElement;
+  const closeDlg = () => { dlgEl.hidden = true; dlgEl.innerHTML = ""; };
+  const openNpc = (npcName: string): void => {
+    void network.request<QuestStateResponse>("GET", "/progression/quests").then(st => {
+      const q = st.side.find(x => x.npcName === npcName);
+      const role = q?.npcRole ?? "";
+      let inner: string;
+      if (!q || q.state === "claimed") {
+        inner = `<div class="say">Cảm ơn Wanderer. Từ ngày ngươi tới, Meadow Village yên bình hơn hẳn.</div>
+          <div class="dlg-actions"><button class="back" id="dlg-close">Đóng</button></div>`;
+      } else if (q.state === "available") {
+        const rew = q.rewards.map(r => `+${r.amount} ${CURRENCY_VI[r.currency] ?? r.currency}`).join(" · ");
+        inner = `<div class="say">${q.giverText}</div>
+          <div class="qmeta">Nhiệm vụ: <b style="color:#fff">${q.title}</b> (0/${q.target}) · Thưởng: ${rew}</div>
+          <div class="dlg-actions"><button class="go" id="dlg-accept">Nhận nhiệm vụ</button><button class="back" id="dlg-close">Để sau</button></div>`;
+      } else if (q.state === "active") {
+        inner = `<div class="say">${q.progressText}</div>
+          <div class="qmeta">Nhiệm vụ: <b style="color:#fff">${q.title}</b> — tiến độ ${q.progress}/${q.target}</div>
+          <div class="dlg-actions"><button class="back" id="dlg-close">Đóng</button></div>`;
+      } else {
+        const rew = q.rewards.map(r => `+${r.amount} ${CURRENCY_VI[r.currency] ?? r.currency}`).join(" · ");
+        inner = `<div class="say">Ngươi làm được rồi, Wanderer! Đây là phần thưởng đã hứa.</div>
+          <div class="qmeta">Nhiệm vụ: <b style="color:#fff">${q.title}</b> hoàn thành · Thưởng: ${rew}</div>
+          <div class="dlg-actions"><button class="go" id="dlg-claim">Nhận thưởng</button><button class="back" id="dlg-close">Để sau</button></div>`;
+      }
+      dlgEl.innerHTML = `<div class="enc-card dlg-card" style="width:560px"><h3>${npcName}</h3><div class="meta" style="justify-content:flex-start"><span>${role}</span></div>${inner}</div>`;
+      dlgEl.hidden = false;
+      dlgEl.querySelector("#dlg-close")?.addEventListener("click", closeDlg);
+      dlgEl.querySelector("#dlg-accept")?.addEventListener("click", () => {
+        void network.request("POST", `/progression/quests/side/${q!.key}/accept`, {}).then(() => { showToast(`Đã nhận nhiệm vụ: ${q!.title}`); closeDlg(); void network.request<QuestStateResponse>("GET", "/progression/quests").then(updateTracker).catch(() => undefined); }).catch((e: Error) => showToast(e.message));
+      });
+      dlgEl.querySelector("#dlg-claim")?.addEventListener("click", () => {
+        void network.request("POST", `/progression/quests/side/${q!.key}/claim`, {}).then(() => {
+          showToast("Đã nhận thưởng nhiệm vụ phụ!");
+          void network.request<{ gold: number; crystal: number }>("GET", "/player/wallet").then(w => { goldEl.textContent = fmt(w.gold); crystalEl.textContent = fmt(w.crystal); }).catch(() => undefined);
+          closeDlg();
+        }).catch((e: Error) => showToast(e.message));
+      });
+    }).catch(() => showToast("Không nói chuyện được lúc này"));
+  };
+  const openBoss = (): void => {
+    dlgEl.innerHTML = `<div class="enc-card dlg-card" style="width:560px"><h3>Ancient Treant</h3>
+      <div class="meta" style="justify-content:flex-start"><span>Boss khu vực · Ancient Grove</span></div>
+      <div class="say">Cổ thụ nghìn năm đang ngủ say giữa đấu trường. Đánh thức nó dậy là một trận chiến thật sự — đội hình 5 Eidolon đầu tiên của bạn sẽ ra trận.</div>
+      <div class="qmeta">Thắng: nhận Evolution Core + Gold (lần thắng đầu mỗi ngày được thưởng đầy đủ).</div>
+      <div class="dlg-actions"><button class="go" id="dlg-fight">Vào trận</button><button class="back" id="dlg-close">Để sau</button></div></div>`;
+    dlgEl.hidden = false;
+    dlgEl.querySelector("#dlg-close")?.addEventListener("click", closeDlg);
+    dlgEl.querySelector("#dlg-fight")?.addEventListener("click", () => { closeDlg(); opts.onBoss?.(); });
+  };
+
   return {
     openEncounter,
+    openNpc,
+    openBoss,
     setWallet: (w) => {
       if (!w) return;
       goldEl.textContent = fmt(w.gold);
