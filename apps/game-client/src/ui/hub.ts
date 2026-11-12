@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import type { PlayerProfile, OwnedCreature, InventoryStack, SummonPullResponse } from "@eidolith/shared-types";
-import { CREATURES, ELEMENTS } from "@eidolith/game-data";
+import type { PlayerProfile, OwnedCreature, InventoryStack, SummonPullResponse, QuestStateResponse, QuestView } from "@eidolith/shared-types";
+import { CREATURES, ELEMENTS, creatureById, statsAtLevel, skillsOf } from "@eidolith/game-data";
 import { network } from "../net/NetworkManager";
 import { CREATURE_SPRITES } from "./sprites";
 /** Hub UI (Part 13 §2): top player bar + bottom navigation
@@ -115,6 +115,23 @@ const CSS = `
 .rar{font-weight:700}
 .qcard{background:rgba(212,164,55,.06);border:1px solid rgba(212,164,55,.22);border-radius:16px;padding:14px 16px;margin-bottom:12px}
 .qcard h3{font-family:'Baloo 2',sans-serif;font-size:20px;color:#f7ead0;margin-bottom:4px}
+.qclaim{margin-top:10px;background:linear-gradient(180deg,#ffb340,#e07f1f);color:#2a1503;border:none;border-radius:10px;padding:9px 18px;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;cursor:pointer}
+.qclaim:hover{filter:brightness(1.08)}
+.qdone{margin-top:10px;color:#8fd96a;font-weight:700;font-size:14.5px}
+.qrew{color:#c9b18a;font-size:14px;margin-top:2px}
+.dt-head{display:flex;gap:18px;align-items:center}
+.dt-head img{width:110px;height:110px;object-fit:contain}
+.dt-head .ph{font-size:64px;font-family:'Baloo 2',sans-serif}
+.dt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.dt-stat{background:rgba(212,164,55,.07);border:1px solid rgba(212,164,55,.2);border-radius:12px;padding:10px;text-align:center}
+.dt-stat b{display:block;font-family:'Baloo 2',sans-serif;font-size:21px;color:#f7ead0}
+.dt-stat span{font-size:12.5px;color:#9a937f;letter-spacing:.6px}
+.hearts{color:#e2543e;letter-spacing:3px;font-size:16px}
+.hearts .off{color:rgba(247,234,208,.18)}
+.sk{display:flex;justify-content:space-between;padding:7px 2px;border-bottom:1px dashed rgba(212,164,55,.18);font-size:15px}
+.sk .tag{color:#ffd94a;font-weight:700;font-size:12.5px;letter-spacing:.8px}
+.slot[data-inst]{cursor:pointer}
+.dex .card{cursor:pointer}
 .qcard p{font-size:15.5px;color:#d8c9a8;line-height:1.5}
 .qobj{display:flex;justify-content:space-between;font-size:15.5px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06)}
 .qobj:last-child{border-bottom:none}
@@ -178,19 +195,18 @@ function dexCard(c: (typeof CREATURES)[number]): string {
     <div class="meta">${ROLE_VI[c.role]} · ${c.habitat || "Chưa rõ nơi sống"}</div></div></div>`;
 }
 
-function questsHtml(tab: string): string {
-  if (tab === "daily") {
-    const daily: [string, string, number][] = [
-      ["Đăng nhập hôm nay", "0/1", 0], ["Khám phá thế giới (đi 300 bước)", "0/300", 0],
-      ["Nói chuyện với 1 NPC", "0/1", 0], ["Thu thập 1 Eidolon", "0/1", 0], ["Hoàn thành 1 nhiệm vụ chính", "0/1", 0],
-    ];
-    return daily.map(([t, p, pct]) => `<div class="qcard"><h3>${t}</h3><div class="qobj"><span>Tiến độ</span><span class="st">${p}</span></div><div class="bar"><i style="width:${pct}%"></i></div></div>`).join("");
-  }
-  if (tab === "side") return `<div class="qcard"><h3>Chưa có nhiệm vụ phụ</h3><p>Hãy nói chuyện với dân làng Meadow Village — nhiệm vụ phụ sẽ xuất hiện tại đây.</p></div>`;
-  return `<div class="qcard"><h3>Arc 0 — Khởi hành</h3><p>Cốt truyện chính bắt đầu tại Meadow Village, Verdant Plains.</p>
-    <div class="qobj"><span>Nói chuyện với Elder Rowan</span><span class="st">Đang làm</span></div>
-    <div class="qobj"><span>Khám phá Whispering Forest</span><span class="st">Chưa mở</span></div>
-    <div class="qobj"><span>Thu thập Eidolon đầu tiên</span><span class="st">Chưa mở</span></div></div>`;
+const CURRENCY_VI: Record<string, string> = { gold: "Gold", crystal: "Crystal", evolution_core: "Evolution Core", bond_essence: "Bond Essence" };
+function questCard(q: QuestView): string {
+  const pct = Math.min(100, Math.round((q.progress / q.target) * 100));
+  const rew = q.rewards.map(r => `+${r.amount} ${CURRENCY_VI[r.currency] ?? r.currency}`).join(" · ");
+  const action = q.claimed
+    ? `<div class="qdone"><i class="fa-solid fa-check"></i> Đã nhận thưởng</div>`
+    : q.complete
+      ? `<button class="qclaim" data-claim="${q.scope}:${q.key}">Nhận thưởng</button>`
+      : "";
+  return `<div class="qcard"><h3>${q.title}</h3><div class="qrew">Thưởng: ${rew}</div>
+    <div class="qobj"><span>Tiến độ</span><span class="st">${q.progress}/${q.target}</span></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>${action}</div>`;
 }
 
 const TOP_ICONS = {
@@ -212,9 +228,9 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   const avatar = p.avatarId === "wanderer_female" ? "assets/chars/wanderer-female-v4.png" : "assets/chars/wanderer-v4.png";
   const html = `<style>${CSS}</style><div class="hub-root">
     <div class="pcluster">
-      <div class="pav"><img src="${avatar}" alt=""/><span class="hud-badge">${p.level}</span></div>
+      <div class="pav"><img src="${avatar}" alt=""/><span class="hud-badge" id="hub-lv">${p.level}</span></div>
       <div class="pmeta"><div class="nm">${p.displayName}</div>
-        <div class="hud-exp"><i style="width:${Math.min(100, Math.round((p.experience / (100 * p.level)) * 100))}%"></i><span>EXP ${p.experience}/${100 * p.level}</span></div></div>
+        <div class="hud-exp"><i id="hub-exp-fill" style="width:${Math.min(100, Math.round((p.experience / (100 * p.level)) * 100))}%"></i><span id="hub-exp-txt">EXP ${p.experience}/${100 * p.level}</span></div></div>
     </div>
     <button class="qcard-top" id="hub-qtrack"><i class="fa-solid fa-scroll"></i><span><span class="qarc">ARC 0 · NHIỆM VỤ CHÍNH</span><br/><span class="qobj-t">Nói chuyện với Elder Rowan</span></span></button>
     <div class="topright">
@@ -281,6 +297,25 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   const goldEl = root.querySelector("#w-gold") as HTMLElement;
   const crystalEl = root.querySelector("#w-crystal") as HTMLElement;
   (root.querySelector("#hub-qtrack") as HTMLElement).addEventListener("click", () => setTab("quests"));
+  const updateTracker = (st: QuestStateResponse): void => {
+    const arcEl = root.querySelector("#hub-qtrack .qarc") as HTMLElement | null;
+    const objEl = root.querySelector("#hub-qtrack .qobj-t") as HTMLElement | null;
+    if (!arcEl || !objEl) return;
+    const nextArc = st.arc.find(q => !q.complete);
+    const nextDaily = st.daily.find(q => !q.complete);
+    if (nextArc) { arcEl.textContent = "ARC 0 · NHIỆM VỤ CHÍNH"; objEl.textContent = `${nextArc.title} · ${nextArc.progress}/${nextArc.target}`; }
+    else if (nextDaily) { arcEl.textContent = "NHIỆM VỤ HẰNG NGÀY"; objEl.textContent = `${nextDaily.title} · ${nextDaily.progress}/${nextDaily.target}`; }
+    else { arcEl.textContent = "NHIỆM VỤ"; objEl.textContent = "Đã xong các mục tiêu — quay lại nhận thưởng!"; }
+  };
+  void network.request<QuestStateResponse>("GET", "/progression/quests").then(st => { if (root.isConnected) updateTracker(st); }).catch(() => undefined);
+  void network.request<PlayerProfile>("GET", "/player/me").then(me => {
+    if (!root.isConnected) return;
+    const lv = root.querySelector("#hub-lv"); if (lv) lv.textContent = String(me.level);
+    const fill = root.querySelector("#hub-exp-fill") as HTMLElement | null;
+    const txt = root.querySelector("#hub-exp-txt");
+    if (fill) fill.style.width = `${Math.min(100, Math.round((me.experience / (100 * me.level)) * 100))}%`;
+    if (txt) txt.textContent = `EXP ${me.experience}/${100 * me.level}`;
+  }).catch(() => undefined);
   const panel = root.querySelector("#hub-panel") as HTMLElement;
   const title = root.querySelector("#hub-title") as HTMLElement;
   const sub = root.querySelector("#hub-sub") as HTMLElement;
@@ -395,7 +430,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
         const team = items.slice(0, 5);
         const slots = [...team.map(it => {
           const sp = SPRITES[it.creatureId];
-          return `<div class="slot" style="color:#e8e4d8">${sp ? `<img src="${sp}" style="width:52px;height:52px;object-fit:contain" alt=""/>` : ""}<span>${it.name}<br/>Lv.${it.level}</span></div>`;
+          return `<div class="slot" data-inst="${it.instanceId}" style="color:#e8e4d8">${sp ? `<img src="${sp}" style="width:52px;height:52px;object-fit:contain" alt=""/>` : ""}<span>${it.name}<br/>Lv.${it.level}</span></div>`;
         }), ...Array(Math.max(0, 5 - team.length)).fill(`<div class="slot">Ô trống</div>`)].join("");
         const dex = CREATURES.map(c => {
           const n = ownedSpecies.get(c.id) ?? 0;
@@ -405,6 +440,41 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
         body.innerHTML = `<div class="hub-sec">Đội hình (${team.length}/5)</div><div class="slots">${slots}</div>
           ${items.length === 0 ? `<p style="font-size:15px;color:#9a937f;margin-top:10px">Bạn chưa có Eidolon nào. Eidolon hoang dã xuất hiện ở Whispering Forest — lại gần và chạm vào chúng để bắt.</p>` : ""}
           <div class="hub-sec">Sổ loài — Verdant Plains</div><div class="dex">${dex}</div>`;
+        const byId = new Map(items.map(i => [i.instanceId, i]));
+        const bestOf = new Map<string, OwnedCreature>();
+        for (const it of items) { const cur = bestOf.get(it.creatureId); if (!cur || it.level > cur.level) bestOf.set(it.creatureId, it); }
+        const showDetail = (it: OwnedCreature): void => {
+          const def = creatureById(it.creatureId);
+          if (!def) return;
+          const st = statsAtLevel(def, it.level);
+          const xpNext = it.level >= 50 ? 0 : 60 + 40 * it.level;
+          const xpPct = xpNext ? Math.min(100, Math.round((it.experience / xpNext) * 100)) : 100;
+          const hearts = Array.from({ length: 10 }, (_, i) => `<i class="fa-solid fa-heart ${i < it.bondLevel ? "" : "off"}"></i>`).join("");
+          const skills = skillsOf(it.creatureId).map(sk => `<div class="sk"><span>${sk.name}</span>${sk.slot === 3 ? `<span class="tag">CHIÊU CUỐI</span>` : sk.slot === 2 ? `<span class="tag">KỸ NĂNG</span>` : `<span class="tag">ĐÒN THƯỜNG</span>`}</div>`).join("");
+          const sp = SPRITES[it.creatureId];
+          sub.textContent = `Chi tiết Eidolon`;
+          body.innerHTML = `<button class="qclaim" id="dt-back" style="margin:0 0 12px">← Bộ sưu tập</button>
+            <div class="dt-head">${sp ? `<img src="${sp}" alt="${it.name}"/>` : `<span class="ph" style="color:${ELEMENT_COLOR[it.element]}">${it.name.slice(0, 1)}</span>`}
+              <div><h3 style="font-family:'Baloo 2',sans-serif;font-size:27px;color:#f7ead0">${it.name} · Lv.${it.level}</h3>
+              <div class="meta"><span class="chip" style="background:${ELEMENT_COLOR[it.element]}">${ELEMENT_VI[it.element] ?? it.element}</span> <span class="rar" style="color:${ELEMENT_COLOR[it.element]}">${RARITY_VI[it.rarity]}</span></div>
+              <div class="meta">${ROLE_VI[it.role]} · ${def.habitat || "Chưa rõ nơi sống"}</div>
+              <div class="hearts" style="margin-top:6px">${hearts}<span style="color:#c9b18a;font-size:13.5px;letter-spacing:0"> Bond ${it.bondLevel}/10</span></div></div></div>
+            <div class="qobj" style="margin-top:12px"><span>Kinh nghiệm</span><span class="st">${it.level >= 50 ? "MAX" : `${it.experience}/${xpNext} XP`}</span></div>
+            <div class="bar"><i style="width:${xpPct}%"></i></div>
+            ${def.descriptionVi ? `<p style="font-size:15px;color:#c9b18a;margin-top:10px">${def.descriptionVi}</p>` : ""}
+            <div class="dt-grid">
+              <div class="dt-stat"><b>${st.hp}</b><span>MÁU (HP)</span></div>
+              <div class="dt-stat"><b>${st.atk}</b><span>TẤN CÔNG</span></div>
+              <div class="dt-stat"><b>${st.def}</b><span>PHÒNG THỦ</span></div>
+              <div class="dt-stat"><b>${st.spd}</b><span>TỐC ĐỘ</span></div>
+            </div>
+            ${def.traitName ? `<div class="hub-sec">Đặc tính — ${def.traitName}</div><p style="font-size:15px;color:#c9b18a">${def.traitDescVi || ""}</p>` : ""}
+            <div class="hub-sec">Kỹ năng</div>${skills}
+            ${def.evolutionBranches.length ? `<div class="hub-sec">Nhánh tiến hoá</div><p style="font-size:15px;color:#c9b18a">${def.evolutionBranches.join(" · ")}<br/>Yêu cầu: Lv.16 + 1 Evolution Core cho mỗi lần tiến hoá.</p>` : ""}`;
+          (body.querySelector("#dt-back") as HTMLElement).addEventListener("click", () => renderers.eidolons());
+        };
+        body.querySelectorAll<HTMLElement>(".slot[data-inst]").forEach(el => el.addEventListener("click", () => { const it = byId.get(el.dataset.inst!); if (it) showDetail(it); }));
+        body.querySelectorAll<HTMLElement>(".dex .card").forEach((el, idx) => el.addEventListener("click", () => { const it = bestOf.get(CREATURES[idx].id); if (it) showDetail(it); }));
       }).catch(() => { sub.textContent = "Không tải được bộ sưu tập"; });
     },
     sanctuary: () => {
@@ -418,14 +488,30 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     quests: () => {
       title.textContent = "Nhiệm vụ"; sub.textContent = "Nhật ký nhiệm vụ";
       let tab = "main";
+      let state: QuestStateResponse | null = null;
       const draw = () => {
+        const list = !state ? `<p style="font-size:15.5px;color:#9a937f">Đang tải…</p>`
+          : tab === "side" ? `<div class="qcard"><h3>Chưa có nhiệm vụ phụ</h3><p>Hãy nói chuyện với dân làng Meadow Village — nhiệm vụ phụ sẽ xuất hiện tại đây.</p></div>`
+          : (tab === "main" ? state.arc : state.daily).map(questCard).join("");
         body.innerHTML = `<div class="tabs">
           <button data-q="main" class="${tab === "main" ? "on" : ""}">Chính tuyến</button>
           <button data-q="daily" class="${tab === "daily" ? "on" : ""}">Hằng ngày</button>
-          <button data-q="side" class="${tab === "side" ? "on" : ""}">Phụ</button></div><div id="q-list">${questsHtml(tab)}</div>`;
+          <button data-q="side" class="${tab === "side" ? "on" : ""}">Phụ</button></div><div id="q-list">${list}</div>`;
         body.querySelectorAll("[data-q]").forEach(btn => btn.addEventListener("click", () => { tab = (btn as HTMLElement).dataset.q!; draw(); }));
+        body.querySelectorAll<HTMLElement>("[data-claim]").forEach(btn => btn.addEventListener("click", () => {
+          const [scope, key] = btn.dataset.claim!.split(":");
+          btn.textContent = "Đang nhận…"; (btn as HTMLButtonElement).disabled = true;
+          void network.request("POST", `/progression/quests/${scope}/${key}/claim`, {}).then(() => {
+            showToast("Đã nhận thưởng nhiệm vụ!");
+            void network.request<QuestStateResponse>("GET", "/progression/quests").then(st => { state = st; draw(); updateTracker(st); }).catch(() => undefined);
+            void network.request<{ gold: number; crystal: number }>("GET", "/player/wallet").then(w => {
+              goldEl.textContent = fmt(w.gold); crystalEl.textContent = fmt(w.crystal);
+            }).catch(() => undefined);
+          }).catch(() => { showToast("Chưa thể nhận thưởng lúc này"); draw(); });
+        }));
       };
       draw();
+      void network.request<QuestStateResponse>("GET", "/progression/quests").then(st => { state = st; if (root.isConnected) draw(); }).catch(() => undefined);
     },
     menu: () => {
       title.textContent = "Menu"; sub.textContent = p.displayName + " · " + regionName;

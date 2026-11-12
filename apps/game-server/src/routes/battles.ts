@@ -9,6 +9,7 @@ import type { BattleResponse, BattleTeamUnit } from "@eidolith/shared-types";
 import { query } from "../db.js";
 import { ApiError, Errors, ok } from "../http.js";
 import { requireAuth, type AuthedRequest } from "../middleware.js";
+import { applyBattleRewards } from "../progression.js";
 
 export const battlesRouter = Router();
 battlesRouter.use(requireAuth);
@@ -73,9 +74,11 @@ battlesRouter.post("/battles", async (req: AuthedRequest, res, next) => {
        VALUES ($1, 'practice', $2, $3, $4, $5, $6, $7, $8) RETURNING battle_id`,
       [playerId, seed, JSON.stringify(playerTeam), JSON.stringify(enemyTeam),
        JSON.stringify(result.events), result.winner, result.ticks, result.hash]);
+    const rewards = await applyBattleRewards(playerId, instanceIds, result.winner, avgLevel);
     const payload: BattleResponse = {
       battleId: saved[0].battle_id, seed, winner: result.winner, ticks: result.ticks,
       hash: result.hash, teams: [...playerTeam, ...enemyTeam], events: result.events,
+      rewards,
     };
     ok(req, res, payload);
   } catch (e) { next(e); }

@@ -8,6 +8,7 @@ import { pool, query } from "../db.js";
 import { ApiError, Errors, ok } from "../http.js";
 import { requireAuth, type AuthedRequest } from "../middleware.js";
 import { findPlayerByUserId, getEncounter, getWild, removeWild, startEncounter, endEncounter } from "../world.js";
+import { bumpObjectives } from "../progression.js";
 import {
   CAPTURE_BASE_RATE, CAPTURE_LEVEL_PENALTY, CAPTURE_RATE_CAP, FLEE_CHANCE_ON_FAIL,
   ENCOUNTER_MAX_DISTANCE, BANNER_STANDARD, DUPLICATE_SHARDS, DUPLICATE_BOND_ESSENCE,
@@ -27,14 +28,15 @@ const err = (status: number, code: string, message: string) => new ApiError(stat
 collectionRouter.get("/creatures", async (req: AuthedRequest, res, next) => {
   try {
     const playerId = await profileIdOf(req.userId!);
-    const { rows } = await query<{ id: string; creature_id: string; level: number; acquired_method: string; acquired_at: string }>(
-      `SELECT id, creature_id, level, acquired_method, acquired_at FROM creatures.creature_instances WHERE player_id = $1 ORDER BY acquired_at DESC LIMIT 200`, [playerId]);
+    const { rows } = await query<{ id: string; creature_id: string; level: number; experience: number; bond_level: number; acquired_method: string; acquired_at: string }>(
+      `SELECT id, creature_id, level, experience, bond_level, acquired_method, acquired_at FROM creatures.creature_instances WHERE player_id = $1 ORDER BY acquired_at DESC LIMIT 200`, [playerId]);
     const items: OwnedCreature[] = rows.map(r => {
       const def = creatureById(r.creature_id);
       return {
-        instanceId: r.id, creatureId: r.creature_id, name: def?.name ?? r.creature_id, level: r.level,
+        instanceId: r.id, creatureId: r.creature_id, name: def?.name ?? r.creature_id, level: Number(r.level),
         rarity: (def?.rarity ?? "Common") as Rarity, element: def?.element ?? "", role: def?.role ?? "",
         acquiredMethod: r.acquired_method, acquiredAt: r.acquired_at,
+        experience: Number(r.experience), bondLevel: Number(r.bond_level),
       };
     });
     ok(req, res, { items, nextCursor: null, hasMore: false });
@@ -109,6 +111,7 @@ collectionRouter.post("/encounters/:id/capture", async (req: AuthedRequest, res,
     let instanceId: string | null = null;
     let fled = false;
     if (captured) {
+      await bumpObjectives(client, playerId, "captured", 1);
       const ins = await client.query<{ id: string }>(
         `INSERT INTO creatures.creature_instances (player_id, creature_id, level, acquired_method)
          VALUES ($1,$2,$3,'capture') RETURNING id`, [playerId, enc.creatureId, enc.level]);
@@ -233,6 +236,7 @@ collectionRouter.post("/summoning/pull", async (req: AuthedRequest, res, next) =
     };
     if (idemKey) await client.query(
       `INSERT INTO summoning.pull_operations (idempotency_key, player_id, response) VALUES ($1,$2,$3)`, [idemKey, playerId, JSON.stringify(response)]);
+    await bumpObjectives(client, playerId, "summoned", 1);
     await client.query("COMMIT");
     ok(req, res, response);
   } catch (e) {

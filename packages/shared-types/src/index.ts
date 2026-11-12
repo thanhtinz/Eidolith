@@ -25,6 +25,7 @@ export interface WildSpawnInfo {
 export interface OwnedCreature {
   instanceId: string; creatureId: string; name: string; level: number;
   rarity: Rarity; element: string; role: string; acquiredMethod: string; acquiredAt: string;
+  experience: number; bondLevel: number;
 }
 export interface InventoryStack {
   itemId: string; name: string; category: string; rarity: string; description: string; quantity: number;
@@ -58,4 +59,18 @@ export interface BattleEventData { tick: number; type: string; data: Record<stri
 export interface BattleResponse {
   battleId: string; seed: number; winner: 0 | 1 | 2; ticks: number; hash: string;
   teams: BattleTeamUnit[]; events: BattleEventData[];
+  rewards?: BattleRewards;
 }
+/** Phase 5: what a finished battle granted (server-applied). */
+export interface BattleRewards {
+  creatureXp: number;
+  levelUps: { instanceId: string; creatureId: string; level: number }[];
+  playerXp: number; playerLevel: number; playerLeveledUp: boolean;
+  gold: number; evolutionCore: number;
+}
+export interface QuestView {
+  key: string; scope: "arc" | "daily"; title: string; target: number; progress: number;
+  complete: boolean; claimed: boolean;
+  rewards: { currency: string; amount: number }[];
+}
+export interface QuestStateResponse { day: string; arc: QuestView[]; daily: QuestView[]; }

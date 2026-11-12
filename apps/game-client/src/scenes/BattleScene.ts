@@ -5,7 +5,7 @@
 import Phaser from "phaser";
 import type { BattleResponse, BattleTeamUnit } from "@eidolith/shared-types";
 import { network } from "../net/NetworkManager";
-import { skillsOf } from "@eidolith/game-data";
+import { skillsOf, creatureById } from "@eidolith/game-data";
 import { sfxUlt, sfxSting, sfxHit, sfxHeal, sfxDefeat, sfxEnd } from "../ui/sfx";
 
 const sx = (x: number) => 215 + (x / 16) * 850;
@@ -179,6 +179,7 @@ export class BattleScene extends Phaser.Scene {
         <div class="bt-result" id="bt-result" hidden>
           <h2 id="bt-title">THẮNG</h2>
           <p id="bt-sub"></p>
+          <p id="bt-rewards" style="color:#ffd94a;font-size:16px;min-height:22px"></p>
           <div class="row">
             <button class="bt-again" id="bt-again">Đấu lại</button>
             <button class="bt-exit" id="bt-back">Về thế giới</button>
@@ -519,6 +520,13 @@ export class BattleScene extends Phaser.Scene {
     title.textContent = w === 0 ? "THẮNG!" : w === 1 ? "THUA" : "HOÀ";
     title.style.color = w === 0 ? "#ffd94a" : w === 1 ? "#ff9a8a" : "#e8c96a";
     sub.textContent = `Trận đấu ${(this.battle.ticks / 10).toFixed(1)} giây · Mã xác thực ${this.battle.hash.slice(0, 8)}`;
+    const rw = this.overlay.querySelector("#bt-rewards") as HTMLElement | null;
+    if (rw && this.battle.rewards) {
+      const r = this.battle.rewards;
+      const ups = r.levelUps.map(u => `${creatureById(u.creatureId)?.name ?? u.creatureId} lên Lv.${u.level}`).join(" · ");
+      rw.textContent = `+${r.gold} Gold · Đội +${r.creatureXp} XP · Bạn +${r.playerXp} XP`
+        + (r.evolutionCore ? " · +1 Evolution Core" : "") + (ups ? ` · ${ups}!` : "") + (r.playerLeveledUp ? ` · Bạn lên Lv.${r.playerLevel}!` : "");
+    }
     if (this.statusEl) this.statusEl.textContent = "Đã kết thúc";
     this.resultEl.hidden = false;
   }
