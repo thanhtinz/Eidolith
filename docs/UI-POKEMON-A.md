@@ -29,6 +29,18 @@ joystick (HudScene), form đăng nhập (LoginScene + `index.html`).
   nhãn mục vàng hoa đúng ngữ pháp Pokémon.
 - Thanh EXP người chơi cao 17px, số trắng trong thanh.
 
+## HUD trên — bản A2 (Tín chốt mockup A 2026-11-11 20:20)
+
+- Thẻ nhân vật + thẻ nhiệm vụ: nameplate **cắt xiên cạnh phải** (clip-path),
+  gradient slate, vạch ngọc lục bảo `#2fae9b` ở mép trái thẻ nhân vật;
+  huy hiệu "Lv.N" thành pill vàng nằm giữa dưới avatar.
+- Tiền: hai loại gộp vào **một dải pill** duy nhất (icon + số), không kèm giờ.
+- **Giờ thế giới + thời tiết: tách riêng thành pill nhỏ nằm dưới minimap**
+  (dòng `.mmeta`: giờ · thời tiết · số người chơi) — lệnh riêng của Tín,
+  không gộp vào dải tiền.
+- Minimap thành mặt la bàn: vòng vàng inset trong viền slate + 4 chấm
+  vàng ở 4 hướng; chấm vị trí người chơi giữ nguyên.
+
 ## Luật điều hướng nhiệm vụ (Tín lệnh 2026-11-11 19:45)
 
 - **Menu KHÔNG có mục Nhiệm vụ.**

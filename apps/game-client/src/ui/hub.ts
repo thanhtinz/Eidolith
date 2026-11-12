@@ -48,33 +48,35 @@ const MENU_ICONS: Record<string, string> = {
 const CSS = `
 .hub-root{position:relative;width:1280px;height:720px;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:#f4f7fa;pointer-events:none;--sel:#ffd83d;--selink:#26303a;--bar:#3ddc5f;--line:rgba(255,255,255,.10);--plate:rgba(35,43,54,.93);--plate2:rgba(255,255,255,.05)}
 .hub-root *{box-sizing:border-box;margin:0;padding:0}
-.pcluster{position:absolute;top:14px;left:14px;display:flex;align-items:center;gap:11px;background:var(--plate);border:1px solid var(--line);border-radius:16px;padding:8px 18px 8px 8px;pointer-events:auto;box-shadow:0 10px 28px rgba(10,15,20,.45)}
+.pcluster{position:absolute;top:14px;left:14px;display:flex;align-items:center;gap:11px;background:linear-gradient(180deg,rgba(46,57,71,.95),rgba(30,37,47,.95));border:1px solid var(--line);border-radius:12px;padding:9px 34px 9px 9px;pointer-events:auto;clip-path:polygon(0 0,100% 0,calc(100% - 18px) 100%,0 100%)}
+.pcluster:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:#2fae9b}
 .pav{position:relative;flex:none}
-.pav img{width:54px;height:54px;object-fit:cover;object-position:top;border-radius:50%;border:2px solid rgba(255,255,255,.25);background:#20303a;display:block}
-.hud-badge{position:absolute;right:-7px;bottom:-5px;border-radius:999px;background:var(--sel);color:var(--selink);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:2px 7px;font-family:'Baloo 2',sans-serif;white-space:nowrap}
+.pav img{width:56px;height:56px;object-fit:cover;object-position:top;border-radius:50%;border:2px solid rgba(255,255,255,.25);background:#20303a;display:block}
+.hud-badge{position:absolute;left:50%;transform:translateX(-50%);bottom:-9px;border-radius:999px;background:var(--sel);color:var(--selink);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:1.5px 9px;font-family:'Baloo 2',sans-serif;white-space:nowrap}
 .pmeta{min-width:0}
 .pmeta .nm{font-family:'Baloo 2',sans-serif;font-size:20px;font-weight:800;line-height:1.15;white-space:nowrap;color:#fff}
-.hud-exp{position:relative;width:186px;height:17px;background:rgba(0,0,0,.42);border-radius:999px;margin-top:4px;overflow:hidden}
+.hud-exp{position:relative;width:196px;height:17px;background:rgba(0,0,0,.42);border-radius:999px;margin-top:4px;overflow:hidden}
 .hud-exp i{position:absolute;left:0;top:0;bottom:0;background:#39b6e8;border-radius:999px}
 .hud-exp span{position:absolute;inset:0;font-size:11.5px;line-height:17px;text-align:center;color:#fff;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.5)}
-.cur{display:flex;align-items:center;gap:8px;background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:5px 15px 5px 6px;font-size:16.5px;font-weight:700;color:#fff;box-shadow:0 8px 20px rgba(10,15,20,.4)}
+.cur{display:flex;align-items:center;gap:8px;font-size:16.5px;font-weight:700;color:#fff}
 .cur .coin{width:29px;height:29px;border-radius:50%;background:#f5b921;display:flex;align-items:center;justify-content:center;color:#5c3a00;font-size:15px;flex:none}
 .cur.gem .coin{background:#39b6e8;color:#083a52}
 .cur i{font-size:15px}
 .cur span{color:#fff}
-.qcard-top{position:absolute;top:100px;left:14px;display:flex;align-items:center;gap:11px;background:var(--plate);border:1px solid var(--line);border-radius:14px;color:#fff;padding:9px 16px 9px 9px;cursor:pointer;pointer-events:auto;max-width:340px;text-align:left;box-shadow:0 10px 28px rgba(10,15,20,.45)}
+.qcard-top{position:absolute;top:104px;left:14px;display:flex;align-items:center;gap:11px;background:linear-gradient(180deg,rgba(46,57,71,.95),rgba(30,37,47,.95));border:1px solid var(--line);border-radius:12px;color:#fff;padding:9px 30px 9px 9px;cursor:pointer;pointer-events:auto;max-width:350px;text-align:left;clip-path:polygon(0 0,100% 0,calc(100% - 14px) 100%,0 100%)}
 .qcard-top>i{font-size:16px;color:var(--selink);background:var(--sel);width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none}
 .qcard-top .qarc{font-size:10.5px;letter-spacing:1.6px;color:var(--sel);font-weight:800}
 .qcard-top .qobj-t{font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .topright{position:absolute;top:14px;right:14px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
-.currencies{display:flex;gap:8px;pointer-events:auto}
+.currencies{display:flex;gap:14px;align-items:center;pointer-events:auto;background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:6px 16px 6px 8px;box-shadow:0 8px 20px rgba(10,15,20,.4)}
 .minimap-wrap{position:relative;pointer-events:auto}
-.minimap{position:relative;width:158px;height:158px;border-radius:50%;overflow:hidden;background:#22331f;border:4px solid #232b36;outline:1px solid rgba(255,255,255,.14);box-shadow:0 10px 26px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
+.minimap{position:relative;width:158px;height:158px;border-radius:50%;overflow:hidden;background:#22331f;border:4px solid #232b36;outline:2px solid var(--sel);outline-offset:-9px;box-shadow:0 10px 26px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
+.tick{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--sel);border:1.5px solid #26303a;z-index:4}
 .minimap-inner{position:relative;width:113px;height:113px;flex:none}
 .minimap img{width:113px;height:113px;display:block;image-rendering:pixelated}
 .mdot{position:absolute;width:11px;height:11px;border-radius:50%;background:var(--sel);border:2px solid #26303a;transform:translate(-50%,-50%);box-shadow:0 0 7px rgba(255,216,61,.9);z-index:2}
 .mname{position:absolute;right:-4px;bottom:-11px;background:var(--plate);color:#fff;font-size:12.5px;font-weight:700;text-align:center;padding:5px 14px;border:1px solid var(--line);border-radius:999px;white-space:nowrap;z-index:3;box-shadow:0 6px 14px rgba(0,0,0,.4)}
-.mmeta{font-size:13px;color:#fff;background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:6px 13px;pointer-events:auto;margin-top:15px;box-shadow:0 6px 14px rgba(0,0,0,.35)}
+.mmeta{font-size:12.5px;color:#fff;background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:6px 13px;pointer-events:auto;margin-top:15px;box-shadow:0 6px 14px rgba(0,0,0,.35)}
 .mmeta #hub-clock{color:var(--sel)}
 .party{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:8px;pointer-events:auto}
 .pmini{display:flex;align-items:center;gap:8px;background:var(--plate);border:1px solid var(--line);border-radius:12px;padding:6px 12px 6px 6px;box-shadow:0 8px 20px rgba(10,15,20,.4);cursor:pointer}
@@ -244,7 +246,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
         <div class="cur gold"><span class="coin">${TOP_ICONS.coin}</span><span id="w-gold">—</span></div>
         <div class="cur gem"><span class="coin">${TOP_ICONS.gem}</span><span id="w-crystal">—</span></div>
       </div>
-      <div class="minimap-wrap"><div class="minimap"><div class="minimap-inner"><img src="assets/maps/minimap-${opts.hud.mapId}.png" alt=""/><span class="mdot" id="hub-mdot" style="left:50%;top:50%"></span></div></div><div class="mname">${opts.hud.mapLabel}</div></div>
+      <div class="minimap-wrap"><span class="tick" style="left:50%;top:-4px;transform:translateX(-50%)"></span><span class="tick" style="left:50%;bottom:-4px;transform:translateX(-50%)"></span><span class="tick" style="top:50%;left:-4px;transform:translateY(-50%)"></span><span class="tick" style="top:50%;right:-4px;transform:translateY(-50%)"></span><div class="minimap"><div class="minimap-inner"><img src="assets/maps/minimap-${opts.hud.mapId}.png" alt=""/><span class="mdot" id="hub-mdot" style="left:50%;top:50%"></span></div></div><div class="mname">${opts.hud.mapLabel}</div></div>
       <div class="mmeta"><span id="hub-clock"></span> · ${opts.hud.weatherLabel} · <span id="hub-players">${opts.hud.players}</span> người chơi</div>
     </div>
     <div class="party" id="hub-party"></div>
