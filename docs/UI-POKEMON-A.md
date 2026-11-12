@@ -45,7 +45,11 @@ joystick (HudScene), form đăng nhập (LoginScene + `index.html`).
   vàng ở 4 hướng; **ảnh map phủ kín khung tròn** (cover, không chừa vành
   tối) và **không còn dải tên map** dưới minimap (Tín lệnh bỏ 20:45).
 - Nút mở menu góc dưới-phải: icon **burger (fa-bars)** cố định, không đổi
-  theo tab đang mở (Tín lệnh 20:49); huy hiệu chevron vàng giữ nguyên.
+  theo tab đang mở (Tín lệnh 20:49) và **không có huy hiệu mũi tên**
+  (bỏ chevron, Tín lệnh 20:57).
+- Bố cục góc phải trên (Tín lệnh 20:59): dải tiền và minimap nằm **cùng
+  một hàng trên cùng** — tiền ở trái, minimap ở phải, hai đỉnh ngang nhau;
+  pill giờ/thời tiết treo ngay dưới minimap.
 
 ## Luật điều hướng nhiệm vụ (Tín lệnh 2026-11-11 19:45)
 

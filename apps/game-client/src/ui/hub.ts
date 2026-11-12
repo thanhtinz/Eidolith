@@ -68,6 +68,7 @@ const CSS = `
 .qcard-top .qarc{font-size:10.5px;letter-spacing:1.6px;color:var(--sel);font-weight:800}
 .qcard-top .qobj-t{font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .topright{position:absolute;top:14px;right:14px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
+.toprow{display:flex;gap:10px;align-items:flex-start;pointer-events:none}
 .currencies{display:flex;gap:14px;align-items:center;pointer-events:auto;background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:6px 16px 6px 8px;box-shadow:0 8px 20px rgba(10,15,20,.4)}
 .minimap-wrap{position:relative;pointer-events:auto}
 .minimap{position:relative;width:158px;height:158px;border-radius:50%;overflow:hidden;background:#22331f;border:4px solid #232b36;outline:2px solid var(--sel);outline-offset:-9px;box-shadow:0 10px 26px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
@@ -76,7 +77,7 @@ const CSS = `
 .minimap img{width:100%;height:100%;display:block;object-fit:cover}
 .mdot{position:absolute;width:11px;height:11px;border-radius:50%;background:var(--sel);border:2px solid #26303a;transform:translate(-50%,-50%);box-shadow:0 0 7px rgba(255,216,61,.9);z-index:2}
 .mname{position:absolute;right:-4px;bottom:-11px;background:var(--plate);color:#fff;font-size:12.5px;font-weight:700;text-align:center;padding:5px 14px;border:1px solid var(--line);border-radius:999px;white-space:nowrap;z-index:3;box-shadow:0 6px 14px rgba(0,0,0,.4)}
-.mmeta{font-size:12.5px;color:#fff;background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:6px 13px;pointer-events:auto;margin-top:15px;box-shadow:0 6px 14px rgba(0,0,0,.35)}
+.mmeta{font-size:12.5px;color:#fff;background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:6px 13px;pointer-events:auto;margin-top:2px;box-shadow:0 6px 14px rgba(0,0,0,.35)}
 .mmeta #hub-clock{color:var(--sel);font-weight:800}
 .mmeta .wsep{color:#aeb9c4;margin:0 7px}
 .mmeta #hub-wicon{color:var(--sel);margin-right:5px}
@@ -245,11 +246,13 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     </div>
     <button class="qcard-top" id="hub-qtrack"><i class="fa-solid fa-scroll"></i><span><span class="qarc">ARC 0 · NHIỆM VỤ CHÍNH</span><br/><span class="qobj-t">Nói chuyện với Elder Rowan</span></span></button>
     <div class="topright">
+      <div class="toprow">
       <div class="currencies">
         <div class="cur gold"><span class="coin">${TOP_ICONS.coin}</span><span id="w-gold">—</span></div>
         <div class="cur gem"><span class="coin">${TOP_ICONS.gem}</span><span id="w-crystal">—</span></div>
       </div>
       <div class="minimap-wrap"><span class="tick" style="left:50%;top:-4px;transform:translateX(-50%)"></span><span class="tick" style="left:50%;bottom:-4px;transform:translateX(-50%)"></span><span class="tick" style="top:50%;left:-4px;transform:translateY(-50%)"></span><span class="tick" style="top:50%;right:-4px;transform:translateY(-50%)"></span><div class="minimap"><div class="minimap-inner"><img src="assets/maps/minimap-${opts.hud.mapId}.png" alt=""/><span class="mdot" id="hub-mdot" style="left:50%;top:50%"></span></div></div></div>
+      </div>
       <div class="mmeta"><span id="hub-clock"></span><span class="wsep">|</span><i id="hub-wicon" class="fa-solid ${WEATHER_ICON[opts.hud.weatherKey] ?? "fa-cloud-sun"}"></i> ${opts.hud.weatherLabel}</div>
     </div>
     <div class="party" id="hub-party"></div>
@@ -264,7 +267,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       <button data-tab="sanctuary"><span class="nico">${ICONS.sanctuary}</span><span>Sanctuary</span></button>
       <button data-tab="menu"><span class="nico">${ICONS.menu}</span><span>Menu</span></button>
       </div>
-      <button class="toggle" id="hub-navtoggle"><span id="hub-navicon"><i class="fa-solid fa-bars"></i></span><span class="chev"><i class="fa-solid fa-chevron-up"></i></span></button>
+      <button class="toggle" id="hub-navtoggle"><span id="hub-navicon"><i class="fa-solid fa-bars"></i></span></button>
     </nav></div>`;
   // Plain fixed overlay positioned over the canvas by its own bounding rect.
   // (Phaser's DOM plugin applies its own scale/origin math that misplaces a
