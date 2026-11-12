@@ -211,8 +211,12 @@ const CSS = `
 .s2-ov .small{font-size:12.5px;color:#aeb9c4;margin-top:1px}
 .s2-lvpill{display:inline-block;background:var(--sel);color:var(--selink);font:800 12px 'Baloo 2',sans-serif;border-radius:999px;padding:1px 8px;vertical-align:2px;margin-left:5px}
 .s2-upmini{margin-top:6px;background:none;border:1px solid var(--sel);color:var(--sel);border-radius:8px;padding:3px 10px;font:700 12px 'Be Vietnam Pro',sans-serif;cursor:pointer;width:max-content}
-.s2-collect{align-self:center;background:var(--sel);color:var(--selink);border:none;border-radius:12px;padding:14px 18px;font:800 15px 'Baloo 2',sans-serif;cursor:pointer;white-space:nowrap}
+.s2-collect{background:var(--sel);color:var(--selink);border:none;border-radius:12px;padding:13px 20px;font:800 15px 'Baloo 2',sans-serif;cursor:pointer;white-space:nowrap}
 .s2-collect:disabled{background:rgba(255,255,255,.14);color:#8a94a0;cursor:default}
+.s2-collectbar{display:flex;align-items:center;gap:14px;background:rgba(24,30,39,.97);border:1px solid var(--line);border-radius:13px;padding:10px 12px 10px 16px;margin:-6px 0 15px}
+.s2-collectbar .cb-tot{font-size:14px;color:#aeb9c4}
+.s2-collectbar .cb-tot b{color:#fff}
+.s2-collectbar .s2-collect{margin-left:auto}
 .s2-b{background:var(--plate2);border:1px solid var(--line);border-radius:16px;padding:15px 17px 16px;margin-bottom:15px}
 .s2-b.locked{opacity:.65;padding:11px 17px}
 .s2-bhead{display:flex;align-items:center;gap:12px}
@@ -634,8 +638,8 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
               <div class="s2-ov"><span class="lab">CẤP SANCTUARY</span><span class="big">Nhà chính<span class="s2-lvpill">Lv.${hall.level}</span></span><span class="small">Trần tích luỹ ${state.capHours} giờ</span>${hall.upgrade ? `<button class="s2-upmini" data-upgrade="main_hall">Nâng cấp · ${fmt(hall.upgrade.gold)} Gold</button>` : `<span class="small">Đã đạt cấp tối đa</span>`}</div>
               <div class="s2-ov"><span class="lab">ĐANG LÀM VIỆC</span><span class="big">${used} / ${totalSlots} ô</span><span class="small">${work.map(b => `${SHORT[b.id] ?? b.nameVi} ${b.assignments.length}`).join(" · ")}</span></div>
               <div class="s2-ov"><span class="lab">CHỜ THU HOẠCH</span><span class="big" style="color:var(--sel)">${totParts || "Chưa có gì"}</span><span class="small">Research Data đang có: ${fmt(state.researchData)}</span></div>
-              <button class="s2-collect" data-collectall="1" ${totParts ? "" : "disabled"}><i class="fa-solid fa-box-open"></i> Thu hoạch tất cả</button>
             </div>`;
+            html += `<div class="s2-collectbar"><span class="cb-tot">${totParts ? `Đang chờ thu hoạch: <b>${totParts}</b>` : "Chưa có gì để thu hoạch"}</span><button class="s2-collect" data-collectall="1" ${totParts ? "" : "disabled"}><i class="fa-solid fa-box-open"></i> Thu hoạch tất cả</button></div>`;
             if (confirmId === "main_hall") html += confirmRow(hall);
             for (const bd of state.buildings) {
               if (bd.id === "main_hall") continue;

@@ -54,7 +54,11 @@ Panel giữ nguyên khung 950px của hub, chia 3 tầng:
   tiến độ nâng cấp Nhà chính.
 - **Đang làm việc**: "5 / 9 ô đang có Eidolon".
 - **Chờ thu hoạch**: tổng hợp mọi công trình, ví dụ "+14 Bond · +386 XP ·
-  +6 Research Data" — kèm nút vàng **Thu hoạch tất cả** (chỉ sáng khi > 0).
+  +6 Research Data". Nút vàng **Thu hoạch tất cả** (chỉ sáng khi > 0) nằm
+  ở HÀNG RIÊNG ngay dưới dải tổng quan kèm dòng tổng đang chờ — vị trí do
+  Tín chốt 2026-11-11 22:26 ("Nút thu hoạch tất cả để chỗ khác"); để nút
+  trong dải tổng quan thì dải bị chật, bản thanh dính đáy panel cũng đã
+  thử và bỏ vì nổi che thẻ công trình khi cuộn.
 - Đồng hồ tích luỹ: "Trần tích luỹ 8 giờ" + con nào sắp đầy thì có chấm
   vàng cảnh báo trên thẻ công trình của nó.
 
