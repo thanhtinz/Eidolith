@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import type { PlayerProfile, OwnedCreature, InventoryStack, SummonPullResponse, QuestStateResponse, QuestView, SideQuestView, SanctuaryStateResponse } from "@eidolith/shared-types";
+import type { PlayerProfile, PlayerWallet, OwnedCreature, InventoryStack, SummonPullResponse, QuestStateResponse, QuestView, SideQuestView, SanctuaryStateResponse, SanctuaryBuildingView } from "@eidolith/shared-types";
 import { CREATURES, ELEMENTS, creatureById, statsAtLevel, skillsOf } from "@eidolith/game-data";
 import { network } from "../net/NetworkManager";
 import { CREATURE_SPRITES } from "./sprites";
@@ -204,6 +204,46 @@ const CSS = `
 .pickrow img{width:44px;height:44px;object-fit:contain}
 .pickrow .ph{font-size:26px;font-weight:800;width:44px;text-align:center}
 .collectbtn{margin-top:10px;background:var(--sel);color:#191203;border:none;border-radius:11px;padding:10px 16px;font:800 15px 'Be Vietnam Pro',sans-serif;cursor:pointer}
+.s2-over{display:flex;gap:12px;align-items:stretch;margin-bottom:15px}
+.s2-ov{flex:1;background:var(--plate2);border:1px solid var(--line);border-radius:13px;padding:11px 14px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.s2-ov .lab{font-size:10.5px;letter-spacing:1.4px;color:#aeb9c4;font-weight:800}
+.s2-ov .big{font-family:'Baloo 2',sans-serif;font-size:19px;color:#fff;line-height:1.2;margin-top:2px;white-space:nowrap}
+.s2-ov .small{font-size:12.5px;color:#aeb9c4;margin-top:1px}
+.s2-lvpill{display:inline-block;background:var(--sel);color:var(--selink);font:800 12px 'Baloo 2',sans-serif;border-radius:999px;padding:1px 8px;vertical-align:2px;margin-left:5px}
+.s2-upmini{margin-top:6px;background:none;border:1px solid var(--sel);color:var(--sel);border-radius:8px;padding:3px 10px;font:700 12px 'Be Vietnam Pro',sans-serif;cursor:pointer;width:max-content}
+.s2-collect{align-self:center;background:var(--sel);color:var(--selink);border:none;border-radius:12px;padding:14px 18px;font:800 15px 'Baloo 2',sans-serif;cursor:pointer;white-space:nowrap}
+.s2-collect:disabled{background:rgba(255,255,255,.14);color:#8a94a0;cursor:default}
+.s2-b{background:var(--plate2);border:1px solid var(--line);border-radius:16px;padding:15px 17px 16px;margin-bottom:15px}
+.s2-b.locked{opacity:.65;padding:11px 17px}
+.s2-bhead{display:flex;align-items:center;gap:12px}
+.s2-bic{width:48px;height:48px;flex:none;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
+.s2-bhead h3{font-family:'Baloo 2',sans-serif;font-size:20px;color:#fff;line-height:1.1}
+.s2-bhead .bd{font-size:13.5px;color:#aeb9c4;margin-top:2px}
+.s2-new{background:#e23b3b;color:#fff;font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 7px;letter-spacing:1px;vertical-align:3px;margin-left:7px}
+.s2-up{margin-left:auto;background:none;border:1.5px solid var(--sel);color:var(--sel);border-radius:10px;padding:9px 14px;font:800 13.5px 'Be Vietnam Pro',sans-serif;cursor:pointer;white-space:nowrap;flex:none}
+.s2-up b{color:#fff;font-family:'Baloo 2',sans-serif}
+.s2-up:disabled{border-color:#4a586c;color:#8b93a0;cursor:default}
+.s2-confirm{display:flex;gap:10px;align-items:center;margin-top:11px;background:rgba(255,216,61,.08);border:1px solid rgba(255,216,61,.45);border-radius:11px;padding:10px 13px;font-size:14px;color:#f4f7fa}
+.s2-confirm .go{background:var(--sel);color:var(--selink);border:none;border-radius:9px;padding:8px 16px;font:800 14px 'Be Vietnam Pro',sans-serif;cursor:pointer}
+.s2-confirm .no{background:#39424f;color:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 14px;font:700 14px 'Be Vietnam Pro',sans-serif;cursor:pointer}
+.s2-specs{display:flex;gap:22px;margin:11px 0;font-size:13px;color:#aeb9c4;flex-wrap:wrap}
+.s2-specs b{color:#e8edf2}
+.s2-specs .k{color:var(--sel);font-weight:800;letter-spacing:.8px;font-size:11px}
+.s2-abar{position:relative;height:18px;background:rgba(0,0,0,.42);border-radius:999px;overflow:hidden;margin-bottom:13px}
+.s2-abar i{position:absolute;left:0;top:0;bottom:0;background:var(--bar);border-radius:999px}
+.s2-abar span{position:absolute;inset:0;font-size:11.5px;line-height:18px;font-weight:700;color:#fff;padding:0 10px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.s2-slots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.s2-slot{background:rgba(20,26,34,.65);border:1px solid var(--line);border-radius:13px;padding:10px 12px;display:flex;gap:10px;align-items:center;min-width:0;overflow:hidden}
+.s2-slot .nm{font:800 15px 'Baloo 2',sans-serif;color:#fff;line-height:1.1;white-space:nowrap}
+.s2-slot .m2{font:600 11.5px 'Be Vietnam Pro',sans-serif;color:#aeb9c4}
+.s2-slot .acc{font-size:12.5px;color:#7fe3a0;font-weight:700;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s2-syn{display:inline-block;background:rgba(255,216,61,.16);border:1px solid var(--sel);color:var(--sel);font-size:10.5px;font-weight:800;border-radius:99px;padding:1px 7px;margin-left:5px;vertical-align:1px}
+.s2-slot .un{margin-left:auto;background:#3a2323;color:#ff9a9a;border:1px solid #6e3a3a;border-radius:8px;width:30px;height:30px;flex:none;cursor:pointer}
+.s2-empty{border:1.5px dashed #4a586c;border-radius:13px;background:transparent;color:#9fb0c0;font:700 14px 'Be Vietnam Pro',sans-serif;padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center;min-height:66px}
+.s2-empty .hint{font-size:11.5px;color:#8b93a0;font-weight:600}
+.s2-locktag{margin-left:auto;color:var(--sel);font:800 13.5px 'Baloo 2',sans-serif;white-space:nowrap}
+.pickrow.dis{opacity:.55;cursor:default}
+.pickrow.dis:hover{border-color:var(--line)}
 .dlg-card{text-align:left}
 .dlg-card h3{margin-top:0}
 .dlg-card .say{font-size:16.5px;line-height:1.5;color:#e8e2d2;margin:10px 0}
@@ -528,63 +568,160 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       }).catch(() => { sub.textContent = "Không tải được bộ sưu tập"; });
     },
     sanctuary: () => {
-      title.textContent = "Sanctuary"; sub.textContent = "Nơi Eidolon nghỉ ngơi và gắn kết";
+      title.textContent = "Sanctuary"; sub.textContent = "Căn cứ của Wanderer — nơi Eidolon nghỉ ngơi, rèn luyện và nghiên cứu";
       body.innerHTML = `<p style="font-size:15.5px;color:#9a937f">Đang tải…</p>`;
+      const BICON: Record<string, [string, string]> = {
+        bond_garden: ["fa-seedling", "#3f9e63"], training_ground: ["fa-dumbbell", "#d0812a"],
+        research_lab: ["fa-flask", "#3973b8"], evo_shrine: ["fa-gem", "#6b4fa1"],
+      };
+      const UNIT: Record<string, string> = { bond: "Bond", xp: "XP", data: "Data" };
+      const fmtDur = (sec: number): string => {
+        if (sec <= 0) return "ngay";
+        const m = Math.ceil(sec / 60);
+        if (m < 60) return `${m} phút`;
+        const h = Math.floor(m / 60), mm = m % 60;
+        return mm ? `${h} giờ ${mm} phút` : `${h} giờ`;
+      };
+      const rateText = (bd: SanctuaryBuildingView): string => bd.kind === "bond"
+        ? (bd.perMinute >= 1 ? `${bd.perMinute} Bond / phút` : `1 Bond / ${Math.round(1 / bd.perMinute)} phút`)
+        : bd.kind === "xp" ? `${bd.perMinute} XP / phút` : `${Math.round(bd.perMinute * 60)} Data / giờ`;
+      const refreshWallet = (): void => {
+        void network.request<PlayerWallet>("GET", "/player/wallet").then(w => {
+          if (!root.isConnected) return;
+          goldEl.textContent = fmt(w.gold); crystalEl.textContent = fmt(w.crystal);
+        }).catch(() => undefined);
+      };
       void (async () => {
         try {
           const [state, owned] = await Promise.all([
             network.request<SanctuaryStateResponse>("GET", "/sanctuary"),
             network.request<{ items: OwnedCreature[] }>("GET", "/creatures"),
           ]);
+          if (!root.isConnected) return;
           const byInstance = new Map(owned.items.map(c => [c.instanceId, c]));
           const assignedIds = new Set(state.buildings.flatMap(bd => bd.assignments.map(a => a.instanceId)));
+          const whereOf = new Map<string, string>();
+          for (const bd of state.buildings) for (const a of bd.assignments) whereOf.set(a.instanceId, bd.nameVi);
           const defOf = (cid: string) => CREATURES.find(c => c.id === cid);
-          const thumb = (cid: string) => {
-            const sp = SPRITES[cid]; const d = defOf(cid);
-            return sp ? `<img src="${sp}" alt=""/>` : `<span class="ph" style="color:${ELEMENT_COLOR[d?.element ?? "Grove"]}">${(d?.name ?? "?").slice(0, 1)}</span>`;
+          const thumb = (cid: string, size = 44) => artFor(cid, size);
+          let confirmId: string | null = null;
+
+          const upLabel = (bd: SanctuaryBuildingView): string => {
+            const u = bd.upgrade!;
+            const cost = u.data > 0 ? `${fmt(u.gold)} Gold + ${u.data} Data` : `${fmt(u.gold)} Gold`;
+            return `Nâng cấp · <b>${cost}</b>`;
           };
-          let html = "";
-          for (const bd of state.buildings) {
-            const tag = bd.kind === "locked" ? "Chưa xây" : "Lv." + bd.level;
-            html += `<div class="bcard"><div class="bic">${ICONS.sanctuary}</div><div><h3>${bd.nameVi}</h3><p>${bd.descVi}</p></div><div class="blv">${tag}</div></div>`;
-            if (bd.slots > 0) {
-              const unit = bd.kind === "bond" ? "Bond" : "XP";
-              html += `<div class="slots sanc" style="margin:4px 0 2px">`;
+          const SHORT: Record<string, string> = { bond_garden: "Vườn", training_ground: "Sân tập", research_lab: "Lab" };
+          const confirmRow = (bd: SanctuaryBuildingView): string => {
+            const u = bd.upgrade!;
+            const cost = u.data > 0 ? `${fmt(u.gold)} Gold và ${u.data} Research Data` : `${fmt(u.gold)} Gold`;
+            return `<div class="s2-confirm"><span>Nâng <b>${bd.nameVi}</b> lên <b>Lv.${u.toLevel}</b>? Trừ ${cost}.</span><span style="margin-left:auto;display:flex;gap:8px"><button class="go" data-upgo="${bd.id}">Nâng cấp</button><button class="no" data-upno="1">Huỷ</button></span></div>`;
+          };
+          const upButton = (bd: SanctuaryBuildingView): string => {
+            if (!bd.upgrade) return "";
+            if (bd.upgrade.blockedByHall) return `<button class="s2-up" disabled>Cần Nhà chính Lv.${bd.upgrade.toLevel}</button>`;
+            return `<button class="s2-up" data-upgrade="${bd.id}">${upLabel(bd)}</button>`;
+          };
+
+          const draw = (): void => {
+            const hall = state.buildings.find(b => b.id === "main_hall")!;
+            const work = state.buildings.filter(b => b.kind === "bond" || b.kind === "xp" || b.kind === "data");
+            const used = work.reduce((n, b) => n + b.assignments.length, 0);
+            const totalSlots = work.reduce((n, b) => n + b.slots, 0);
+            const t = state.totals;
+            const totParts = [t.bond ? `+${t.bond} Bond` : "", t.xp ? `+${t.xp} XP` : "", t.data ? `+${t.data} Data` : ""].filter(Boolean).join(" · ");
+            let html = `<div class="s2-over">
+              <div class="s2-ov"><span class="lab">CẤP SANCTUARY</span><span class="big">Nhà chính<span class="s2-lvpill">Lv.${hall.level}</span></span><span class="small">Trần tích luỹ ${state.capHours} giờ</span>${hall.upgrade ? `<button class="s2-upmini" data-upgrade="main_hall">Nâng cấp · ${fmt(hall.upgrade.gold)} Gold</button>` : `<span class="small">Đã đạt cấp tối đa</span>`}</div>
+              <div class="s2-ov"><span class="lab">ĐANG LÀM VIỆC</span><span class="big">${used} / ${totalSlots} ô</span><span class="small">${work.map(b => `${SHORT[b.id] ?? b.nameVi} ${b.assignments.length}`).join(" · ")}</span></div>
+              <div class="s2-ov"><span class="lab">CHỜ THU HOẠCH</span><span class="big" style="color:var(--sel)">${totParts || "Chưa có gì"}</span><span class="small">Research Data đang có: ${fmt(state.researchData)}</span></div>
+              <button class="s2-collect" data-collectall="1" ${totParts ? "" : "disabled"}><i class="fa-solid fa-box-open"></i> Thu hoạch tất cả</button>
+            </div>`;
+            if (confirmId === "main_hall") html += confirmRow(hall);
+            for (const bd of state.buildings) {
+              if (bd.id === "main_hall") continue;
+              const [icon, color] = BICON[bd.id] ?? ["fa-house", "#8a6d3b"];
+              if (bd.kind === "locked") {
+                html += `<div class="s2-b locked"><div class="s2-bhead"><div class="s2-bic" style="background:${color};width:40px;height:40px;font-size:18px"><i class="fa-solid ${icon}"></i></div><div><h3 style="font-size:18px">${bd.nameVi}</h3><div class="bd">${bd.descVi}</div></div><span class="s2-locktag"><i class="fa-solid fa-lock"></i> Mở khoá: người chơi Lv.10 + duyệt bản tiến hoá</span></div></div>`;
+                continue;
+              }
+              const unit = UNIT[bd.kind] ?? "";
+              const totAcc = bd.assignments.reduce((n, a) => n + a.accrued, 0);
+              const totCap = bd.assignments.reduce((n, a) => n + (a.progress01 > 0 ? a.accrued / a.progress01 : 0), 0);
+              const minCap = bd.assignments.length ? Math.min(...bd.assignments.map(a => a.capInSec)) : 0;
+              const abar = bd.assignments.length
+                ? `<div class="s2-abar"><i style="width:${totCap > 0 ? Math.min(100, Math.round((totAcc / totCap) * 100)) : 0}%"></i><span>${totAcc > 0 ? `Đã tích ${totAcc} / ${Math.round(totCap)} ${unit} · ${minCap <= 0 ? "đã đầy trần" : `đầy sau ${fmtDur(minCap)}`}` : `Chưa tích luỹ — Eidolon đang làm việc`}</span></div>`
+                : "";
+              html += `<div class="s2-b">
+                <div class="s2-bhead"><div class="s2-bic" style="background:${color}"><i class="fa-solid ${icon}"></i></div>
+                  <div><h3>${bd.nameVi}${bd.id === "research_lab" ? `<span class="s2-new">MỚI</span>` : ""}</h3><div class="bd">${bd.descVi}</div></div>
+                  <span class="s2-lvpill">Lv.${bd.level}</span>${upButton(bd)}</div>
+                ${confirmId === bd.id ? confirmRow(bd) : ""}
+                <div class="s2-specs"><span><span class="k">SẢN LƯỢNG</span> <b>${rateText(bd)}</b></span><span><span class="k">Ô</span> <b>${bd.assignments.length} / ${bd.slots}</b></span><span><span class="k">CỘNG HƯỞNG</span> <b>${bd.synergyElements.join(" · ")} +20%</b></span><span><span class="k">TRẦN</span> <b>${state.capHours} giờ</b></span></div>
+                ${abar}
+                <div class="s2-slots">`;
               for (const a of bd.assignments) {
                 const c = byInstance.get(a.instanceId); const d = defOf(a.creatureId);
-                html += `<div class="slotc">${thumb(a.creatureId)}<div style="min-width:0"><div class="snm">${d?.name ?? a.creatureId}</div><div class="smeta">Lv.${a.level}${c ? ` · Bond ${c.bondLevel}` : ""} · +${a.accrued} ${unit}</div></div><button class="un" data-unassign="${a.instanceId}" title="Rút về (phần chưa thu hoạch sẽ mất)"><i class="fa-solid fa-xmark"></i></button></div>`;
+                const m2 = bd.kind === "bond" ? `Bond ${c?.bondLevel ?? 0}` : bd.kind === "xp" ? `XP ${c?.experience ?? 0}` : (d ? ROLE_VI[d.role] : "");
+                const acc = a.capInSec <= 0 ? `+${a.accrued} ${unit} · Đã đầy trần` : `+${a.accrued} ${unit} · sau ${fmtDur(a.nextUnitInSec)}`;
+                html += `<div class="s2-slot">${thumb(a.creatureId, 46)}<div style="min-width:0"><div class="nm">${d?.name ?? a.creatureId} <span class="chip" style="background:var(--sel);color:var(--selink);font-size:10.5px">Lv.${a.level}</span> <span class="chip" style="background:${ELEMENT_COLOR[d?.element ?? ""] ?? "#666"};font-size:10.5px">${d?.element ?? ""}</span> <span class="m2">${m2}</span></div><div class="acc">${acc}${a.synergy ? `<span class="s2-syn">+20%</span>` : ""}</div></div><button class="un" data-unassign="${a.instanceId}" title="Rút về (phần chưa thu hoạch sẽ mất)"><i class="fa-solid fa-xmark"></i></button></div>`;
               }
               for (let i = bd.assignments.length; i < bd.slots; i++)
-                html += `<button class="slotempty" data-pick="${bd.id}">+ Phân công Eidolon</button>`;
-              html += `</div>`;
-              const total = bd.assignments.reduce((n, a) => n + a.accrued, 0);
-              if (total > 0) html += `<button class="collectbtn" data-collect="${bd.id}">Thu hoạch: +${total} ${unit}</button>`;
+                html += `<button class="s2-empty" data-pick="${bd.id}">+ Phân công Eidolon<span class="hint">Hợp: ${bd.synergyElements.join(" · ")} / ${bd.synergyRoles.map(r => ROLE_VI[r] ?? r).join(" · ")}</span></button>`;
+              html += `</div></div>`;
             }
-          }
-          html += `<p style="font-size:13.5px;color:#8b93a0;margin-top:12px">Tích luỹ tối đa 8 giờ cho mỗi Eidolon. Rút về trước khi thu hoạch sẽ mất phần chưa thu.</p>`;
-          body.innerHTML = html;
-          body.querySelectorAll<HTMLElement>("[data-unassign]").forEach(btn => btn.addEventListener("click", () => {
-            void network.request("POST", "/sanctuary/unassign", { creatureInstanceId: btn.dataset.unassign }).then(() => { showToast("Đã rút Eidolon về"); renderers.sanctuary(); }).catch((e: Error) => showToast(e.message));
-          }));
-          body.querySelectorAll<HTMLElement>("[data-collect]").forEach(btn => btn.addEventListener("click", () => {
-            void network.request<{ gains: { amount: number }[] }>("POST", "/sanctuary/collect", { buildingId: btn.dataset.collect }).then(r => {
-              const total = r.gains.reduce((n, g) => n + g.amount, 0);
-              showToast(total > 0 ? `Thu hoạch xong: +${total}` : "Chưa có gì để thu hoạch");
-              renderers.sanctuary(); refreshParty();
-            }).catch((e: Error) => showToast(e.message));
-          }));
-          body.querySelectorAll<HTMLElement>("[data-pick]").forEach(btn => btn.addEventListener("click", () => {
-            const buildingId = btn.dataset.pick!;
+            html += `<p style="font-size:13px;color:#8b93a0;margin-top:2px">Tích luỹ tối đa ${state.capHours} giờ cho mỗi Eidolon theo cấp Nhà chính. Rút về trước khi thu hoạch sẽ mất phần chưa thu.</p>`;
+            body.innerHTML = html;
+            wire();
+          };
+
+          const drawPicker = (bd: SanctuaryBuildingView): void => {
+            const isSyn = (c: OwnedCreature) => { const d = defOf(c.creatureId); return !!d && (bd.synergyElements.includes(d.element) || bd.synergyRoles.includes(d.role)); };
             const free = owned.items.filter(c => !assignedIds.has(c.instanceId));
-            body.innerHTML = `<div class="hub-sec">Chọn Eidolon phân công</div>` + (free.length
-              ? free.map(c => `<button class="pickrow" data-assign="${c.instanceId}">${thumb(c.creatureId)}<span><b>${defOf(c.creatureId)?.name ?? c.creatureId}</b> · Lv.${c.level} · Bond ${c.bondLevel}</span></button>`).join("")
-              : `<p style="font-size:15.5px;color:#9a937f">Mọi Eidolon đều đã được phân công.</p>`)
-              + `<button class="slotempty" id="pick-back">← Quay lại Sanctuary</button>`;
-            body.querySelector("#pick-back")?.addEventListener("click", () => renderers.sanctuary());
+            const sugg = free.filter(isSyn);
+            const rest = free.filter(c => !isSyn(c));
+            const row = (c: OwnedCreature, syn: boolean): string => {
+              const d = defOf(c.creatureId);
+              return `<button class="pickrow" data-assign="${c.instanceId}">${thumb(c.creatureId)}<span><b>${d?.name ?? c.creatureId}</b> <span class="chip" style="background:var(--sel);color:var(--selink);font-size:10.5px">Lv.${c.level}</span> <span class="chip" style="background:${ELEMENT_COLOR[d?.element ?? ""] ?? "#666"};font-size:10.5px">${d?.element ?? ""}</span> <span style="color:#aeb9c4;font-size:13px">${d ? ROLE_VI[d.role] : ""} · Bond ${c.bondLevel}</span>${syn ? `<span class="s2-syn">HỢP +20%</span>` : ""}</span></button>`;
+            };
+            const elsewhere = owned.items.filter(c => assignedIds.has(c.instanceId));
+            body.innerHTML = `<div class="hub-sec">Phân công vào ${bd.nameVi} — sản lượng ${rateText(bd)}</div>`
+              + (sugg.length ? `<div class="hub-sec" style="margin-top:4px">Gợi ý — hợp công trình này</div>` + sugg.map(c => row(c, true)).join("") : "")
+              + (rest.length ? `<div class="hub-sec">Tất cả Eidolon</div>` + rest.map(c => row(c, false)).join("") : "")
+              + (!free.length ? `<p style="font-size:15.5px;color:#9a937f">Mọi Eidolon đều đã được phân công.</p>` : "")
+              + (elsewhere.length ? `<div class="hub-sec">Đang phân công nơi khác</div>` + elsewhere.map(c => { const d = defOf(c.creatureId); return `<button class="pickrow dis" disabled>${thumb(c.creatureId)}<span><b>${d?.name ?? c.creatureId}</b> <span style="color:#aeb9c4;font-size:13px">Đang ở ${whereOf.get(c.instanceId) ?? ""} — rút về mới phân công lại được</span></span></button>`; }).join("") : "")
+              + `<button class="slotempty" id="pick-back" style="margin-top:6px">← Quay lại Sanctuary</button>`;
+            body.querySelector("#pick-back")?.addEventListener("click", () => draw());
             body.querySelectorAll<HTMLElement>("[data-assign]").forEach(b2 => b2.addEventListener("click", () => {
-              void network.request("POST", "/sanctuary/assign", { buildingId, creatureInstanceId: b2.dataset.assign }).then(() => { showToast("Đã phân công!"); renderers.sanctuary(); }).catch((e: Error) => showToast(e.message));
+              void network.request("POST", "/sanctuary/assign", { buildingId: bd.id, creatureInstanceId: b2.dataset.assign }).then(() => { showToast("Đã phân công!"); renderers.sanctuary(); }).catch((e: Error) => showToast(e.message));
             }));
-          }));
+          };
+
+          const wire = (): void => {
+            body.querySelectorAll<HTMLElement>("[data-unassign]").forEach(btn => btn.addEventListener("click", () => {
+              void network.request("POST", "/sanctuary/unassign", { creatureInstanceId: btn.dataset.unassign }).then(() => { showToast("Đã rút Eidolon về"); renderers.sanctuary(); }).catch((e: Error) => showToast(e.message));
+            }));
+            body.querySelector<HTMLElement>("[data-collectall]")?.addEventListener("click", () => {
+              void network.request<{ totals: { bond: number; xp: number; data: number } }>("POST", "/sanctuary/collect-all", {}).then(r => {
+                const parts = [r.totals.bond ? `+${r.totals.bond} Bond` : "", r.totals.xp ? `+${r.totals.xp} XP` : "", r.totals.data ? `+${r.totals.data} Data` : ""].filter(Boolean).join(" · ");
+                showToast(parts ? `Thu hoạch xong: ${parts}` : "Chưa có gì để thu hoạch");
+                renderers.sanctuary(); refreshParty(); refreshWallet();
+              }).catch((e: Error) => showToast(e.message));
+            });
+            body.querySelectorAll<HTMLElement>("[data-upgrade]").forEach(btn => btn.addEventListener("click", () => { confirmId = btn.dataset.upgrade!; draw(); }));
+            body.querySelector<HTMLElement>("[data-upno]")?.addEventListener("click", () => { confirmId = null; draw(); });
+            body.querySelector<HTMLElement>("[data-upgo]")?.addEventListener("click", (ev) => {
+              const id = (ev.currentTarget as HTMLElement).dataset.upgo!;
+              void network.request<{ level: number }>("POST", `/sanctuary/buildings/${id}/upgrade`, {}).then(r => {
+                showToast(`Đã nâng cấp lên Lv.${r.level}!`);
+                confirmId = null; renderers.sanctuary(); refreshWallet();
+              }).catch((e: Error) => { showToast(e.message); confirmId = null; draw(); });
+            });
+            body.querySelectorAll<HTMLElement>("[data-pick]").forEach(btn => btn.addEventListener("click", () => {
+              const bd = state.buildings.find(b => b.id === btn.dataset.pick)!;
+              drawPicker(bd);
+            }));
+          };
+          draw();
         } catch (e) {
           body.innerHTML = `<p style="font-size:15.5px;color:#e88">${e instanceof Error ? e.message : "Không tải được Sanctuary"}</p>`;
         }

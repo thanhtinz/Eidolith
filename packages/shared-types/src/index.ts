@@ -18,6 +18,7 @@ export interface PlayerProfile {
 }
 export interface PlayerWallet {
   gold: number; crystal: number; bondEssence: number; evolutionCore: number;
+  researchData: number;
 }
 export interface WildSpawnInfo {
   spawnId: string; creatureId: string; level: number; x: number; y: number;
@@ -81,14 +82,27 @@ export interface SideQuestView {
   rewards: { currency: string; amount: number }[];
 }
 export interface QuestStateResponse { day: string; arc: QuestView[]; daily: QuestView[]; side: SideQuestView[]; }
-/** Phase 5b Sanctuary (Part 6 §13). Accrued amounts are whole units ready
- *  to collect; rates/caps live server-side. */
+/** Sanctuary (Part 6 §13; redesign v2 phase 1 — docs/SANCTUARY-REDESIGN-v2.md).
+ *  Accrued amounts are whole units ready to collect; rates/caps live
+ *  server-side. progress01/nextUnitInSec/capInSec describe the lazy accrual
+ *  of one assignment against the Sanctuary-Hall-level cap. */
 export interface SanctuaryAssignmentView {
   instanceId: string; creatureId: string; level: number; accrued: number;
+  progress01: number; nextUnitInSec: number; capInSec: number; synergy: boolean;
+}
+export interface SanctuaryUpgradeView {
+  toLevel: number; gold: number; data: number; blockedByHall: boolean;
 }
 export interface SanctuaryBuildingView {
   id: string; nameVi: string; descVi: string; level: number;
-  kind: "bond" | "xp" | "info" | "locked"; slots: number;
+  kind: "bond" | "xp" | "data" | "info" | "locked"; slots: number;
+  perMinute: number; synergyElements: string[]; synergyRoles: string[];
+  upgrade: SanctuaryUpgradeView | null;
   assignments: SanctuaryAssignmentView[];
 }
-export interface SanctuaryStateResponse { buildings: SanctuaryBuildingView[]; }
+export interface SanctuaryStateResponse {
+  buildings: SanctuaryBuildingView[];
+  hallLevel: number; capHours: number;
+  totals: { bond: number; xp: number; data: number };
+  researchData: number;
+}

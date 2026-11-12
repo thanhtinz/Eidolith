@@ -46,7 +46,7 @@ playerRouter.get("/wallet", async (req: AuthedRequest, res, next) => {
     const { rows } = await query<{ currency_id: string; balance: string }>(
       `SELECT currency_id, balance FROM economy.player_wallets WHERE player_id = $1`, [profile.id]);
     const bal = (id: string) => Number(rows.find(r => r.currency_id === id)?.balance ?? 0);
-    const wallet: PlayerWallet = { gold: bal("gold"), crystal: bal("crystal"), bondEssence: bal("bond_essence"), evolutionCore: bal("evolution_core") };
+    const wallet: PlayerWallet = { gold: bal("gold"), crystal: bal("crystal"), bondEssence: bal("bond_essence"), evolutionCore: bal("evolution_core"), researchData: bal("research_data") };
     ok(req, res, wallet);
   } catch (e) { next(e); }
 });

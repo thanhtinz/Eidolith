@@ -36,7 +36,7 @@ const wallet = async () => {
 
 /* ------------------------------ Sanctuary ------------------------------ */
 let st = await call("GET", "/sanctuary", token);
-check("sanctuary state: 4 buildings", st.status === 200 && st.json.data.buildings.length === 4);
+check("sanctuary state: 5 buildings (v2 added research_lab)", st.status === 200 && st.json.data.buildings.length === 5);
 const garden = st.json.data.buildings.find(b => b.id === "bond_garden");
 check("bond garden: 3 slots, empty", garden.slots === 3 && garden.assignments.length === 0);
 
