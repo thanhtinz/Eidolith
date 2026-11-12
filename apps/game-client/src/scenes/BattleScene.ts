@@ -153,19 +153,19 @@ export class BattleScene extends Phaser.Scene {
     const div = document.createElement("div");
     div.innerHTML = `
       <style>
-        .bt-root{position:relative;width:1280px;height:720px;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:#f7ead0;pointer-events:none}
+        .bt-root{position:relative;width:1280px;height:720px;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:#f4f7fa;pointer-events:none}
         .bt-top{position:absolute;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;pointer-events:auto}
-        .bt-pill{background:linear-gradient(180deg,#3b2517,#2a190e);border:2px solid #d4a437;border-radius:999px;padding:7px 16px;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,.4);white-space:nowrap}
-        .bt-pill b{font-family:'Baloo 2',sans-serif;color:#e8c96a;letter-spacing:.6px}
-        .bt-btn{cursor:pointer;color:#f7ead0;font-weight:600}
-        .bt-btn.on{background:linear-gradient(180deg,#8a5a1e,#6e4513);color:#ffe9a8}
-        .bt-result{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:430px;background:linear-gradient(180deg,#2e1c0f,#211307);border:2px solid #d4a437;border-radius:22px;padding:26px 28px;text-align:center;pointer-events:auto;box-shadow:0 24px 70px rgba(0,0,0,.6)}
-        .bt-result h2{font-family:'Baloo 2',sans-serif;font-size:34px;margin:0 0 6px;color:#e8c96a}
-        .bt-result p{margin:4px 0 14px;color:#c9b18a;font-size:15.5px}
+        .bt-pill{background:rgba(27,33,43,.93);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:7px 16px;font-size:15px;box-shadow:0 6px 16px rgba(0,0,0,.4);white-space:nowrap}
+        .bt-pill b{font-family:'Baloo 2',sans-serif;color:#ffd83d;letter-spacing:.6px}
+        .bt-btn{cursor:pointer;color:#f4f7fa;font-weight:700}
+        .bt-btn.on{background:#ffd83d;color:#26303a;border-color:#ffd83d}
+        .bt-result{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:430px;background:rgba(27,33,43,.97);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:26px 28px;text-align:center;pointer-events:auto;box-shadow:0 24px 70px rgba(0,0,0,.6)}
+        .bt-result h2{font-family:'Baloo 2',sans-serif;font-size:34px;margin:0 0 6px;color:#ffd83d}
+        .bt-result p{margin:4px 0 14px;color:#aeb9c4;font-size:15.5px}
         .bt-result .row{display:flex;gap:10px}
         .bt-result button{flex:1;padding:13px;border:none;border-radius:12px;font-size:16.5px;font-weight:700;cursor:pointer;font-family:'Baloo 2',sans-serif}
-        .bt-again{background:linear-gradient(180deg,#e8a33d,#c8871e);color:#fff}
-        .bt-exit{background:#171006;color:#e8c96a;border:1.5px solid #d4a437 !important}
+        .bt-again{background:#ffd83d;color:#26303a}
+        .bt-exit{background:rgba(255,255,255,.06);color:#f4f7fa;border:1px solid rgba(255,255,255,.16) !important}
       </style>
       <div class="bt-root">
         <div class="bt-top">
@@ -179,7 +179,7 @@ export class BattleScene extends Phaser.Scene {
         <div class="bt-result" id="bt-result" hidden>
           <h2 id="bt-title">THẮNG</h2>
           <p id="bt-sub"></p>
-          <p id="bt-rewards" style="color:#ffd94a;font-size:16px;min-height:22px"></p>
+          <p id="bt-rewards" style="color:#ffd83d;font-size:16px;min-height:22px"></p>
           <div class="row">
             <button class="bt-again" id="bt-again">Đấu lại</button>
             <button class="bt-exit" id="bt-back">Về thế giới</button>
@@ -518,7 +518,7 @@ export class BattleScene extends Phaser.Scene {
     const title = this.overlay.querySelector("#bt-title") as HTMLElement;
     const sub = this.overlay.querySelector("#bt-sub") as HTMLElement;
     title.textContent = w === 0 ? "THẮNG!" : w === 1 ? "THUA" : "HOÀ";
-    title.style.color = w === 0 ? "#ffd94a" : w === 1 ? "#ff9a8a" : "#e8c96a";
+    title.style.color = w === 0 ? "#ffd83d" : w === 1 ? "#ff9a8a" : "#f4f7fa";
     sub.textContent = `Trận đấu ${(this.battle.ticks / 10).toFixed(1)} giây · Mã xác thực ${this.battle.hash.slice(0, 8)}`;
     const rw = this.overlay.querySelector("#bt-rewards") as HTMLElement | null;
     if (rw && this.battle.rewards) {

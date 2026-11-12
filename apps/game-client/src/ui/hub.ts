@@ -46,140 +46,146 @@ const MENU_ICONS: Record<string, string> = {
 };
 
 const CSS = `
-.hub-root{position:relative;width:1280px;height:720px;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:#e8e4d8;pointer-events:none}
+.hub-root{position:relative;width:1280px;height:720px;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:#f4f7fa;pointer-events:none;--sel:#ffd83d;--selink:#26303a;--bar:#3ddc5f;--line:rgba(255,255,255,.10);--plate:rgba(35,43,54,.93);--plate2:rgba(255,255,255,.05)}
 .hub-root *{box-sizing:border-box;margin:0;padding:0}
-.pcluster{position:absolute;top:14px;left:14px;display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,#3b2517,#2a190e);border:2px solid #d4a437;border-radius:999px;padding:7px 22px 7px 7px;pointer-events:auto;box-shadow:0 6px 18px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,220,150,.35)}
+.pcluster{position:absolute;top:14px;left:14px;display:flex;align-items:center;gap:11px;background:var(--plate);border:1px solid var(--line);border-radius:16px;padding:8px 18px 8px 8px;pointer-events:auto;box-shadow:0 10px 28px rgba(10,15,20,.45)}
 .pav{position:relative;flex:none}
-.pav img{width:58px;height:58px;object-fit:cover;object-position:top;border-radius:50%;border:2px solid #d4a437;background:#20303a;display:block;box-shadow:0 0 0 3px #2a190e}
-.hud-badge{position:absolute;right:-5px;bottom:-5px;min-width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe9a8,#d4a437);color:#2a190e;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #2a190e;padding:0 4px;font-family:'Baloo 2',sans-serif}
+.pav img{width:54px;height:54px;object-fit:cover;object-position:top;border-radius:50%;border:2px solid rgba(255,255,255,.25);background:#20303a;display:block}
+.hud-badge{position:absolute;right:-7px;bottom:-5px;border-radius:999px;background:var(--sel);color:var(--selink);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:2px 7px;font-family:'Baloo 2',sans-serif;white-space:nowrap}
 .pmeta{min-width:0}
-.pmeta .nm{font-family:'Baloo 2',sans-serif;font-size:20px;font-weight:800;line-height:1.15;white-space:nowrap;color:#f7ead0;text-shadow:0 2px 3px rgba(0,0,0,.5)}
-.hud-exp{position:relative;width:186px;height:16px;background:#170d06;border-radius:9px;margin-top:5px;overflow:hidden;box-shadow:inset 0 2px 5px rgba(0,0,0,.8)}
-.hud-exp i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#2fae9b,#7fd4c1);border-radius:9px}
-.hud-exp span{position:absolute;inset:0;font-size:11px;line-height:16px;text-align:center;color:#ffe9a8;text-shadow:0 1px 2px rgba(0,0,0,.6)}
-.cur{display:flex;align-items:center;gap:7px;background:linear-gradient(180deg,#3b2517,#2a190e);border:2px solid #d4a437;border-radius:999px;padding:5px 14px 5px 6px;font-size:16.5px;font-weight:700;color:#f7ead0;box-shadow:0 4px 12px rgba(0,0,0,.4)}
-.cur .coin{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe9a8,#d4a437);display:flex;align-items:center;justify-content:center;color:#5c3d0c;font-size:16px;flex:none}
-.cur.gem .coin{background:radial-gradient(circle at 35% 30%,#bff3ff,#3fa7c4);color:#0d3a4a}
-.cur i{font-size:16px}
-.cur span{color:#f7ead0}
-.qcard-top{position:absolute;top:98px;left:14px;display:flex;align-items:center;gap:11px;background:linear-gradient(180deg,#f8edd2,#eedcae);border:2px solid #b98a1e;border-left:6px solid #b98a1e;border-radius:10px;color:#4a2f18;padding:9px 16px 9px 12px;cursor:pointer;pointer-events:auto;max-width:330px;text-align:left;box-shadow:0 6px 16px rgba(0,0,0,.4)}
-.qcard-top i{font-size:19px;color:#a33b2e;flex:none}
-.qcard-top .qarc{font-size:11.5px;letter-spacing:1.2px;color:#a33b2e;font-weight:700}
-.qcard-top .qobj-t{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pmeta .nm{font-family:'Baloo 2',sans-serif;font-size:20px;font-weight:800;line-height:1.15;white-space:nowrap;color:#fff}
+.hud-exp{position:relative;width:186px;height:17px;background:rgba(0,0,0,.42);border-radius:999px;margin-top:4px;overflow:hidden}
+.hud-exp i{position:absolute;left:0;top:0;bottom:0;background:#39b6e8;border-radius:999px}
+.hud-exp span{position:absolute;inset:0;font-size:11.5px;line-height:17px;text-align:center;color:#fff;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.cur{display:flex;align-items:center;gap:8px;background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:5px 15px 5px 6px;font-size:16.5px;font-weight:700;color:#fff;box-shadow:0 8px 20px rgba(10,15,20,.4)}
+.cur .coin{width:29px;height:29px;border-radius:50%;background:#f5b921;display:flex;align-items:center;justify-content:center;color:#5c3a00;font-size:15px;flex:none}
+.cur.gem .coin{background:#39b6e8;color:#083a52}
+.cur i{font-size:15px}
+.cur span{color:#fff}
+.qcard-top{position:absolute;top:100px;left:14px;display:flex;align-items:center;gap:11px;background:var(--plate);border:1px solid var(--line);border-radius:14px;color:#fff;padding:9px 16px 9px 9px;cursor:pointer;pointer-events:auto;max-width:340px;text-align:left;box-shadow:0 10px 28px rgba(10,15,20,.45)}
+.qcard-top>i{font-size:16px;color:var(--selink);background:var(--sel);width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none}
+.qcard-top .qarc{font-size:10.5px;letter-spacing:1.6px;color:var(--sel);font-weight:800}
+.qcard-top .qobj-t{font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .topright{position:absolute;top:14px;right:14px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
 .currencies{display:flex;gap:8px;pointer-events:auto}
 .minimap-wrap{position:relative;pointer-events:auto}
-.minimap{position:relative;width:158px;height:158px;border-radius:50%;overflow:hidden;background:#22331f;border:4px solid #2a190e;outline:2px solid #d4a437;box-shadow:0 10px 26px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
+.minimap{position:relative;width:158px;height:158px;border-radius:50%;overflow:hidden;background:#22331f;border:4px solid #232b36;outline:1px solid rgba(255,255,255,.14);box-shadow:0 10px 26px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
 .minimap-inner{position:relative;width:113px;height:113px;flex:none}
 .minimap img{width:113px;height:113px;display:block;image-rendering:pixelated}
-.mdot{position:absolute;width:11px;height:11px;border-radius:50%;background:#ffd94a;border:2px solid #2a190e;transform:translate(-50%,-50%);box-shadow:0 0 7px rgba(255,217,74,.9);z-index:2}
-.mname{position:absolute;right:-4px;bottom:-11px;background:linear-gradient(180deg,#3b2517,#2a190e);color:#f7ead0;font-size:12.5px;font-weight:700;text-align:center;padding:4.5px 14px;border:2px solid #d4a437;border-radius:999px;white-space:nowrap;z-index:3;box-shadow:0 4px 10px rgba(0,0,0,.4)}
-.mmeta{font-size:13px;color:#f7ead0;background:linear-gradient(180deg,#3b2517,#2a190e);border:2px solid #d4a437;border-radius:999px;padding:5px 13px;pointer-events:auto;margin-top:15px;box-shadow:0 4px 10px rgba(0,0,0,.35)}
-.mmeta #hub-clock{color:#ffe9a8}
-.party{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:10px;pointer-events:auto}
-.pslot{position:relative;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 34% 26%,#5a3a22,#241407 75%);border:2px solid #d4a437;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,.45)}
-.pslot img{width:52px;height:52px;object-fit:contain;border-radius:50%}
-.pslot .ph{font-size:24px;font-weight:800}
-.pslot.empty{border-style:dashed;border-color:#a68d5f;color:#a68d5f;background:rgba(30,18,8,.92)}
-.pslot.empty i{font-size:21px}
-.pslot .plv{position:absolute;right:-4px;bottom:-4px;background:radial-gradient(circle at 35% 30%,#ffe9a8,#d4a437);color:#2a190e;font-size:11.5px;font-weight:800;border-radius:999px;padding:1px 6px;border:2px solid #2a190e;font-family:'Baloo 2',sans-serif}
-.pslot .gem-dot{position:absolute;left:50%;bottom:-5px;transform:translateX(-50%) rotate(45deg);width:9px;height:9px;background:#35d4b5;border:1.5px solid #2a190e;z-index:2}
-.hub-nav{position:absolute;right:14px;bottom:14px;display:flex;flex-direction:column;gap:11px;pointer-events:auto;align-items:center}
-.nav-items{display:flex;flex-direction:column;gap:11px;transition:opacity .18s ease,transform .18s ease}
+.mdot{position:absolute;width:11px;height:11px;border-radius:50%;background:var(--sel);border:2px solid #26303a;transform:translate(-50%,-50%);box-shadow:0 0 7px rgba(255,216,61,.9);z-index:2}
+.mname{position:absolute;right:-4px;bottom:-11px;background:var(--plate);color:#fff;font-size:12.5px;font-weight:700;text-align:center;padding:5px 14px;border:1px solid var(--line);border-radius:999px;white-space:nowrap;z-index:3;box-shadow:0 6px 14px rgba(0,0,0,.4)}
+.mmeta{font-size:13px;color:#fff;background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:6px 13px;pointer-events:auto;margin-top:15px;box-shadow:0 6px 14px rgba(0,0,0,.35)}
+.mmeta #hub-clock{color:var(--sel)}
+.party{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:8px;pointer-events:auto}
+.pmini{display:flex;align-items:center;gap:8px;background:var(--plate);border:1px solid var(--line);border-radius:12px;padding:6px 12px 6px 6px;box-shadow:0 8px 20px rgba(10,15,20,.4);cursor:pointer}
+.pmini img{width:36px;height:36px;object-fit:contain}
+.pmini .pn{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:13.5px;line-height:1;color:#fff}
+.pmini .pl{font-size:11px;color:#aeb9c4;font-weight:700}
+.pmini .pbar{position:relative;height:11px;min-width:88px;background:rgba(0,0,0,.42);border-radius:999px;margin-top:3px;overflow:hidden}
+.pmini .pbar i{position:absolute;left:0;top:0;bottom:0;background:var(--bar);border-radius:999px}
+.pmini .pbar span{position:absolute;inset:0;font-size:9.5px;line-height:11px;font-weight:700;color:#fff;padding:0 6px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.pmini.empty{color:#aeb9c4;font-size:13px;font-weight:700;padding:10px 16px;cursor:default}
+.hub-nav{position:absolute;right:14px;bottom:12px;display:flex;flex-direction:column;gap:9px;pointer-events:auto;align-items:flex-end}
+.nav-items{display:flex;flex-direction:column;gap:3px;background:rgba(27,33,43,.97);border:1px solid var(--line);border-radius:16px;padding:8px;width:218px;box-shadow:0 14px 34px rgba(10,15,20,.5);transition:opacity .18s ease,transform .18s ease}
 .hub-nav:not(.open) .nav-items{opacity:0;transform:translateY(14px);pointer-events:none}
-.hub-nav .toggle .chev{position:absolute;right:-3px;top:-3px;width:19px;height:19px;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,#ffe9a8,#d4a437);color:#2a190e;border:1.5px solid #2a190e}
+.nav-items .nh{font-size:10.5px;letter-spacing:1.6px;font-weight:800;color:#aeb9c4;padding:4px 10px 6px}
+.hub-nav button[data-tab]{display:flex;align-items:center;gap:11px;width:100%;padding:9px 10px;border:none;border-radius:10px;background:none;color:#f4f7fa;font-weight:700;font-size:15px;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;text-align:left}
+.hub-nav button[data-tab] .nico{width:22px;text-align:center;font-size:15px;flex:none}
+.hub-nav button[data-tab].on{background:var(--sel);color:var(--selink)}
+.hub-nav .toggle{width:58px;height:58px;border-radius:50%;background:rgba(27,33,43,.97);border:1px solid var(--line);color:#fff;cursor:pointer;box-shadow:0 10px 24px rgba(10,15,20,.5);position:relative;display:flex;align-items:center;justify-content:center;font-size:22px}
+.hub-nav .toggle .chev{position:absolute;right:-3px;top:-3px;width:19px;height:19px;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;background:var(--sel);color:var(--selink);border:1.5px solid #26303a}
 .hub-nav.open .toggle .chev i{transform:rotate(180deg)}
-.hub-nav button{width:64px;background:none;border:none;color:#e8dcc0;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;cursor:pointer;padding:0;font-family:'Be Vietnam Pro',sans-serif;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.7)}
-.hub-nav button .nico{width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 34% 28%,#5a3a22,#2a190e 72%);border:2px solid #d4a437;display:flex;align-items:center;justify-content:center;color:#e8c96a;box-shadow:0 6px 16px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,220,150,.35);position:relative}
-.hub-nav button i{font-size:23px}
-.hub-nav button.on{color:#ffd94a}
-.hub-nav button.on .nico{border-color:#ffe9a8;color:#ffe9a8;box-shadow:0 0 14px rgba(212,164,55,.55),inset 0 0 12px rgba(53,212,181,.35)}
-.hub-panel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(950px,calc(100% - 150px));max-height:656px;display:none;flex-direction:column;background:linear-gradient(180deg,#2e1c0f,#211307);border:2px solid #d4a437;border-radius:22px;pointer-events:auto;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.6)}
+.hub-panel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(950px,calc(100% - 150px));max-height:656px;display:none;flex-direction:column;background:rgba(27,33,43,.97);border:1px solid var(--line);border-radius:18px;pointer-events:auto;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.6)}
 .hub-panel.open{display:flex}
 .hub-panel header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 10px}
-.hub-panel header h2{font-family:'Baloo 2',sans-serif;font-size:25px;color:#e8c96a}
-.hub-panel header .sub{font-size:15px;color:#c9b18a;margin-top:2px}
-.hub-panel .x{width:40px;height:40px;border-radius:10px;background:#c33;color:#fff;border:none;font-size:20px;cursor:pointer;flex:none}
+.hub-panel header h2{font-family:'Baloo 2',sans-serif;font-size:25px;color:#fff}
+.hub-panel header .sub{font-size:15px;color:#aeb9c4;margin-top:2px}
+.hub-panel .x{width:38px;height:38px;border-radius:10px;background:#e23b3b;color:#fff;border:none;font-size:19px;cursor:pointer;flex:none}
 .hub-body{overflow-y:auto;padding:6px 20px 20px;min-height:0;flex:1}
-.hub-sec{font-family:'Baloo 2',sans-serif;font-size:17px;color:#e8c96a;letter-spacing:.4px;margin:14px 0 8px;text-transform:uppercase}
+.hub-sec{font-size:12px;font-weight:800;color:var(--sel);letter-spacing:1.6px;margin:15px 0 8px;text-transform:uppercase;font-family:'Be Vietnam Pro',sans-serif}
 .slots{display:flex;gap:10px}
-.slot{flex:1;height:86px;border:1.5px dashed rgba(212,164,55,.4);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#a68d5f;font-size:14px;text-align:center;padding:4px;background:rgba(212,164,55,.04)}
-.dex{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.card{background:rgba(212,164,55,.06);border:1px solid rgba(212,164,55,.22);border-radius:16px;padding:12px;display:flex;gap:12px;align-items:center}
-.card .art{width:74px;height:74px;flex:none;border-radius:12px;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.14),rgba(255,255,255,.02));display:flex;align-items:center;justify-content:center;overflow:hidden}
+.slot{flex:1;min-height:86px;border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:flex-start;gap:8px;color:#aeb9c4;font-size:14px;text-align:left;padding:8px 10px;background:var(--plate2);min-width:0}
+.slot.empty{justify-content:center;border-style:dashed}
+.slot img{width:46px;height:46px;object-fit:contain;flex:none}
+.slot .sn{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:14.5px;color:#fff;line-height:1.1;white-space:nowrap}
+.slot .sl2{font-size:11px;color:#aeb9c4;font-weight:700;white-space:nowrap}
+.dex{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{background:var(--plate2);border:1px solid var(--line);border-radius:14px;padding:11px;display:flex;gap:12px;align-items:center}
+.card .art{width:74px;height:74px;flex:none;border-radius:12px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .card .art img{width:74px;height:74px;object-fit:contain}
 .card .art .ph{font-size:30px;font-weight:800}
-.card h3{font-family:'Baloo 2',sans-serif;font-size:20px;color:#f7ead0}
-.card .meta{font-size:14.5px;color:#d8c9a8;line-height:1.45}
-.chip{display:inline-block;padding:1px 9px;border-radius:99px;font-size:13.5px;color:#0d1117;font-weight:700;vertical-align:1px}
+.card h3{font-family:'Baloo 2',sans-serif;font-size:20px;color:#fff}
+.card .meta{font-size:14.5px;color:#c3ccd4;line-height:1.45}
+.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:13px;color:#fff;font-weight:700;vertical-align:1px}
 .rar{font-weight:700}
-.qcard{background:rgba(212,164,55,.06);border:1px solid rgba(212,164,55,.22);border-radius:16px;padding:14px 16px;margin-bottom:12px}
-.qcard h3{font-family:'Baloo 2',sans-serif;font-size:20px;color:#f7ead0;margin-bottom:4px}
-.qclaim{margin-top:10px;background:linear-gradient(180deg,#ffb340,#e07f1f);color:#2a1503;border:none;border-radius:10px;padding:9px 18px;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;cursor:pointer}
-.qclaim:hover{filter:brightness(1.08)}
-.qdone{margin-top:10px;color:#8fd96a;font-weight:700;font-size:14.5px}
-.qrew{color:#c9b18a;font-size:14px;margin-top:2px}
+.qcard{background:var(--plate2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.qcard h3{font-family:'Baloo 2',sans-serif;font-size:20px;color:#fff;margin-bottom:4px}
+.qclaim{margin-top:10px;background:var(--sel);color:var(--selink);border:none;border-radius:10px;padding:9px 18px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;cursor:pointer}
+.qclaim:hover{filter:brightness(1.06)}
+.qdone{margin-top:10px;color:#7fe3a0;font-weight:700;font-size:14.5px}
+.qrew{color:#aeb9c4;font-size:14px;margin-top:2px}
 .dt-head{display:flex;gap:18px;align-items:center}
 .dt-head img{width:110px;height:110px;object-fit:contain}
 .dt-head .ph{font-size:64px;font-family:'Baloo 2',sans-serif}
 .dt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
-.dt-stat{background:rgba(212,164,55,.07);border:1px solid rgba(212,164,55,.2);border-radius:12px;padding:10px;text-align:center}
-.dt-stat b{display:block;font-family:'Baloo 2',sans-serif;font-size:21px;color:#f7ead0}
-.dt-stat span{font-size:12.5px;color:#9a937f;letter-spacing:.6px}
-.hearts{color:#e2543e;letter-spacing:3px;font-size:16px}
-.hearts .off{color:rgba(247,234,208,.18)}
-.sk{display:flex;justify-content:space-between;padding:7px 2px;border-bottom:1px dashed rgba(212,164,55,.18);font-size:15px}
-.sk .tag{color:#ffd94a;font-weight:700;font-size:12.5px;letter-spacing:.8px}
+.dt-stat{background:var(--plate2);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.dt-stat b{display:block;font-family:'Baloo 2',sans-serif;font-size:21px;color:#fff}
+.dt-stat span{font-size:12.5px;color:#aeb9c4;letter-spacing:.6px}
+.hearts{color:#ff5a4a;letter-spacing:3px;font-size:16px}
+.hearts .off{color:rgba(255,255,255,.16)}
+.sk{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;background:var(--plate2);margin-bottom:6px;font-size:15px}
+.sk .sic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12.5px;flex:none}
+.sk .tag{margin-left:auto;color:var(--sel);font-weight:800;font-size:11px;letter-spacing:1.2px}
 .slot[data-inst]{cursor:pointer}
 .dex .card{cursor:pointer}
-.qcard p{font-size:15.5px;color:#d8c9a8;line-height:1.5}
+.qcard p{font-size:15.5px;color:#c3ccd4;line-height:1.5}
 .qobj{display:flex;justify-content:space-between;font-size:15.5px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06)}
 .qobj:last-child{border-bottom:none}
-.qobj .st{color:#cdb87a}
-.bar{height:8px;background:rgba(255,255,255,.10);border-radius:99px;margin-top:6px;overflow:hidden}
-.bar i{display:block;height:100%;background:#7fd4c1;border-radius:99px}
+.qobj .st{color:#fff;font-weight:700}
+.bar{height:10px;background:rgba(0,0,0,.42);border-radius:99px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--bar);border-radius:99px}
 .tabs{display:flex;gap:8px;margin:4px 0 14px}
-.tabs button{flex:1;padding:10px 0;border-radius:12px;border:1px solid rgba(212,164,55,.3);background:rgba(212,164,55,.05);color:#f7ead0;font-size:16px;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif}
-.tabs button.on{background:rgba(232,201,106,.16);border-color:rgba(232,201,106,.55);color:#e8c96a}
-.bcard{background:rgba(212,164,55,.06);border:1px solid rgba(212,164,55,.22);border-radius:16px;padding:14px 16px;margin-bottom:12px;display:flex;gap:14px;align-items:center}
-.bcard .bic{width:52px;height:52px;flex:none;border-radius:12px;background:rgba(127,212,193,.13);display:flex;align-items:center;justify-content:center;color:#7fd4c1}
+.tabs button{flex:1;padding:10px 0;border-radius:11px;border:1px solid var(--line);background:var(--plate2);color:#f4f7fa;font-size:16px;font-weight:700;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif}
+.tabs button.on{background:var(--sel);border-color:var(--sel);color:var(--selink)}
+.bcard{background:var(--plate2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;gap:14px;align-items:center}
+.bcard .bic{width:52px;height:52px;flex:none;border-radius:12px;background:rgba(255,216,61,.12);display:flex;align-items:center;justify-content:center;color:var(--sel)}
 .bcard .bic svg{width:30px;height:30px}
-.bcard h3{font-family:'Baloo 2',sans-serif;font-size:20px;color:#f7ead0}
-.bcard p{font-size:15px;color:#d8c9a8;line-height:1.45}
-.bcard .blv{margin-left:auto;font-size:15px;color:#cdb87a;white-space:nowrap}
-.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.mgrid button{background:rgba(212,164,55,.06);border:1px solid rgba(212,164,55,.22);border-radius:16px;color:#f7ead0;padding:16px 4px 12px;font-size:15.5px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif}
-.mgrid button svg{width:30px;height:30px;color:#7fd4c1}
-.mgrid button i{font-size:27px;color:#e8c96a}
+.bcard h3{font-family:'Baloo 2',sans-serif;font-size:20px;color:#fff}
+.bcard p{font-size:15px;color:#c3ccd4;line-height:1.45}
+.bcard .blv{margin-left:auto;font-size:15px;color:var(--sel);font-weight:700;white-space:nowrap}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mgrid button{background:var(--plate2);border:1px solid var(--line);border-radius:14px;color:#f4f7fa;padding:16px 4px 12px;font-size:15.5px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif}
+.mgrid button svg{width:30px;height:30px;color:var(--sel)}
+.mgrid button i{font-size:27px;color:var(--sel)}
 .setrow{display:flex;align-items:center;justify-content:space-between;padding:13px 2px;border-bottom:1px solid rgba(255,255,255,.07);font-size:17px}
-.tgl{width:58px;height:32px;border-radius:99px;background:rgba(255,255,255,.14);position:relative;cursor:pointer;flex:none}
-.tgl::after{content:'';position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#e8e4d8;transition:left .15s}
+.tgl{width:58px;height:32px;border-radius:99px;background:rgba(255,255,255,.16);position:relative;cursor:pointer;flex:none}
+.tgl::after{content:'';position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#f4f7fa;transition:left .15s}
 .tgl.on{background:#3f9e63}.tgl.on::after{left:30px}
 .logout{width:100%;margin-top:18px;padding:15px;border:none;border-radius:14px;background:#8c2f2f;color:#fff;font-size:17.5px;font-weight:700;cursor:pointer}
 .logout.confirm{background:#c33}
 .enc{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(4,6,9,.45);pointer-events:auto;z-index:5}
 .enc[hidden]{display:none}
-.enc-card{position:relative;width:520px;background:linear-gradient(180deg,#2e1c0f,#211307);border:2px solid #d4a437;border-radius:26px;padding:22px 26px 26px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.6)}
+.enc-card{position:relative;width:520px;background:rgba(27,33,43,.98);border:1px solid var(--line);border-radius:20px;padding:22px 26px 26px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.6)}
 .enc-card img{width:150px;height:150px;object-fit:contain}
 .enc-card .ph{font-size:88px;font-weight:800;line-height:150px}
-.enc-card h3{font-family:'Baloo 2',sans-serif;font-size:29px;margin-top:6px;color:#f7ead0}
-.enc-card .meta{display:flex;gap:8px;justify-content:center;margin-top:9px;font-size:15.5px;color:#c9b18a}
-.enc-msg{min-height:26px;font-size:17px;margin:14px 0 6px;color:#f7ead0}
+.enc-card h3{font-family:'Baloo 2',sans-serif;font-size:29px;margin-top:6px;color:#fff}
+.enc-card .meta{display:flex;gap:8px;justify-content:center;margin-top:9px;font-size:15.5px;color:#aeb9c4}
+.enc-msg{min-height:26px;font-size:17px;margin:14px 0 6px;color:#f4f7fa}
 .enc-msg.good{color:#7fe3a0}.enc-msg.bad{color:#ff9a8a}
-.enc-btn{width:100%;padding:16px;border:none;border-radius:14px;background:linear-gradient(180deg,#e8a33d,#c8871e);color:#fff;font-size:18.5px;font-weight:700;cursor:pointer;font-family:'Baloo 2',sans-serif}
-.enc-btn:disabled{background:#4a4436;color:#9a937f;cursor:default}
+.enc-btn{width:100%;padding:16px;border:none;border-radius:13px;background:var(--sel);color:var(--selink);font-size:18.5px;font-weight:800;cursor:pointer;font-family:'Baloo 2',sans-serif}
+.enc-btn:disabled{background:rgba(255,255,255,.14);color:#8a94a0;cursor:default}
 .enc-x{position:absolute;top:14px;right:14px}
 .enc.shake .enc-card{animation:shk .4s}
 @keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-9px)}75%{transform:translateX(9px)}}
-.owned-badge{background:#3f9e63;color:#eafff1;border-radius:999px;font-size:12.5px;padding:2.5px 9px;font-weight:700}
+.owned-badge{background:#3f9e63;color:#fff;border-radius:999px;font-size:12.5px;padding:2.5px 9px;font-weight:700}
 .sumres{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
-.sumres .cell{background:rgba(212,164,55,.06);border:1px solid rgba(212,164,55,.22);border-radius:14px;padding:12px;text-align:center}
+.sumres .cell{background:var(--plate2);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
 .sumres .cell img{width:96px;height:96px;object-fit:contain}
 .sumres .cell .ph{font-size:52px;font-weight:800;line-height:96px}
-.bagrow{display:flex;align-items:center;gap:13px;background:rgba(212,164,55,.06);border:1px solid rgba(212,164,55,.22);border-radius:14px;padding:13px 15px;margin-bottom:10px}
-.bagrow i{font-size:24px;color:#e8c96a}
-.bagrow .qty{margin-left:auto;font-weight:800;font-size:18px;color:#e8c96a}
-.toast{position:absolute;left:50%;transform:translateX(-50%);bottom:92px;background:linear-gradient(180deg,#3b2517,#2a190e);border:2px solid #d4a437;color:#f7ead0;padding:11px 20px;border-radius:999px;font-size:16px;display:none;pointer-events:none;white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,.45)}
+.bagrow{display:flex;align-items:center;gap:13px;background:var(--plate2);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:10px}
+.bagrow i{font-size:24px;color:var(--sel)}
+.bagrow .qty{margin-left:auto;font-weight:800;font-size:18px;color:#fff}
+.toast{position:absolute;left:50%;transform:translateX(-50%);bottom:92px;background:rgba(27,33,43,.97);border:1px solid var(--line);color:#fff;padding:11px 20px;border-radius:999px;font-size:16px;font-weight:600;display:none;pointer-events:none;white-space:nowrap;box-shadow:0 10px 24px rgba(0,0,0,.45)}
 `;
 
 function dexCard(c: (typeof CREATURES)[number]): string {
@@ -228,7 +234,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   const avatar = p.avatarId === "wanderer_female" ? "assets/chars/wanderer-female-v4.png" : "assets/chars/wanderer-v4.png";
   const html = `<style>${CSS}</style><div class="hub-root">
     <div class="pcluster">
-      <div class="pav"><img src="${avatar}" alt=""/><span class="hud-badge" id="hub-lv">${p.level}</span></div>
+      <div class="pav"><img src="${avatar}" alt=""/><span class="hud-badge">Lv.<span id="hub-lv">${p.level}</span></span></div>
       <div class="pmeta"><div class="nm">${p.displayName}</div>
         <div class="hud-exp"><i id="hub-exp-fill" style="width:${Math.min(100, Math.round((p.experience / (100 * p.level)) * 100))}%"></i><span id="hub-exp-txt">EXP ${p.experience}/${100 * p.level}</span></div></div>
     </div>
@@ -247,13 +253,13 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     <div class="toast" id="hub-toast"></div>
     <nav class="hub-nav" id="hub-nav">
       <div class="nav-items">
+      <div class="nh">MENU CHÍNH</div>
       <button data-tab="world" class="on"><span class="nico">${ICONS.world}</span><span>Thế giới</span></button>
       <button data-tab="eidolons"><span class="nico">${ICONS.eidolons}</span><span>Eidolons</span></button>
       <button data-tab="sanctuary"><span class="nico">${ICONS.sanctuary}</span><span>Sanctuary</span></button>
-      <button data-tab="quests"><span class="nico">${ICONS.quests}</span><span>Nhiệm vụ</span></button>
       <button data-tab="menu"><span class="nico">${ICONS.menu}</span><span>Menu</span></button>
       </div>
-      <button class="toggle" id="hub-navtoggle"><span class="nico"><span id="hub-navicon">${ICONS.world}</span><span class="chev"><i class="fa-solid fa-chevron-up"></i></span></span></button>
+      <button class="toggle" id="hub-navtoggle"><span id="hub-navicon">${ICONS.world}</span><span class="chev"><i class="fa-solid fa-chevron-up"></i></span></button>
     </nav></div>`;
   // Plain fixed overlay positioned over the canvas by its own bounding rect.
   // (Phaser's DOM plugin applies its own scale/origin math that misplaces a
@@ -344,12 +350,12 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     const team = items.slice(0, 5);
     partyEl.innerHTML = [
       ...team.map(it => {
-        const def = CREATURES.find(c => c.id === it.creatureId);
         const sp = SPRITES[it.creatureId];
-        const color = ELEMENT_COLOR[def?.element ?? ""] ?? "#9a937f";
-        return `<div class="pslot" data-party title="${it.name} · Lv.${it.level}" style="border-color:${color}">${sp ? `<img src="${sp}" alt=""/>` : `<span class="ph" style="color:${color}">${it.name.charAt(0)}</span>`}<span class="plv">${it.level}</span><span class="gem-dot"></span></div>`;
+        const xpNext = it.level >= 50 ? 0 : 60 + 40 * it.level;
+        const pct = xpNext ? Math.min(100, Math.round((it.experience / xpNext) * 100)) : 100;
+        return `<div class="pmini" data-party title="${it.name} · Lv.${it.level}">${sp ? `<img src="${sp}" alt=""/>` : ""}<span><span class="pn">${it.name}</span> <span class="pl">Lv.${it.level}</span><div class="pbar"><i style="width:${pct}%"></i><span>${it.level >= 50 ? "MAX" : `XP ${it.experience}/${xpNext}`}</span></div></span></div>`;
       }),
-      ...Array(Math.max(0, 5 - team.length)).fill(`<div class="pslot empty" data-party><i class="fa-solid fa-paw"></i></div>`),
+      ...Array(Math.max(0, 5 - team.length)).fill(`<div class="pmini empty" data-party>Ô trống</div>`),
     ].join("");
     partyEl.querySelectorAll("[data-party]").forEach(el => el.addEventListener("click", () => setTab("eidolons")));
   };
@@ -430,8 +436,9 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
         const team = items.slice(0, 5);
         const slots = [...team.map(it => {
           const sp = SPRITES[it.creatureId];
-          return `<div class="slot" data-inst="${it.instanceId}" style="color:#e8e4d8">${sp ? `<img src="${sp}" style="width:52px;height:52px;object-fit:contain" alt=""/>` : ""}<span>${it.name}<br/>Lv.${it.level}</span></div>`;
-        }), ...Array(Math.max(0, 5 - team.length)).fill(`<div class="slot">Ô trống</div>`)].join("");
+          const xpNext = it.level >= 50 ? 0 : 60 + 40 * it.level;
+          return `<div class="slot" data-inst="${it.instanceId}">${sp ? `<img src="${sp}" alt=""/>` : ""}<span><span class="sn">${it.name}</span><br/><span class="sl2">Lv.${it.level} · ${it.level >= 50 ? "MAX" : `XP ${it.experience}/${xpNext}`}</span></span></div>`;
+        }), ...Array(Math.max(0, 5 - team.length)).fill(`<div class="slot empty">Ô trống</div>`)].join("");
         const dex = CREATURES.map(c => {
           const n = ownedSpecies.get(c.id) ?? 0;
           const card = dexCard(c);
@@ -450,27 +457,27 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
           const xpNext = it.level >= 50 ? 0 : 60 + 40 * it.level;
           const xpPct = xpNext ? Math.min(100, Math.round((it.experience / xpNext) * 100)) : 100;
           const hearts = Array.from({ length: 10 }, (_, i) => `<i class="fa-solid fa-heart ${i < it.bondLevel ? "" : "off"}"></i>`).join("");
-          const skills = skillsOf(it.creatureId).map(sk => `<div class="sk"><span>${sk.name}</span>${sk.slot === 3 ? `<span class="tag">CHIÊU CUỐI</span>` : sk.slot === 2 ? `<span class="tag">KỸ NĂNG</span>` : `<span class="tag">ĐÒN THƯỜNG</span>`}</div>`).join("");
+          const skills = skillsOf(it.creatureId).map(sk => `<div class="sk"><span class="sic" style="background:${ELEMENT_COLOR[it.element]}"><i class="fa-solid ${sk.slot === 3 ? "fa-star" : sk.slot === 2 ? "fa-shield-halved" : "fa-paw"}"></i></span><span>${sk.name}</span>${sk.slot === 3 ? `<span class="tag">CHIÊU CUỐI</span>` : sk.slot === 2 ? `<span class="tag">KỸ NĂNG</span>` : `<span class="tag">ĐÒN THƯỜNG</span>`}</div>`).join("");
           const sp = SPRITES[it.creatureId];
           sub.textContent = `Chi tiết Eidolon`;
           body.innerHTML = `<button class="qclaim" id="dt-back" style="margin:0 0 12px">← Bộ sưu tập</button>
             <div class="dt-head">${sp ? `<img src="${sp}" alt="${it.name}"/>` : `<span class="ph" style="color:${ELEMENT_COLOR[it.element]}">${it.name.slice(0, 1)}</span>`}
-              <div><h3 style="font-family:'Baloo 2',sans-serif;font-size:27px;color:#f7ead0">${it.name} · Lv.${it.level}</h3>
+              <div><h3 style="font-family:'Baloo 2',sans-serif;font-size:27px;color:#fff">${it.name} · Lv.${it.level}</h3>
               <div class="meta"><span class="chip" style="background:${ELEMENT_COLOR[it.element]}">${ELEMENT_VI[it.element] ?? it.element}</span> <span class="rar" style="color:${ELEMENT_COLOR[it.element]}">${RARITY_VI[it.rarity]}</span></div>
               <div class="meta">${ROLE_VI[it.role]} · ${def.habitat || "Chưa rõ nơi sống"}</div>
-              <div class="hearts" style="margin-top:6px">${hearts}<span style="color:#c9b18a;font-size:13.5px;letter-spacing:0"> Bond ${it.bondLevel}/10</span></div></div></div>
+              <div class="hearts" style="margin-top:6px">${hearts}<span style="color:#aeb9c4;font-size:13.5px;letter-spacing:0"> Bond ${it.bondLevel}/10</span></div></div></div>
             <div class="qobj" style="margin-top:12px"><span>Kinh nghiệm</span><span class="st">${it.level >= 50 ? "MAX" : `${it.experience}/${xpNext} XP`}</span></div>
             <div class="bar"><i style="width:${xpPct}%"></i></div>
-            ${def.descriptionVi ? `<p style="font-size:15px;color:#c9b18a;margin-top:10px">${def.descriptionVi}</p>` : ""}
+            ${def.descriptionVi ? `<p style="font-size:15px;color:#c3ccd4;margin-top:10px">${def.descriptionVi}</p>` : ""}
             <div class="dt-grid">
               <div class="dt-stat"><b>${st.hp}</b><span>MÁU (HP)</span></div>
               <div class="dt-stat"><b>${st.atk}</b><span>TẤN CÔNG</span></div>
               <div class="dt-stat"><b>${st.def}</b><span>PHÒNG THỦ</span></div>
               <div class="dt-stat"><b>${st.spd}</b><span>TỐC ĐỘ</span></div>
             </div>
-            ${def.traitName ? `<div class="hub-sec">Đặc tính — ${def.traitName}</div><p style="font-size:15px;color:#c9b18a">${def.traitDescVi || ""}</p>` : ""}
+            ${def.traitName ? `<div class="hub-sec">Đặc tính — ${def.traitName}</div><p style="font-size:15px;color:#c3ccd4">${def.traitDescVi || ""}</p>` : ""}
             <div class="hub-sec">Kỹ năng</div>${skills}
-            ${def.evolutionBranches.length ? `<div class="hub-sec">Nhánh tiến hoá</div><p style="font-size:15px;color:#c9b18a">${def.evolutionBranches.join(" · ")}<br/>Yêu cầu: Lv.16 + 1 Evolution Core cho mỗi lần tiến hoá.</p>` : ""}`;
+            ${def.evolutionBranches.length ? `<div class="hub-sec">Nhánh tiến hoá</div><p style="font-size:15px;color:#c3ccd4">${def.evolutionBranches.join(" · ")}<br/>Yêu cầu: Lv.16 + 1 Evolution Core cho mỗi lần tiến hoá.</p>` : ""}`;
           (body.querySelector("#dt-back") as HTMLElement).addEventListener("click", () => renderers.eidolons());
         };
         body.querySelectorAll<HTMLElement>(".slot[data-inst]").forEach(el => el.addEventListener("click", () => { const it = byId.get(el.dataset.inst!); if (it) showDetail(it); }));
