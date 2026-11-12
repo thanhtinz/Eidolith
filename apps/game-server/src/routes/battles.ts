@@ -9,7 +9,7 @@ import type { BattleResponse, BattleTeamUnit } from "@eidolith/shared-types";
 import { query } from "../db.js";
 import { ApiError, Errors, ok } from "../http.js";
 import { requireAuth, type AuthedRequest } from "../middleware.js";
-import { applyBattleRewards } from "../progression.js";
+import { applyBattleRewards, grantBossBonus } from "../progression.js";
 
 export const battlesRouter = Router();
 battlesRouter.use(requireAuth);
@@ -49,6 +49,7 @@ function buildEnemyTeam(count: number, avgLevel: number, rng: () => number): Bat
 battlesRouter.post("/battles", async (req: AuthedRequest, res, next) => {
   try {
     const playerId = await profileIdOf(req.userId!);
+    const mode = (req.body as { mode?: unknown })?.mode === "boss" ? "boss" : "practice";
     const instanceIds = (req.body as { instanceIds?: unknown })?.instanceIds;
     if (!Array.isArray(instanceIds) || instanceIds.length < 1 || instanceIds.length > 5
       || !instanceIds.every(x => typeof x === "string"))
@@ -65,16 +66,35 @@ battlesRouter.post("/battles", async (req: AuthedRequest, res, next) => {
     });
     const avgLevel = Math.round(playerUnits.reduce((a, u) => a + u.level, 0) / playerUnits.length);
     const seed = Math.floor(Math.random() * 2 ** 31);
-    const enemyUnits = buildEnemyTeam(playerUnits.length, avgLevel, Math.random);
+    // Phase 5b boss (Part 3 §45.1): Ancient Treant Lv.18 + 2 Pebblit Lv.10,
+    // tuned by simulation — docs/PHASE5B-SANCTUARY-BOSS-SIDEQUESTS-v1.md §2.
+    const enemyUnits = mode === "boss"
+      ? [buildUnitInit("1-0", "EID-B01", 18, 1, 0),
+         buildUnitInit("1-1", "EID-004", 10, 1, 1),
+         buildUnitInit("1-2", "EID-004", 10, 1, 2)]
+      : buildEnemyTeam(playerUnits.length, avgLevel, Math.random);
+    let bossFirstWinToday = false;
+    if (mode === "boss") {
+      const { rows: prior } = await query<{ n: string }>(
+        `SELECT COUNT(*) AS n FROM combat.battles WHERE player_id = $1 AND mode = 'boss' AND winner = 0 AND created_at::date = CURRENT_DATE`,
+        [playerId]);
+      bossFirstWinToday = Number(prior[0].n) === 0;
+    }
     const result = runBattle(seed, [...playerUnits, ...enemyUnits]);
     const playerTeam = playerUnits.map(toTeamUnit);
     const enemyTeam = enemyUnits.map(toTeamUnit);
     const { rows: saved } = await query<{ battle_id: string }>(
       `INSERT INTO combat.battles (player_id, mode, seed, player_team, enemy_team, events, winner, ticks, result_hash)
-       VALUES ($1, 'practice', $2, $3, $4, $5, $6, $7, $8) RETURNING battle_id`,
+       VALUES ($1, $9, $2, $3, $4, $5, $6, $7, $8) RETURNING battle_id`,
       [playerId, seed, JSON.stringify(playerTeam), JSON.stringify(enemyTeam),
-       JSON.stringify(result.events), result.winner, result.ticks, result.hash]);
-    const rewards = await applyBattleRewards(playerId, instanceIds, result.winner, avgLevel);
+       JSON.stringify(result.events), result.winner, result.ticks, result.hash, mode]);
+    const rewards = await applyBattleRewards(playerId, instanceIds, result.winner, mode === "boss" ? Math.max(avgLevel, 13) : avgLevel);
+    if (mode === "boss" && result.winner === 0) {
+      const bonus = await grantBossBonus(playerId, bossFirstWinToday);
+      rewards.gold += bonus.gold;
+      rewards.evolutionCore += bonus.evolutionCore;
+      rewards.playerXp += bonus.playerXp;
+    }
     const payload: BattleResponse = {
       battleId: saved[0].battle_id, seed, winner: result.winner, ticks: result.ticks,
       hash: result.hash, teams: [...playerTeam, ...enemyTeam], events: result.events,

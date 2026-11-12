@@ -14,7 +14,7 @@ def prop(o, n):
         if p["name"] == n:
             return p["value"]
 
-for map_id in ["meadow_village", "whispering_forest"]:
+for map_id in ["meadow_village", "whispering_forest", "ancient_grove"]:
     m = json.load(open(f"{MAPS}/{map_id}.json"))
     w, h = m["width"], m["height"]
     img = Image.new("RGB", (w * S, h * S), (40, 60, 35))

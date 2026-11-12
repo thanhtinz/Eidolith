@@ -89,7 +89,19 @@ export const CREATURES: CreatureDef[] = [
   creature({ id: "EID-019", name: "Glacibear", element: "Frost", rarity: "Epic", role: "Guardian", habitat: "", descriptionVi: "", skillNames: ["Ice Smash", "Frozen Roar", "Glacier Wall"], traitName: "", traitDescVi: "", evolutionBranches: ["Frostmaw", "Polar Titan"] }),
   creature({ id: "EID-020", name: "Tempestray", element: "Volt", rarity: "Epic", role: "Striker", habitat: "", descriptionVi: "", skillNames: ["Lightning Dash", "Thunder Claw", "Tempest Nova"], traitName: "", traitDescVi: "", evolutionBranches: ["Stormreaver", "Thunderlord"] }),
 ];
-export const creatureById = (id: string) => CREATURES.find(c => c.id === id);
+/** Boss defs (Part 3 §45) — deliberately OUTSIDE the collectible roster:
+ *  the content validator locks CREATURES at 20, and bosses must never be
+ *  captured, summoned, listed in the dex or rolled as random enemies.
+ *  Stats are explicit (not the role×rarity formula): boss-tuned baselines,
+ *  see docs/PHASE5B-SANCTUARY-BOSS-SIDEQUESTS-v1.md §2. */
+export const BOSSES: CreatureDef[] = [
+  { id: "EID-B01", name: "Ancient Treant", element: "Grove", rarity: "Legendary", role: "Guardian",
+    habitat: "Ancient Grove", descriptionVi: "Cổ thụ nghìn năm trấn giữ Ancient Grove — Area Guardian của Verdant Plains.",
+    skillNames: ["Root Slam", "Forest Barrier", "Ancient Roar"], traitName: "Ancient Core", traitDescVi: "",
+    evolutionBranches: [], baseStats: { hp: 660, atk: 48, def: 22, spd: 9 },
+    growthCurveId: "growth_guardian_standard", assetKey: "boss_eid_b01" },
+];
+export const creatureById = (id: string) => CREATURES.find(c => c.id === id) ?? BOSSES.find(c => c.id === id);
 
 /** Content validation (TDD §9.3): unique ids, valid enums, 3 skills, >=2 evolution branches. */
 export function validateGameData(): string[] {
@@ -121,6 +133,11 @@ export * from "./maps.js";
  *  relative; levels are inclusive ranges rolled by the server per spawn. */
 export interface EncounterEntry { creatureId: string; weight: number; minLevel: number; maxLevel: number; }
 export const ENCOUNTER_TABLES: Record<string, EncounterEntry[]> = {
+  ancient_grove: [
+    { creatureId: "EID-011", weight: 40, minLevel: 8, maxLevel: 11 },
+    { creatureId: "EID-004", weight: 30, minLevel: 8, maxLevel: 10 },
+    { creatureId: "EID-006", weight: 30, minLevel: 8, maxLevel: 11 },
+  ],
   whispering_forest: [
     { creatureId: "EID-002", weight: 40, minLevel: 2, maxLevel: 4 },
     { creatureId: "EID-005", weight: 20, minLevel: 2, maxLevel: 4 },
@@ -203,7 +220,7 @@ function buildSkills(c: CreatureDef): SkillDefinition[] {
   }
   return [s1, s2, ult];
 }
-export const SKILLS: Record<string, SkillDefinition[]> = Object.fromEntries(CREATURES.map(c => [c.id, buildSkills(c)]));
+export const SKILLS: Record<string, SkillDefinition[]> = Object.fromEntries([...CREATURES, ...BOSSES].map(c => [c.id, buildSkills(c)]));
 export const skillsOf = (creatureId: string): SkillDefinition[] => SKILLS[creatureId] ?? [];
 
 /** Level scaling (PHASE4 baseline): +8% per level on hp/atk/def; spd flat so

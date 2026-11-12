@@ -3,5 +3,6 @@ export interface MapDef { id: string; nameVi: string; regionId: string; file: st
 export const MAPS: MapDef[] = [
   { id: "meadow_village", nameVi: "Meadow Village", regionId: "verdant_plains", file: "meadow_village.json", priority: "P0" },
   { id: "whispering_forest", nameVi: "Whispering Forest", regionId: "verdant_plains", file: "whispering_forest.json", priority: "P0" },
+  { id: "ancient_grove", nameVi: "Ancient Grove", regionId: "verdant_plains", file: "ancient_grove.json", priority: "P1" },
 ];
 export const mapById = (id: string) => MAPS.find(m => m.id === id);

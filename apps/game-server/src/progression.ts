@@ -8,7 +8,7 @@
 import type { PoolClient } from "pg";
 import { pool, query } from "./db.js";
 import { ApiError } from "./http.js";
-import type { BattleRewards, QuestStateResponse, QuestView } from "@eidolith/shared-types";
+import type { BattleRewards, QuestStateResponse, QuestView, SideQuestView } from "@eidolith/shared-types";
 
 /* ------------------------------ curves ------------------------------ */
 export const creatureXpForNext = (level: number): number => 60 + 40 * level;
@@ -36,6 +36,57 @@ export const QUESTS: QuestDef[] = [
 ];
 const questByKey = new Map(QUESTS.map(q => [q.key, q]));
 
+/* --------------------------- side quests ------------------------------ */
+/** Part 10 side quests (MVP frame + the 3 village NPCs). Part 10 names no
+ *  concrete side quests, so these are Bé's, built on the existing objective
+ *  kinds; progress counts only AFTER accepting at the NPC. */
+export interface SideQuestDef {
+  key: string; title: string; npcName: string; npcRole: string;
+  giverText: string; progressText: string;
+  kind: ObjectiveKind; target: number; rewards: { currency: string; amount: number }[];
+}
+export const SIDE_QUESTS: SideQuestDef[] = [
+  { key: "side_rowan_wins", title: "Lời dạy của trưởng lão", npcName: "Elder Rowan", npcRole: "Trưởng làng",
+    giverText: "Đội hình chỉ mạnh khi được thử lửa, Wanderer. Hãy thắng 3 trận đấu trường rồi quay lại gặp ta.",
+    progressText: "Đấu trường đang chờ. Thắng đủ 3 trận rồi quay lại đây.",
+    kind: "battle_won", target: 3, rewards: [{ currency: "gold", amount: 60 }] },
+  { key: "side_mira_capture", title: "Người bạn rừng xanh", npcName: "Mira", npcRole: "Nhà nghiên cứu Resonance",
+    giverText: "Ta cần quan sát thêm Eidolon hoang dã ở cự ly gần. Bắt 3 con trong rừng rồi về báo ta nhé.",
+    progressText: "Rừng Whispering đang nhiều Eidolon lắm. Bắt đủ 3 con rồi quay lại nhé.",
+    kind: "captured", target: 3, rewards: [{ currency: "gold", amount: 40 }, { currency: "crystal", amount: 10 }] },
+  { key: "side_kael_battles", title: "Thử thách đầu tiên", npcName: "Kael", npcRole: "Người dẫn đường",
+    giverText: "Muốn đi xa thì đừng ngại va chạm. Chơi 5 trận đấu trường — thắng thua không quan trọng — rồi về gặp ta.",
+    progressText: "Cứ đấu đủ 5 trận, thắng thua tính sau. Ta chờ ở đây.",
+    kind: "battle_played", target: 5, rewards: [{ currency: "evolution_core", amount: 1 }] },
+];
+const sideByKey = new Map(SIDE_QUESTS.map(q => [q.key, q]));
+
+/** Add bond points to one creature (battle rewards + Sanctuary collect),
+ *  rolling points into bond levels with the Phase 5 caps. */
+export async function addBondPoints(client: PoolClient, playerId: string, instanceId: string, points: number): Promise<void> {
+  if (points <= 0) return;
+  const { rows } = await client.query<{ bond_level: number; bond_points: number }>(
+    `SELECT bond_level, bond_points FROM creatures.creature_instances WHERE id = $1 AND player_id = $2 FOR UPDATE`, [instanceId, playerId]);
+  if (!rows.length) return;
+  let bond_level = Number(rows[0].bond_level), bond_points = Number(rows[0].bond_points) + points;
+  while (bond_points >= BOND_POINTS_PER_LEVEL && bond_level < MAX_BOND) { bond_points -= BOND_POINTS_PER_LEVEL; bond_level++; }
+  if (bond_level >= MAX_BOND) bond_points = Math.min(bond_points, BOND_POINTS_PER_LEVEL - 1);
+  await client.query(`UPDATE creatures.creature_instances SET bond_level=$1, bond_points=$2, updated_at=now() WHERE id=$3`, [bond_level, bond_points, instanceId]);
+}
+
+/** Grant XP to one creature (Sanctuary training). Returns the new level. */
+export async function grantCreatureXp(client: PoolClient, playerId: string, instanceId: string, xp: number): Promise<number | null> {
+  if (xp <= 0) return null;
+  const { rows } = await client.query<{ level: number; experience: number }>(
+    `SELECT level, experience FROM creatures.creature_instances WHERE id = $1 AND player_id = $2 FOR UPDATE`, [instanceId, playerId]);
+  if (!rows.length) return null;
+  let level = Number(rows[0].level), experience = Number(rows[0].experience) + xp;
+  while (level < MAX_LEVEL && experience >= creatureXpForNext(level)) { experience -= creatureXpForNext(level); level++; }
+  if (level >= MAX_LEVEL) experience = 0;
+  await client.query(`UPDATE creatures.creature_instances SET level=$1, experience=$2, updated_at=now() WHERE id=$3`, [level, experience, instanceId]);
+  return level;
+}
+
 /** Advance every quest (arc + today's dailies) matching an objective kind. */
 export async function bumpObjectives(client: PoolClient, playerId: string, kind: ObjectiveKind, n = 1): Promise<void> {
   for (const def of QUESTS) {
@@ -51,6 +102,13 @@ export async function bumpObjectives(client: PoolClient, playerId: string, kind:
          ON CONFLICT (player_id, day, quest_key) DO UPDATE SET progress = LEAST(progression.daily_progress.progress + $3, $4)`,
         [playerId, def.key, Math.min(n, def.target), def.target]);
     }
+  }
+  for (const def of SIDE_QUESTS) {
+    if (def.kind !== kind) continue;
+    await client.query(
+      `UPDATE progression.side_progress SET progress = LEAST(progress + $2, $3)
+       WHERE player_id = $1 AND quest_key = $4 AND claimed_at IS NULL`,
+      [playerId, n, def.target, def.key]);
   }
 }
 
@@ -137,11 +195,82 @@ export async function questState(playerId: string): Promise<QuestStateResponse> 
       complete: progress >= def.target, claimed: Boolean(row?.claimed_at), rewards: def.rewards,
     };
   };
+  const sideRows = await query<{ quest_key: string; progress: number; claimed_at: string | null }>(
+    `SELECT quest_key, progress, claimed_at FROM progression.side_progress WHERE player_id = $1`, [playerId]);
+  const sideMap = new Map(sideRows.rows.map(r => [r.quest_key, r]));
+  const side: SideQuestView[] = SIDE_QUESTS.map(def => {
+    const row = sideMap.get(def.key);
+    const progress = row?.progress ?? 0;
+    const state: SideQuestView["state"] = !row ? "available" : row.claimed_at ? "claimed"
+      : progress >= def.target ? "complete" : "active";
+    return {
+      key: def.key, title: def.title, npcName: def.npcName, npcRole: def.npcRole,
+      giverText: def.giverText, progressText: def.progressText,
+      target: def.target, progress, state, rewards: def.rewards,
+    };
+  });
   return {
     day: dayRow.rows[0].day,
     arc: QUESTS.filter(q => q.scope === "arc").map(d => view(d, arcMap.get(d.key))),
     daily: QUESTS.filter(q => q.scope === "daily").map(d => view(d, dailyMap.get(d.key))),
+    side,
   };
+}
+
+export async function acceptSideQuest(playerId: string, key: string): Promise<void> {
+  const def = sideByKey.get(key);
+  if (!def) throw new ApiError(404, "QUEST_NOT_FOUND", "Nhiệm vụ không tồn tại");
+  const { rows } = await query<{ quest_key: string }>(
+    `SELECT quest_key FROM progression.side_progress WHERE player_id = $1 AND quest_key = $2`, [playerId, key]);
+  if (rows.length) throw new ApiError(422, "QUEST_ALREADY_ACCEPTED", "Đã nhận nhiệm vụ này rồi");
+  await query(`INSERT INTO progression.side_progress (player_id, quest_key) VALUES ($1, $2)`, [playerId, key]);
+}
+
+export async function claimSideQuest(playerId: string, key: string): Promise<{ rewards: { currency: string; amount: number }[] }> {
+  const def = sideByKey.get(key);
+  if (!def) throw new ApiError(404, "QUEST_NOT_FOUND", "Nhiệm vụ không tồn tại");
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const { rows } = await client.query<{ progress: number; claimed_at: string | null }>(
+      `SELECT progress, claimed_at FROM progression.side_progress WHERE player_id = $1 AND quest_key = $2 FOR UPDATE`, [playerId, key]);
+    const row = rows[0];
+    if (!row) throw new ApiError(422, "QUEST_NOT_ACCEPTED", "Chưa nhận nhiệm vụ này");
+    if (row.claimed_at) throw new ApiError(422, "QUEST_ALREADY_CLAIMED", "Đã nhận thưởng nhiệm vụ này rồi");
+    if (row.progress < def.target) throw new ApiError(422, "QUEST_NOT_COMPLETE", "Nhiệm vụ chưa hoàn thành");
+    for (const r of def.rewards) await grantCurrency(client, playerId, r.currency, r.amount, "quest_reward");
+    await client.query(`UPDATE progression.side_progress SET claimed_at = now() WHERE player_id = $1 AND quest_key = $2`, [playerId, key]);
+    await client.query("COMMIT");
+    return { rewards: def.rewards };
+  } catch (e) {
+    await client.query("ROLLBACK").catch(() => undefined);
+    throw e;
+  } finally { client.release(); }
+}
+
+/** Boss clear bonus (Phase 5b): currencies + extra player XP, own tx.
+ *  Full reward only for the day's first boss win (anti Core-farming). */
+export async function grantBossBonus(playerId: string, firstWinToday: boolean): Promise<{ gold: number; evolutionCore: number; playerXp: number }> {
+  const gold = firstWinToday ? 120 : 30;
+  const evolutionCore = firstWinToday ? 1 : 0;
+  const playerXp = firstWinToday ? 30 : 8;
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    await grantCurrency(client, playerId, "gold", gold, "boss_reward");
+    if (evolutionCore) await grantCurrency(client, playerId, "evolution_core", evolutionCore, "boss_reward");
+    const prof = await client.query<{ level: number; experience: number }>(
+      `SELECT level, experience FROM players.player_profiles WHERE id = $1 FOR UPDATE`, [playerId]);
+    let pLevel = Number(prof.rows[0].level), pXp = Number(prof.rows[0].experience) + playerXp;
+    while (pLevel < MAX_LEVEL && pXp >= playerXpForNext(pLevel)) { pXp -= playerXpForNext(pLevel); pLevel++; }
+    if (pLevel >= MAX_LEVEL) pXp = 0;
+    await client.query(`UPDATE players.player_profiles SET level=$1, experience=$2, updated_at=now() WHERE id=$3`, [pLevel, pXp, playerId]);
+    await client.query("COMMIT");
+    return { gold, evolutionCore, playerXp };
+  } catch (e) {
+    await client.query("ROLLBACK").catch(() => undefined);
+    throw e;
+  } finally { client.release(); }
 }
 
 export async function claimQuest(playerId: string, scope: string, key: string): Promise<{ rewards: { currency: string; amount: number }[] }> {

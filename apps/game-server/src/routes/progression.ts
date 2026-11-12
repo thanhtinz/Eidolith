@@ -4,7 +4,7 @@ import { ok } from "../http.js";
 import { requireAuth, type AuthedRequest } from "../middleware.js";
 import { query } from "../db.js";
 import { Errors } from "../http.js";
-import { questState, claimQuest } from "../progression.js";
+import { questState, claimQuest, acceptSideQuest, claimSideQuest } from "../progression.js";
 
 export const progressionRouter = Router();
 progressionRouter.use(requireAuth);
@@ -19,6 +19,23 @@ progressionRouter.get("/progression/quests", async (req: AuthedRequest, res, nex
   try {
     const playerId = await profileIdOf(req.userId!);
     ok(req, res, await questState(playerId));
+  } catch (e) { next(e); }
+});
+
+// Side quests (Phase 5b): accept/claim at the NPC. Registered before the
+// generic ":scope/:key/claim" route so "side" is never parsed as a scope.
+progressionRouter.post("/progression/quests/side/:key/accept", async (req: AuthedRequest, res, next) => {
+  try {
+    const playerId = await profileIdOf(req.userId!);
+    await acceptSideQuest(playerId, req.params.key);
+    ok(req, res, await questState(playerId));
+  } catch (e) { next(e); }
+});
+
+progressionRouter.post("/progression/quests/side/:key/claim", async (req: AuthedRequest, res, next) => {
+  try {
+    const playerId = await profileIdOf(req.userId!);
+    ok(req, res, await claimSideQuest(playerId, req.params.key));
   } catch (e) { next(e); }
 });
 

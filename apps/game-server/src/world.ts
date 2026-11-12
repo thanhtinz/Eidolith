@@ -17,7 +17,7 @@ const prop = (o: MapObject, n: string) => o.properties?.find(p => p.name === n)?
 const mapsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "packages", "game-data", "maps");
 const SPAWNS = new Map<string, Map<string, { x: number; y: number }>>();
 const WILD_POINTS = new Map<string, { x: number; y: number }[]>();
-for (const mapId of ["meadow_village", "whispering_forest"]) {
+for (const mapId of ["meadow_village", "whispering_forest", "ancient_grove"]) {
   const map = JSON.parse(readFileSync(join(mapsDir, `${mapId}.json`), "utf8")) as MapFile;
   const objects = map.layers.find(l => l.name === "objects")?.objects ?? [];
   const spawns = new Map<string, { x: number; y: number }>();
