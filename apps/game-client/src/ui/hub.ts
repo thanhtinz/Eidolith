@@ -77,7 +77,9 @@ const CSS = `
 .mdot{position:absolute;width:11px;height:11px;border-radius:50%;background:var(--sel);border:2px solid #26303a;transform:translate(-50%,-50%);box-shadow:0 0 7px rgba(255,216,61,.9);z-index:2}
 .mname{position:absolute;right:-4px;bottom:-11px;background:var(--plate);color:#fff;font-size:12.5px;font-weight:700;text-align:center;padding:5px 14px;border:1px solid var(--line);border-radius:999px;white-space:nowrap;z-index:3;box-shadow:0 6px 14px rgba(0,0,0,.4)}
 .mmeta{font-size:12.5px;color:#fff;background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:6px 13px;pointer-events:auto;margin-top:15px;box-shadow:0 6px 14px rgba(0,0,0,.35)}
-.mmeta #hub-clock{color:var(--sel)}
+.mmeta #hub-clock{color:var(--sel);font-weight:800}
+.mmeta .wsep{color:#aeb9c4;margin:0 7px}
+.mmeta #hub-wicon{color:var(--sel);margin-right:5px}
 .party{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:8px;pointer-events:auto}
 .pmini{display:flex;align-items:center;gap:8px;background:var(--plate);border:1px solid var(--line);border-radius:12px;padding:6px 12px 6px 6px;box-shadow:0 8px 20px rgba(10,15,20,.4);cursor:pointer}
 .pmini img{width:36px;height:36px;object-fit:contain}
@@ -229,7 +231,8 @@ export interface HubHandle {
   openEncounter: (enc: EncounterUi) => void;
 }
 
-export interface HubHudInfo { mapLabel: string; weatherLabel: string; startMinutes: number; players: number; mapId: string; mapW: number; mapH: number; }
+export interface HubHudInfo { mapLabel: string; weatherLabel: string; weatherKey: string; startMinutes: number; players: number; mapId: string; mapW: number; mapH: number; }
+const WEATHER_ICON: Record<string, string> = { clear: "fa-sun", cloudy: "fa-cloud", rain: "fa-cloud-rain", wind: "fa-wind", storm: "fa-cloud-bolt", fog: "fa-smog", snow: "fa-snowflake" };
 export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hud: HubHudInfo; onLogout: () => void; onArena?: () => void }): HubHandle {
   const p = opts.profile;
   const regionName = p.currentRegion.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
@@ -247,7 +250,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
         <div class="cur gem"><span class="coin">${TOP_ICONS.gem}</span><span id="w-crystal">—</span></div>
       </div>
       <div class="minimap-wrap"><span class="tick" style="left:50%;top:-4px;transform:translateX(-50%)"></span><span class="tick" style="left:50%;bottom:-4px;transform:translateX(-50%)"></span><span class="tick" style="top:50%;left:-4px;transform:translateY(-50%)"></span><span class="tick" style="top:50%;right:-4px;transform:translateY(-50%)"></span><div class="minimap"><div class="minimap-inner"><img src="assets/maps/minimap-${opts.hud.mapId}.png" alt=""/><span class="mdot" id="hub-mdot" style="left:50%;top:50%"></span></div></div><div class="mname">${opts.hud.mapLabel}</div></div>
-      <div class="mmeta"><span id="hub-clock"></span> · ${opts.hud.weatherLabel} · <span id="hub-players">${opts.hud.players}</span> người chơi</div>
+      <div class="mmeta"><span id="hub-clock"></span><span class="wsep">|</span><i id="hub-wicon" class="fa-solid ${WEATHER_ICON[opts.hud.weatherKey] ?? "fa-cloud-sun"}"></i> ${opts.hud.weatherLabel} · <span id="hub-players">${opts.hud.players}</span> người chơi</div>
     </div>
     <div class="party" id="hub-party"></div>
     <section class="hub-panel" id="hub-panel"><header><div><h2 id="hub-title"></h2><div class="sub" id="hub-sub"></div></div><button class="x" id="hub-close"><i class="fa-solid fa-xmark"></i></button></header><div class="hub-body" id="hub-body"></div></section>
@@ -288,7 +291,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   const playersEl = root.querySelector("#hub-players") as HTMLElement;
   const drawClock = () => {
     const h = Math.floor(minutes / 60) % 24, m = Math.floor(minutes % 60);
-    clockEl.textContent = `Giờ thế giới: ${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+    clockEl.textContent = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
   };
   drawClock();
   const clockTimer = window.setInterval(() => { minutes = (minutes + 0.4) % 1440; drawClock(); }, 1000);

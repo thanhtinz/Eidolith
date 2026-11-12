@@ -35,9 +35,12 @@ joystick (HudScene), form đăng nhập (LoginScene + `index.html`).
   gradient slate, vạch ngọc lục bảo `#2fae9b` ở mép trái thẻ nhân vật;
   huy hiệu "Lv.N" thành pill vàng nằm giữa dưới avatar.
 - Tiền: hai loại gộp vào **một dải pill** duy nhất (icon + số), không kèm giờ.
-- **Giờ thế giới + thời tiết: tách riêng thành pill nhỏ nằm dưới minimap**
-  (dòng `.mmeta`: giờ · thời tiết · số người chơi) — lệnh riêng của Tín,
-  không gộp vào dải tiền.
+- **Giờ thế giới + thời tiết: tách riêng thành pill nhỏ nằm dưới minimap** —
+  lệnh riêng của Tín, không gộp vào dải tiền. Định dạng pill (Tín chốt
+  2026-11-11 20:40): `HH:MM | <icon thời tiết> <nhãn>` rồi mới tới
+  `· N người chơi`. Icon theo loại thời tiết Part 8 §14 (fa-sun / fa-cloud /
+  fa-cloud-rain / fa-wind / fa-cloud-bolt / fa-smog / fa-snowflake);
+  server đã bổ sung loại `wind` ("Gió mạnh") vào vòng quay thời tiết.
 - Minimap thành mặt la bàn: vòng vàng inset trong viền slate + 4 chấm
   vàng ở 4 hướng; chấm vị trí người chơi giữ nguyên.
 

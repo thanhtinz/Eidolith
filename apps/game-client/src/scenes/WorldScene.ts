@@ -58,12 +58,12 @@ export class WorldScene extends Phaser.Scene {
     this.buildMap(snap.world.mapId, snap);
     for (const w of snap.wilds ?? []) this.addWild(w);
     this.launchHud(snap);
-    const weatherVi: Record<string, string> = { clear: "Quang đãng", cloudy: "Nhiều mây", rain: "Mưa" };
+    const weatherVi: Record<string, string> = { clear: "Quang đãng", cloudy: "Nhiều mây", rain: "Mưa", wind: "Gió mạnh", storm: "Bão", fog: "Sương mù", snow: "Tuyết" };
     this.hub = mountHub(this, {
       profile: this.profile,
       hud: {
         mapLabel: `${mapById(snap.world.mapId)?.nameVi ?? snap.world.mapId} — Verdant Plains`,
-        weatherLabel: weatherVi[snap.world.weather] ?? snap.world.weather,
+        weatherLabel: weatherVi[snap.world.weather] ?? snap.world.weather, weatherKey: snap.world.weather,
         startMinutes: snap.world.time.hour * 60 + snap.world.time.minute,
         players: snap.players.length + 1,
         mapId: snap.world.mapId,
@@ -191,7 +191,7 @@ export class WorldScene extends Phaser.Scene {
 
   private launchHud(snap: WorldSnapshot): void {
     const def = mapById(this.mapId);
-    const weatherVi: Record<string, string> = { clear: "Quang đãng", cloudy: "Nhiều mây", rain: "Mưa" };
+    const weatherVi: Record<string, string> = { clear: "Quang đãng", cloudy: "Nhiều mây", rain: "Mưa", wind: "Gió mạnh", storm: "Bão", fog: "Sương mù", snow: "Tuyết" };
     const data: HudData = {
       mapLabel: `${def?.nameVi ?? this.mapId} — Verdant Plains`,
       weatherLabel: weatherVi[snap.world.weather] ?? snap.world.weather,

@@ -30,7 +30,7 @@ export function worldClock(now = Date.now()) {
   const dayMinutes = Math.floor(((now % cycleMs) / cycleMs) * 1440);
   return { hour: Math.floor(dayMinutes / 60), minute: dayMinutes % 60, cycleMinutes: 60 };
 }
-const WEATHERS = ["clear", "clear", "clear", "cloudy", "rain"] as const;
+const WEATHERS = ["clear", "clear", "clear", "cloudy", "rain", "wind"] as const;
 export function weatherFor(regionId: string, now = Date.now()) {
   const window = Math.floor(now / (30 * 60 * 1000));
   let h = window;
