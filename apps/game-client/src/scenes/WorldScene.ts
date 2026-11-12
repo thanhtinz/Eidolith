@@ -3,14 +3,13 @@ import type { PlayerProfile, WildSpawnInfo } from "@eidolith/shared-types";
 import { NavGrid, findPath, gridToIso, isoToGrid } from "@eidolith/navigation-core";
 import { mapById, creatureById } from "@eidolith/game-data";
 import { network, type RemotePlayer, type WorldSnapshot } from "../net/NetworkManager";
-import { joyState } from "../state";
 import { mountHub, type HubHandle } from "../ui/hub";
 import type { BattleResponse, OwnedCreature } from "@eidolith/shared-types";
 import type { HudData } from "./HudScene";
 import meadowVillage from "@eidolith/game-data/maps/meadow_village.json";
 import whisperingForest from "@eidolith/game-data/maps/whispering_forest.json";
 // World — Phase 2: real isometric world (World Part 8). Tiled maps rendered at the locked
-// 64x32 tile, tap-to-move + virtual joystick, A* pathfinding, camera follow/bounds,
+// 64x32 tile, tap-to-move (tap anywhere to walk), A* pathfinding, camera follow/bounds,
 // portals between maps, other players via WebSocket snapshot/events, world clock + weather HUD.
 const MAP_JSON: Record<string, unknown> = { meadow_village: meadowVillage, whispering_forest: whisperingForest };
 interface TiledObject { name: string; type: string; properties?: { name: string; value: unknown }[]; }
@@ -307,10 +306,8 @@ export class WorldScene extends Phaser.Scene {
 
 
   private onTap(pointer: Phaser.Input.Pointer): void {
-    if (joyState.active || this.changingMap) return;
+    if (this.changingMap) return;
     const worldPoint = pointer.positionToCamera(this.cameras.main) as Phaser.Math.Vector2;
-    // Ignore taps on the joystick corner.
-    if (pointer.x < 210 && pointer.y > this.scale.height - 310) return;
     for (const w of this.wilds.values()) {
       if (Math.hypot(worldPoint.x - w.container.x, worldPoint.y - (w.container.y - 30)) < 46) { void this.tryEncounter(w.info.spawnId); return; }
     }
@@ -351,13 +348,7 @@ export class WorldScene extends Phaser.Scene {
     if (this.tintRect) { const v = this.cameras.main.worldView; this.tintRect.setPosition(v.centerX, v.centerY); }
     const dt = Math.min(deltaMs, 100) / 1000;
     let moved = false;
-    if (joyState.active && (joyState.vec.x !== 0 || joyState.vec.y !== 0)) {
-      const nx = this.gridPos.x + joyState.vec.x * SPEED_TILES_PER_SEC * dt;
-      const ny = this.gridPos.y + joyState.vec.y * SPEED_TILES_PER_SEC * dt;
-      if (this.grid.walkable(Math.round(nx), Math.round(this.gridPos.y))) this.gridPos.x = nx;
-      if (this.grid.walkable(Math.round(this.gridPos.x), Math.round(ny))) this.gridPos.y = ny;
-      moved = true;
-    } else if (this.path.length) {
+    if (this.path.length) {
       const target = this.path[0];
       const dx = target.x - this.gridPos.x, dy = target.y - this.gridPos.y;
       const dist = Math.hypot(dx, dy);
