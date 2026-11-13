@@ -17,7 +17,7 @@ const prop = (o: MapObject, n: string) => o.properties?.find(p => p.name === n)?
 const mapsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "packages", "game-data", "maps");
 const SPAWNS = new Map<string, Map<string, { x: number; y: number }>>();
 const WILD_POINTS = new Map<string, { x: number; y: number }[]>();
-for (const mapId of ["meadow_village", "whispering_forest", "ancient_grove"]) {
+for (const mapId of ["meadow_village", "whispering_forest", "ancient_grove", "crystal_lake", "windmill_fields", "riverbend_village", "lake_cave", "forest_deep", "grove_ruins", "mist_marsh", "hilltop_shrine", "farm_acres", "forest_camp", "root_hollow_1", "root_hollow_2"]) {
   const map = JSON.parse(readFileSync(join(mapsDir, `${mapId}.json`), "utf8")) as MapFile;
   const objects = map.layers.find(l => l.name === "objects")?.objects ?? [];
   const spawns = new Map<string, { x: number; y: number }>();
@@ -39,7 +39,30 @@ export function weatherFor(regionId: string, now = Date.now()) {
 }
 interface PlayerState {
   userId: string; playerId: string; displayName: string; level: number; avatarId: string;
+  hairStyle: string | null; hairColor: string | null; outfit: string | null;
   mapId: string; x: number; y: number; ws: WebSocket; lastPersist: number; lastMoveAt: number;
+  lastChatAt: number;
+}
+/** Player ids with a live world connection (friends list online flags). */
+export function onlinePlayerIds(): Set<string> {
+  const ids = new Set<string>();
+  for (const z of zones.values()) for (const p of z.values()) ids.add(p.playerId);
+  return ids;
+}
+/** playerId -> current mapId for players with a live world connection. */
+export function onlinePlayerMap(): Map<string, string> {
+  const m = new Map<string, string>();
+  for (const z of zones.values()) for (const p of z.values()) m.set(p.playerId, p.mapId);
+  return m;
+}
+/* Zone chat moderation (Phase 6, Part 12): small baseline banned-word list,
+ * matched case-insensitively and replaced with *** before broadcast/log. */
+const BANNED_WORDS = ["địt", "đụ má", "đụ", "lồn", "cặc", "buồi", "đéo", "chó đẻ", "fuck", "shit", "bitch"];
+export function filterChat(text: string): string {
+  let out = text;
+  for (const w of BANNED_WORDS)
+    out = out.replace(new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), "***");
+  return out;
 }
 const zones = new Map<string, Map<string, PlayerState>>();
 function zone(mapId: string) {
@@ -52,7 +75,7 @@ function send(ws: WebSocket, type: string, payload: unknown) {
 function broadcast(mapId: string, exceptPlayerId: string | null, type: string, payload: unknown) {
   for (const p of zone(mapId).values()) if (p.playerId !== exceptPlayerId) send(p.ws, type, payload);
 }
-const pub = (p: PlayerState) => ({ playerId: p.playerId, displayName: p.displayName, level: p.level, avatarId: p.avatarId, x: p.x, y: p.y, mapId: p.mapId });
+const pub = (p: PlayerState) => ({ playerId: p.playerId, displayName: p.displayName, level: p.level, avatarId: p.avatarId, hairStyle: p.hairStyle ?? undefined, hairColor: p.hairColor ?? undefined, outfit: p.outfit ?? undefined, x: p.x, y: p.y, mapId: p.mapId });
 async function persist(p: PlayerState) {
   p.lastPersist = Date.now();
   await query(`UPDATE players.player_profiles SET current_map_id=$1, position_x=$2, position_y=$3, updated_at=now() WHERE id=$4`,
@@ -148,17 +171,18 @@ export function attachWorldServer(server: Server): void {
         if (msg.type !== "auth.authenticate" || typeof payload.accessToken !== "string") { ws.close(4002, "unauthenticated"); return; }
         try {
           const decoded = verifyAccessToken(payload.accessToken);
-          const { rows } = await query<{ id: string; display_name: string; level: number; avatar_id: string; current_map_id: string; position_x: number; position_y: number }>(
-            `SELECT id, display_name, level, avatar_id, current_map_id, position_x, position_y FROM players.player_profiles WHERE user_id = $1`, [decoded.sub]);
+          const { rows } = await query<{ id: string; display_name: string; level: number; avatar_id: string; hair_style: string | null; hair_color: string | null; outfit: string | null; current_map_id: string; position_x: number; position_y: number }>(
+            `SELECT id, display_name, level, avatar_id, hair_style, hair_color, outfit, current_map_id, position_x, position_y FROM players.player_profiles WHERE user_id = $1`, [decoded.sub]);
           if (!rows.length) { ws.close(4003, "player not found"); return; }
           const r = rows[0];
           const mapId = SPAWNS.has(r.current_map_id) ? r.current_map_id : "meadow_village";
-          const spawn = SPAWNS.get(mapId)!.get(mapId === "whispering_forest" ? "from_village" : "spawn_player")!;
+          const spawn = SPAWNS.get(mapId)!.get("spawn_player") ?? SPAWNS.get(mapId)!.get("from_village")!;
           const hasSavedPos = r.position_x !== 0 || r.position_y !== 0;
           state = {
             userId: decoded.sub, playerId: r.id, displayName: r.display_name, level: r.level, avatarId: r.avatar_id,
+            hairStyle: r.hair_style, hairColor: r.hair_color, outfit: r.outfit,
             mapId, x: hasSavedPos ? r.position_x : spawn.x, y: hasSavedPos ? r.position_y : spawn.y,
-            ws, lastPersist: 0, lastMoveAt: Date.now(),
+            ws, lastPersist: 0, lastMoveAt: Date.now(), lastChatAt: 0,
           };
           clearTimeout(authTimer);
           zone(mapId).set(state.playerId, state);
@@ -203,6 +227,26 @@ export function attachWorldServer(server: Server): void {
         });
         broadcast(targetMap, state.playerId, "world.player.joined", pub(state));
         void persist(state);
+        return;
+      }
+      if (msg.type === "world.chat.send") {
+        const now = Date.now();
+        if (now - state.lastChatAt < 1500) return; // rate limit: 1 msg / 1.5 s
+        const raw = typeof payload.content === "string" ? payload.content.trim().slice(0, 200) : "";
+        if (!raw) return;
+        state.lastChatAt = now;
+        const content = filterChat(raw);
+        // Channels: "zone" = current map only; "world" = every online player.
+        const channel = payload.channel === "world" ? "world" : "zone";
+        const out = { playerId: state.playerId, displayName: state.displayName, content, ts: now, channel };
+        if (channel === "world") {
+          for (const m of zones.keys()) broadcast(m, null, "world.chat.message", out);
+        } else {
+          broadcast(state.mapId, null, "world.chat.message", out);
+        }
+        void query(
+          `INSERT INTO social.chat_messages (player_id, channel, map_id, content) VALUES ($1, $2, $3, $4)`,
+          [state.playerId, channel, state.mapId, content]).catch(() => undefined);
         return;
       }
     });

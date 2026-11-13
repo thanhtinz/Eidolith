@@ -5,7 +5,10 @@ export interface ApiSuccess<T> { success: true; data: T; error: null; meta: ApiM
 export interface ApiFailure { success: false; data: null; error: ApiError; meta: ApiMeta; }
 export type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
 
-export interface RegisterRequest { email: string; username: string; password: string; }
+export interface RegisterRequest { email: string; username?: string; password: string; }
+export interface CharacterCreateRequest {
+  displayName: string; avatarId: string; hairStyle: string; hairColor: string; outfit: string;
+}
 export interface RegisterResponse { userId: string; emailVerificationRequired: boolean; }
 export interface LoginRequest { email: string; password: string; deviceId?: string; }
 export interface AuthTokens { accessToken: string; refreshToken: string; expiresIn: number; }
@@ -15,6 +18,7 @@ export interface RefreshRequest { refreshToken: string; }
 export interface PlayerProfile {
   playerId: string; displayName: string; level: number; experience: number;
   avatarId: string; currentRegion: string; currentMap: string;
+  characterCreated: boolean; hairStyle?: string; hairColor?: string; outfit?: string;
 }
 export interface PlayerWallet {
   gold: number; crystal: number; bondEssence: number; evolutionCore: number;
@@ -95,7 +99,7 @@ export interface SanctuaryUpgradeView {
 }
 export interface SanctuaryBuildingView {
   id: string; nameVi: string; descVi: string; level: number;
-  kind: "bond" | "xp" | "data" | "info" | "locked"; slots: number;
+  kind: "bond" | "xp" | "data" | "info" | "locked" | "expedition" | "workshop" | "shrine"; slots: number;
   perMinute: number; synergyElements: string[]; synergyRoles: string[];
   upgrade: SanctuaryUpgradeView | null;
   assignments: SanctuaryAssignmentView[];
@@ -105,4 +109,37 @@ export interface SanctuaryStateResponse {
   hallLevel: number; capHours: number;
   totals: { bond: number; xp: number; data: number };
   researchData: number;
+}
+/** Sanctuary wave 2 — Expedition Gate (Part 2 §28) and Workshop. */
+export interface ExpeditionDestinationView {
+  id: string; nameVi: string; minutes: number; requiresText: string; rewardText: string;
+  needElement: string | null; minTotalLevel: number | null;
+}
+export interface ExpeditionView {
+  id: string; destinationId: string; nameVi: string;
+  creatureIds: string[]; creatureNames: string[];
+  startedAt: string; endsAt: string; ready: boolean;
+  rewards: { currency: string; amount: number }[] | null;
+}
+export interface ExpeditionsResponse {
+  destinations: ExpeditionDestinationView[]; active: ExpeditionView[];
+}
+export interface WorkshopRecipeView {
+  id: string; nameVi: string; qty: number;
+  costs: { currency: string; amount: number }[]; canAfford: boolean;
+}
+export interface WorkshopResponse { recipes: WorkshopRecipeView[]; }
+/** Phase 6 wave 1 — friends (Part 12 MVP). */
+export interface FriendView {
+  playerId: string; displayName: string; level: number; avatarId: string; online: boolean;
+  /** Companion-card extras (friends list only): team preview + current map. */
+  team?: { creatureId: string; level: number }[];
+  mapId?: string | null;
+}
+export interface FriendRequestView extends FriendView { requestId: string; }
+export interface FriendsResponse {
+  friends: FriendView[]; incoming: FriendRequestView[]; outgoing: FriendRequestView[];
+}
+export interface PlayerSearchResult extends FriendView {
+  relation: "none" | "friend" | "outgoing" | "incoming";
 }

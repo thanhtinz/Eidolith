@@ -11,10 +11,10 @@ const check = (name, cond, extra = "") => {
   if (!cond) failures++;
 };
 
-const email = `p3_${Date.now()}@test.dev`;
+const email = `p3x${Date.now()}@test.dev`;
 const reg = await fetch(`${API}/auth/register`, {
   method: "POST", headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ email, username: `p3_${Date.now() % 100000}`, password: "SecurePass123" }),
+  body: JSON.stringify({ email, username: `p3x${Date.now() % 100000}`, password: "SecurePass123" }),
 });
 check("register 201", reg.status === 201);
 const login = await (await fetch(`${API}/auth/login`, {

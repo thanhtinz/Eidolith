@@ -3,7 +3,13 @@
 > **TRẠNG THÁI: Tín duyệt Mockup A 2026-11-11 22:13 ("A ok nhưng mà bị
 > dính nhau quá") → bản A2 nới thoáng (ô lưới 2 cột, thẻ cao, panel cuộn
 > tự nhiên) → ĐỢT 1 ĐÃ CODE XONG + kiểm chứng (test API 32/32, tour Chrome
-> thật).** Hai chỉnh so với bản trình đầu: (1) giá nâng Nhà chính chốt
+> thật). ĐỢT 2 CŨNG ĐÃ XONG (Tín lệnh "Tiếp tục" 2026-11-12): Expedition
+> Gate 3 chuyến như §3 đợt 2 (phần thưởng roll lúc xuất phát, khoá Eidolon
+> khỏi phân công + ra trận tới khi nhận kết quả) và Workshop 2 công thức
+> Orb — test API 27/27 + tour Chrome thật (shots/sanc-v2-expedition.png,
+> sanc-v2-exp-picker.png, sanc-v2-workshop.png, sanc-v2-exp-ready.png).
+> Sanctuary v2 coi như hoàn thiện; còn lại thuộc các hệ thống khác:
+> Đài tiến hoá chờ duyệt EVOLUTION-DRAFT, Market thuộc Phase 6.** Hai chỉnh so với bản trình đầu: (1) giá nâng Nhà chính chốt
 > 300/600/1.200/2.400 Gold cho Lv.2–5 (theo đúng số trên mockup đã duyệt);
 > (2) Research Lab mở ngay từ đầu như mockup thể hiện (không khoá theo
 > Nhà chính Lv.3 như đề xuất §5.4 ban đầu).

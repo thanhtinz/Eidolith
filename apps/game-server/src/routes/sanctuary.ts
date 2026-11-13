@@ -22,7 +22,7 @@ async function profileIdOf(userId: string): Promise<string> {
 }
 const err = (status: number, code: string, message: string) => new ApiError(status, code, message);
 
-type Kind = "bond" | "xp" | "data" | "info" | "locked";
+type Kind = "bond" | "xp" | "data" | "info" | "locked" | "expedition" | "workshop" | "shrine";
 interface BuildingDef {
   id: string; nameVi: string; descVi: string; kind: Kind;
   /** Per level 1..5: assignment slots (0 = takes no assignments). */
@@ -43,9 +43,14 @@ export const BUILDINGS: BuildingDef[] = [
     slotsByLevel: [2, 3, 3, 4, 4], perMinuteByLevel: [2, 2, 3, 3, 4], synergyElements: ["Stone", "Gale"], synergyRoles: ["Striker", "Guardian"], upgradeGold: [150, 400, 900, 1800] },
   { id: "research_lab", nameVi: "Phòng nghiên cứu", descVi: "Research Lab — nghiên cứu sinh Research Data theo thời gian.", kind: "data",
     slotsByLevel: [2, 3, 3, 4, 4], perMinuteByLevel: [1 / 60, 1 / 60, 2 / 60, 2 / 60, 3 / 60], synergyElements: ["Astral", "Volt"], synergyRoles: ["Controller", "Specialist"], upgradeGold: [150, 400, 900, 1800] },
-  { id: "evo_shrine", nameVi: "Đài tiến hoá", descVi: "Evolution Shrine — tiến hoá Eidolon bằng Evolution Core.", kind: "locked",
+  { id: "expedition_gate", nameVi: "Cổng thám hiểm", descVi: "Expedition Gate — gửi Eidolon đi thám hiểm mang tài nguyên về.", kind: "expedition",
+    slotsByLevel: [0, 0, 0, 0, 0], perMinuteByLevel: [0, 0, 0, 0, 0], synergyElements: [], synergyRoles: [], upgradeGold: [0, 0, 0, 0] },
+  { id: "workshop", nameVi: "Xưởng chế tạo", descVi: "Workshop — chế tạo vật phẩm từ tài nguyên.", kind: "workshop",
+    slotsByLevel: [0, 0, 0, 0, 0], perMinuteByLevel: [0, 0, 0, 0, 0], synergyElements: [], synergyRoles: [], upgradeGold: [0, 0, 0, 0] },
+  { id: "evo_shrine", nameVi: "Đài tiến hoá", descVi: "Evolution Shrine — tiến hoá thực hiện trong thẻ chi tiết của từng Eidolon.", kind: "shrine",
     slotsByLevel: [0, 0, 0, 0, 0], perMinuteByLevel: [0, 0, 0, 0, 0], synergyElements: [], synergyRoles: [], upgradeGold: [0, 0, 0, 0] },
 ];
+const UPGRADABLE_KINDS: Kind[] = ["bond", "xp", "data", "info"];
 const buildingById = new Map(BUILDINGS.map(b => [b.id, b]));
 /** Accrual cap in minutes by Sanctuary Hall level (Lv.1..5). */
 const CAP_MINUTES_BY_HALL = [480, 600, 600, 720, 720];
@@ -136,7 +141,7 @@ sanctuaryRouter.get("/sanctuary", async (req: AuthedRequest, res, next) => {
         };
       });
       let upgrade: SanctuaryBuildingView["upgrade"] = null;
-      if (def.kind !== "locked" && level < MAX_LEVEL) {
+      if (UPGRADABLE_KINDS.includes(def.kind) && level < MAX_LEVEL) {
         const toLevel = level + 1;
         upgrade = {
           toLevel, gold: def.upgradeGold[toLevel - 2], data: UPGRADE_DATA[toLevel] ?? 0,
@@ -173,6 +178,8 @@ sanctuaryRouter.post("/sanctuary/assign", async (req: AuthedRequest, res, next) 
     const { rows: existing } = await query<{ building_id: string }>(
       `SELECT building_id FROM sanctuary.assignments WHERE creature_instance_id = $1`, [creatureInstanceId]);
     if (existing.length) throw err(422, "SANCTUARY_ALREADY_ASSIGNED", "Eidolon này đã được phân công rồi");
+    const awayIds = await activeExpeditionCreatureIds(playerId);
+    if (awayIds.has(creatureInstanceId)) throw err(422, "SANCTUARY_ON_EXPEDITION", "Eidolon đang đi thám hiểm, chưa thể phân công");
     const { rows: inBuilding } = await query<{ n: string }>(
       `SELECT COUNT(*) AS n FROM sanctuary.assignments WHERE player_id = $1 AND building_id = $2`, [playerId, def.id]);
     if (Number(inBuilding[0].n) >= def.slotsByLevel[level - 1]) throw err(422, "SANCTUARY_FULL", "Công trình đã đủ chỗ");
@@ -264,7 +271,7 @@ sanctuaryRouter.post("/sanctuary/buildings/:id/upgrade", async (req: AuthedReque
   try {
     const playerId = await profileIdOf(req.userId!);
     const def = buildingById.get(req.params.id);
-    if (!def || def.kind === "locked") throw err(422, "SANCTUARY_BUILDING_INVALID", "Công trình này chưa nâng cấp được");
+    if (!def || !UPGRADABLE_KINDS.includes(def.kind)) throw err(422, "SANCTUARY_BUILDING_INVALID", "Công trình này chưa nâng cấp được");
     const client = await pool.connect();
     try {
       await client.query("BEGIN");
@@ -293,6 +300,170 @@ sanctuaryRouter.post("/sanctuary/buildings/:id/upgrade", async (req: AuthedReque
         [playerId, def.id, toLevel]);
       await client.query("COMMIT");
       ok(req, res, { buildingId: def.id, level: toLevel, gold: bal("gold") - goldCost, researchData: bal("research_data") - dataCost });
+    } catch (e) {
+      await client.query("ROLLBACK").catch(() => undefined);
+      throw e;
+    } finally { client.release(); }
+  } catch (e) { next(e); }
+});
+
+/* ================= Wave 2 — Expedition Gate (Part 2 §28) ================= */
+export interface ExpeditionDef {
+  id: string; nameVi: string; minutes: number; requiresText: string; rewardText: string;
+  needElement?: string; minTotalLevel?: number;
+}
+export const EXPEDITIONS: ExpeditionDef[] = [
+  { id: "whisper_edge", nameVi: "Rìa rừng Whispering", minutes: 30, requiresText: "Không yêu cầu", rewardText: "Gold · Bond Essence" },
+  { id: "crystal_shore", nameVi: "Bờ hồ Crystal", minutes: 120, requiresText: "Cần ít nhất 1 Eidolon hệ Tide trong đội", needElement: "Tide", rewardText: "Gold · Research Data · Bond Essence" },
+  { id: "grove_deep", nameVi: "Sâu trong Ancient Grove", minutes: 480, requiresText: "Tổng cấp của đội ≥ 30", minTotalLevel: 30, rewardText: "Gold · Research Data · tỉ lệ ra Evolution Core" },
+];
+const rollInt = (min: number, max: number) => min + Math.floor(Math.random() * (max - min + 1));
+function rollRewards(destinationId: string): { currency: string; amount: number }[] {
+  if (destinationId === "whisper_edge")
+    return [{ currency: "gold", amount: rollInt(40, 70) }, { currency: "bond_essence", amount: rollInt(2, 4) }];
+  if (destinationId === "crystal_shore")
+    return [{ currency: "gold", amount: rollInt(90, 140) }, { currency: "research_data", amount: rollInt(2, 4) }, { currency: "bond_essence", amount: rollInt(3, 5) }];
+  const rewards = [{ currency: "gold", amount: rollInt(180, 260) }, { currency: "research_data", amount: rollInt(4, 7) }];
+  if (Math.random() < 0.2) rewards.push({ currency: "evolution_core", amount: 1 });
+  return rewards;
+}
+/** Creatures currently away: on an unclaimed expedition. */
+export async function activeExpeditionCreatureIds(playerId: string): Promise<Set<string>> {
+  const { rows } = await query<{ creature_instance_ids: string[] }>(
+    `SELECT creature_instance_ids FROM sanctuary.expeditions WHERE player_id = $1 AND claimed_at IS NULL`, [playerId]);
+  const set = new Set<string>();
+  for (const r of rows) for (const id of r.creature_instance_ids) set.add(id);
+  return set;
+}
+interface ExpeditionRow {
+  id: string; destination_id: string; creature_instance_ids: string[];
+  started_at: Date; ends_at: Date; rewards: { currency: string; amount: number }[];
+}
+sanctuaryRouter.get("/sanctuary/expeditions", async (req: AuthedRequest, res, next) => {
+  try {
+    const playerId = await profileIdOf(req.userId!);
+    const { rows } = await query<ExpeditionRow>(
+      `SELECT id, destination_id, creature_instance_ids, started_at, ends_at, rewards
+       FROM sanctuary.expeditions WHERE player_id = $1 AND claimed_at IS NULL ORDER BY started_at`, [playerId]);
+    const names = new Map<string, string>();
+    if (rows.length) {
+      const allIds = rows.flatMap(r => r.creature_instance_ids);
+      const { rows: cs } = await query<{ id: string; creature_id: string }>(
+        `SELECT id, creature_id FROM creatures.creature_instances WHERE id = ANY($1::uuid[])`, [allIds]);
+      for (const c of cs) names.set(c.id, creatureById(c.creature_id)?.name ?? c.creature_id);
+    }
+    const now = Date.now();
+    ok(req, res, {
+      destinations: EXPEDITIONS.map(d => ({ id: d.id, nameVi: d.nameVi, minutes: d.minutes, requiresText: d.requiresText, rewardText: d.rewardText, needElement: d.needElement ?? null, minTotalLevel: d.minTotalLevel ?? null })),
+      active: rows.map(r => {
+        const ready = new Date(r.ends_at).getTime() <= now;
+        const dest = EXPEDITIONS.find(d => d.id === r.destination_id);
+        return {
+          id: r.id, destinationId: r.destination_id, nameVi: dest?.nameVi ?? r.destination_id,
+          creatureIds: r.creature_instance_ids, creatureNames: r.creature_instance_ids.map(id => names.get(id) ?? "?"),
+          startedAt: new Date(r.started_at).toISOString(), endsAt: new Date(r.ends_at).toISOString(),
+          ready, rewards: ready ? r.rewards : null,
+        };
+      }),
+    });
+  } catch (e) { next(e); }
+});
+
+sanctuaryRouter.post("/sanctuary/expeditions/start", async (req: AuthedRequest, res, next) => {
+  try {
+    const playerId = await profileIdOf(req.userId!);
+    const { destinationId, creatureInstanceIds } = req.body as { destinationId?: string; creatureInstanceIds?: unknown };
+    const dest = EXPEDITIONS.find(d => d.id === destinationId);
+    if (!dest) throw err(422, "EXPEDITION_DESTINATION_INVALID", "Điểm đến không tồn tại");
+    if (!Array.isArray(creatureInstanceIds) || creatureInstanceIds.length < 1 || creatureInstanceIds.length > 3
+      || !creatureInstanceIds.every(x => typeof x === "string") || new Set(creatureInstanceIds).size !== creatureInstanceIds.length)
+      throw err(422, "EXPEDITION_PARTY_INVALID", "Đội thám hiểm phải gồm 1–3 Eidolon khác nhau");
+    const ids = creatureInstanceIds as string[];
+    const { rows } = await query<{ id: string; creature_id: string; level: number }>(
+      `SELECT id, creature_id, level FROM creatures.creature_instances WHERE player_id = $1 AND id = ANY($2::uuid[])`, [playerId, ids]);
+    if (rows.length !== ids.length) throw err(422, "EXPEDITION_PARTY_INVALID", "Có Eidolon không thuộc về bạn hoặc không tồn tại");
+    const { rows: assigned } = await query<{ creature_instance_id: string }>(
+      `SELECT creature_instance_id FROM sanctuary.assignments WHERE player_id = $1 AND creature_instance_id = ANY($2::uuid[])`, [playerId, ids]);
+    if (assigned.length) throw err(422, "EXPEDITION_CREATURE_BUSY", "Có Eidolon đang phân công ở Sanctuary — rút về trước khi đi thám hiểm");
+    const away = await activeExpeditionCreatureIds(playerId);
+    if (ids.some(id => away.has(id))) throw err(422, "EXPEDITION_CREATURE_BUSY", "Có Eidolon đang đi thám hiểm rồi");
+    if (dest.needElement && !rows.some(r => creatureById(r.creature_id)?.element === dest.needElement))
+      throw err(422, "EXPEDITION_REQUIREMENT", `Chuyến này cần ít nhất 1 Eidolon hệ ${dest.needElement}`);
+    if (dest.minTotalLevel && rows.reduce((n, r) => n + Number(r.level), 0) < dest.minTotalLevel)
+      throw err(422, "EXPEDITION_REQUIREMENT", `Chuyến này cần tổng cấp đội ≥ ${dest.minTotalLevel}`);
+    const rewards = rollRewards(dest.id);
+    const { rows: ins } = await query<{ id: string; ends_at: Date }>(
+      `INSERT INTO sanctuary.expeditions (player_id, destination_id, creature_instance_ids, ends_at, rewards)
+       VALUES ($1, $2, $3, now() + ($4 * interval '1 minute'), $5) RETURNING id, ends_at`,
+      [playerId, dest.id, ids, dest.minutes, JSON.stringify(rewards)]);
+    ok(req, res, { id: ins[0].id, endsAt: new Date(ins[0].ends_at).toISOString() });
+  } catch (e) { next(e); }
+});
+
+sanctuaryRouter.post("/sanctuary/expeditions/:id/claim", async (req: AuthedRequest, res, next) => {
+  try {
+    const playerId = await profileIdOf(req.userId!);
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      const { rows } = await client.query<ExpeditionRow>(
+        `SELECT id, destination_id, creature_instance_ids, started_at, ends_at, rewards
+         FROM sanctuary.expeditions WHERE id = $1 AND player_id = $2 AND claimed_at IS NULL FOR UPDATE`, [req.params.id, playerId]);
+      if (!rows.length) throw err(404, "EXPEDITION_NOT_FOUND", "Chuyến thám hiểm không tồn tại hoặc đã nhận kết quả");
+      const exp = rows[0];
+      if (new Date(exp.ends_at).getTime() > Date.now()) throw err(422, "EXPEDITION_NOT_READY", "Đội chưa trở về");
+      for (const rw of exp.rewards) await grantCurrency(client, playerId, rw.currency, rw.amount, "expedition_reward");
+      await client.query(`UPDATE sanctuary.expeditions SET claimed_at = now() WHERE id = $1`, [exp.id]);
+      await client.query("COMMIT");
+      ok(req, res, { rewards: exp.rewards });
+    } catch (e) {
+      await client.query("ROLLBACK").catch(() => undefined);
+      throw e;
+    } finally { client.release(); }
+  } catch (e) { next(e); }
+});
+
+/* ================= Wave 2 — Workshop ================= */
+export const RECIPES = [
+  { id: "orb_basic_x3", nameVi: "Capture Orb Cơ Bản ×3", itemId: "basic_capture_orb", qty: 3, costs: [{ currency: "gold", amount: 60 }] },
+  { id: "orb_advanced", nameVi: "Capture Orb Cao Cấp ×1", itemId: "advanced_capture_orb", qty: 1, costs: [{ currency: "gold", amount: 150 }, { currency: "bond_essence", amount: 2 }] },
+];
+sanctuaryRouter.get("/sanctuary/workshop", async (req: AuthedRequest, res, next) => {
+  try {
+    const playerId = await profileIdOf(req.userId!);
+    const balances = new Map<string, number>();
+    for (const cur of ["gold", "bond_essence", "research_data"]) balances.set(cur, await walletBalance(playerId, cur));
+    ok(req, res, {
+      recipes: RECIPES.map(r => ({
+        id: r.id, nameVi: r.nameVi, qty: r.qty, costs: r.costs,
+        canAfford: r.costs.every(c => (balances.get(c.currency) ?? 0) >= c.amount),
+      })),
+    });
+  } catch (e) { next(e); }
+});
+sanctuaryRouter.post("/sanctuary/workshop/craft", async (req: AuthedRequest, res, next) => {
+  try {
+    const playerId = await profileIdOf(req.userId!);
+    const { recipeId } = req.body as { recipeId?: string };
+    const recipe = RECIPES.find(r => r.id === recipeId);
+    if (!recipe) throw err(422, "WORKSHOP_RECIPE_INVALID", "Công thức không tồn tại");
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      const { rows: wRows } = await client.query<{ currency_id: string; balance: string }>(
+        `SELECT currency_id, balance FROM economy.player_wallets WHERE player_id = $1 AND currency_id = ANY($2) FOR UPDATE`,
+        [playerId, recipe.costs.map(c => c.currency)]);
+      const bal = (id: string) => Number(wRows.find(r => r.currency_id === id)?.balance ?? 0);
+      const CUR_NAME: Record<string, string> = { gold: "Gold", bond_essence: "Bond Essence", research_data: "Research Data" };
+      for (const c of recipe.costs)
+        if (bal(c.currency) < c.amount) throw err(422, "WORKSHOP_INSUFFICIENT", `Không đủ ${CUR_NAME[c.currency] ?? c.currency} (cần ${c.amount})`);
+      for (const c of recipe.costs) await spendCurrency(client, playerId, c.currency, c.amount, "workshop_craft");
+      await client.query(
+        `INSERT INTO inventory.player_inventory (player_id, item_id, quantity) VALUES ($1, $2, $3)
+         ON CONFLICT (player_id, item_id) DO UPDATE SET quantity = inventory.player_inventory.quantity + $3, updated_at = now()`,
+        [playerId, recipe.itemId, recipe.qty]);
+      await client.query("COMMIT");
+      ok(req, res, { itemId: recipe.itemId, qty: recipe.qty });
     } catch (e) {
       await client.query("ROLLBACK").catch(() => undefined);
       throw e;

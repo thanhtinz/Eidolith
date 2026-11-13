@@ -49,7 +49,8 @@ function buildEnemyTeam(count: number, avgLevel: number, rng: () => number): Bat
 battlesRouter.post("/battles", async (req: AuthedRequest, res, next) => {
   try {
     const playerId = await profileIdOf(req.userId!);
-    const mode = (req.body as { mode?: unknown })?.mode === "boss" ? "boss" : "practice";
+    const rawMode = (req.body as { mode?: unknown })?.mode;
+    const mode = rawMode === "boss" ? "boss" : rawMode === "friend" ? "friend" : "practice";
     const instanceIds = (req.body as { instanceIds?: unknown })?.instanceIds;
     if (!Array.isArray(instanceIds) || instanceIds.length < 1 || instanceIds.length > 5
       || !instanceIds.every(x => typeof x === "string"))
@@ -59,6 +60,11 @@ battlesRouter.post("/battles", async (req: AuthedRequest, res, next) => {
       [playerId, instanceIds]);
     if (rows.length !== instanceIds.length)
       throw err(422, "BATTLE_TEAM_INVALID", "Có Eidolon không thuộc về bạn hoặc không tồn tại");
+    const { rows: expRows } = await query<{ n: string }>(
+      `SELECT COUNT(*) AS n FROM sanctuary.expeditions WHERE player_id = $1 AND claimed_at IS NULL AND creature_instance_ids && $2::uuid[]`,
+      [playerId, instanceIds]);
+    if (Number(expRows[0].n) > 0)
+      throw err(422, "BATTLE_TEAM_INVALID", "Có Eidolon đang đi thám hiểm, không thể ra trận");
     const byId = new Map(rows.map(r => [r.id, r]));
     const playerUnits = instanceIds.map((id, i) => {
       const row = byId.get(id)!;
@@ -68,11 +74,28 @@ battlesRouter.post("/battles", async (req: AuthedRequest, res, next) => {
     const seed = Math.floor(Math.random() * 2 ** 31);
     // Phase 5b boss (Part 3 §45.1): Ancient Treant Lv.18 + 2 Pebblit Lv.10,
     // tuned by simulation — docs/PHASE5B-SANCTUARY-BOSS-SIDEQUESTS-v1.md §2.
+    // Phase 6 friendly battle: the enemy is a snapshot of a friend's team
+    // (first 5 owned, same convention as the collection panel). No rewards.
+    let friendEnemyUnits: ReturnType<typeof buildUnitInit>[] | null = null;
+    if (mode === "friend") {
+      const opponentPlayerId = (req.body as { opponentPlayerId?: unknown })?.opponentPlayerId;
+      if (typeof opponentPlayerId !== "string") throw err(422, "BATTLE_TEAM_INVALID", "Thiếu đối thủ giao hữu");
+      const { rows: fr } = await query(
+        `SELECT 1 FROM social.friendships WHERE status = 'accepted'
+         AND ((requester_id = $1 AND addressee_id = $2) OR (requester_id = $2 AND addressee_id = $1))`,
+        [playerId, opponentPlayerId]);
+      if (!fr.length) throw err(422, "BATTLE_NOT_FRIENDS", "Chỉ đấu giao hữu được với bạn bè");
+      const { rows: opp } = await query<{ creature_id: string; level: number }>(
+        `SELECT creature_id, level FROM creatures.creature_instances WHERE player_id = $1 ORDER BY acquired_at DESC LIMIT 5`,
+        [opponentPlayerId]);
+      if (!opp.length) throw err(422, "BATTLE_TEAM_INVALID", "Đối thủ chưa có Eidolon nào");
+      friendEnemyUnits = opp.map((r, i) => buildUnitInit(`1-${i}`, r.creature_id, Number(r.level), 1, i));
+    }
     const enemyUnits = mode === "boss"
       ? [buildUnitInit("1-0", "EID-B01", 18, 1, 0),
          buildUnitInit("1-1", "EID-004", 10, 1, 1),
          buildUnitInit("1-2", "EID-004", 10, 1, 2)]
-      : buildEnemyTeam(playerUnits.length, avgLevel, Math.random);
+      : friendEnemyUnits ?? buildEnemyTeam(playerUnits.length, avgLevel, Math.random);
     let bossFirstWinToday = false;
     if (mode === "boss") {
       const { rows: prior } = await query<{ n: string }>(
@@ -88,8 +111,9 @@ battlesRouter.post("/battles", async (req: AuthedRequest, res, next) => {
        VALUES ($1, $9, $2, $3, $4, $5, $6, $7, $8) RETURNING battle_id`,
       [playerId, seed, JSON.stringify(playerTeam), JSON.stringify(enemyTeam),
        JSON.stringify(result.events), result.winner, result.ticks, result.hash, mode]);
-    const rewards = await applyBattleRewards(playerId, instanceIds, result.winner, mode === "boss" ? Math.max(avgLevel, 13) : avgLevel);
-    if (mode === "boss" && result.winner === 0) {
+    const rewards = mode === "friend" ? undefined
+      : await applyBattleRewards(playerId, instanceIds, result.winner, mode === "boss" ? Math.max(avgLevel, 13) : avgLevel);
+    if (mode === "boss" && result.winner === 0 && rewards) {
       const bonus = await grantBossBonus(playerId, bossFirstWinToday);
       rewards.gold += bonus.gold;
       rewards.evolutionCore += bonus.evolutionCore;

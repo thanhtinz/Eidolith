@@ -13,33 +13,75 @@ export class NavGrid {
     return x >= 0 && y >= 0 && x < this.width && y < this.height && this.cells[y * this.width + x] === 0;
   }
 }
-/** A* pathfinding (4-directional). Returns path excluding start, or null if unreachable. */
+/** Straight-line walkability between two cell centres: samples the
+ * segment finely; a diagonal crossing also requires both orthogonal
+ * neighbours of the corner to be walkable (no corner cutting). */
+export function lineWalkable(grid: NavGrid, a: GridPoint, b: GridPoint): boolean {
+  const dist = Math.hypot(b.x - a.x, b.y - a.y);
+  const steps = Math.max(1, Math.ceil(dist * 4));
+  let px = a.x, py = a.y;
+  for (let i = 1; i <= steps; i++) {
+    const x = a.x + (b.x - a.x) * (i / steps), y = a.y + (b.y - a.y) * (i / steps);
+    const cx = Math.round(x), cy = Math.round(y);
+    if (!grid.walkable(cx, cy)) return false;
+    if (cx !== px && cy !== py) {
+      if (!grid.walkable(cx, py) || !grid.walkable(px, cy)) return false;
+    }
+    px = cx; py = cy;
+  }
+  return true;
+}
+
+/** A* pathfinding (8-directional, corner-guarded) + line-of-sight
+ * smoothing, so walkers flow diagonally and cut natural corners
+ * instead of stepping in right angles (the top-down stiffness fix,
+ * 2026-11-12). Returns path excluding start, or null if unreachable. */
 export function findPath(grid: NavGrid, start: GridPoint, goal: GridPoint): GridPoint[] | null {
   if (!grid.walkable(goal.x, goal.y)) return null;
   const key = (x: number, y: number) => y * grid.width + x;
   const open = new Map<number, number>(); // key -> fScore
   const gScore = new Map<number, number>([[key(start.x, start.y), 0]]);
   const cameFrom = new Map<number, number>();
-  open.set(key(start.x, start.y), Math.abs(goal.x - start.x) + Math.abs(goal.y - start.y));
-  const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]] as const;
+  const heuristic = (x: number, y: number) => {
+    const dx = Math.abs(goal.x - x), dy = Math.abs(goal.y - y);
+    return Math.max(dx, dy) + (Math.SQRT2 - 1) * Math.min(dx, dy); // octile
+  };
+  open.set(key(start.x, start.y), heuristic(start.x, start.y));
+  const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]] as const;
   while (open.size) {
     let current = -1, best = Infinity;
     for (const [k, f] of open) if (f < best) { best = f; current = k; }
     open.delete(current);
     const cx = current % grid.width, cy = Math.floor(current / grid.width);
     if (cx === goal.x && cy === goal.y) {
-      const path: GridPoint[] = [];
+      const raw: GridPoint[] = [];
       let k = current;
-      while (k !== key(start.x, start.y)) { path.push({ x: k % grid.width, y: Math.floor(k / grid.width) }); k = cameFrom.get(k)!; }
-      return path.reverse();
+      while (k !== key(start.x, start.y)) { raw.push({ x: k % grid.width, y: Math.floor(k / grid.width) }); k = cameFrom.get(k)!; }
+      raw.reverse();
+      // Smoothing: from each anchor, jump to the farthest visible point.
+      const smooth: GridPoint[] = [];
+      let anchor = start;
+      let i = 0;
+      while (i < raw.length) {
+        let far = i;
+        for (let j = raw.length - 1; j > i; j--) {
+          if (lineWalkable(grid, anchor, raw[j])) { far = j; break; }
+        }
+        smooth.push(raw[far]);
+        anchor = raw[far];
+        i = far + 1;
+      }
+      return smooth;
     }
     for (const [dx, dy] of dirs) {
       const nx = cx + dx, ny = cy + dy;
       if (!grid.walkable(nx, ny)) continue;
-      const nk = key(nx, ny), tentative = (gScore.get(current) ?? Infinity) + 1;
+      const diag = dx !== 0 && dy !== 0;
+      if (diag && (!grid.walkable(cx + dx, cy) || !grid.walkable(cx, cy + dy))) continue; // no corner cutting
+      const nk = key(nx, ny), tentative = (gScore.get(current) ?? Infinity) + (diag ? Math.SQRT2 : 1);
       if (tentative < (gScore.get(nk) ?? Infinity)) {
         gScore.set(nk, tentative); cameFrom.set(nk, current);
-        open.set(nk, tentative + Math.abs(goal.x - nx) + Math.abs(goal.y - ny));
+        open.set(nk, tentative + heuristic(nx, ny));
       }
     }
   }

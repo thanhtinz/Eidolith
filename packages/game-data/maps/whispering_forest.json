@@ -1,1 +1,8263 @@
-{"type": "map", "orientation": "isometric", "renderorder": "right-down", "width": 28, "height": 28, "tilewidth": 64, "tileheight": 32, "infinite": false, "version": "1.10", "tiledversion": "1.10.2", "nextlayerid": 4, "nextobjectid": 133, "tilesets": [{"firstgid": 1, "name": "verdant", "tilewidth": 64, "tileheight": 32, "tilecount": 6, "columns": 3, "image": "verdant.png", "imagewidth": 192, "imageheight": 64}], "layers": [{"id": 1, "name": "ground", "type": "tilelayer", "width": 28, "height": 28, "data": [2, 2, 6, 6, 2, 2, 6, 2, 6, 6, 6, 6, 2, 2, 6, 2, 6, 6, 6, 2, 2, 6, 6, 6, 6, 2, 6, 6, 2, 2, 2, 6, 6, 6, 2, 6, 6, 6, 2, 6, 2, 6, 2, 6, 6, 2, 2, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 2, 6, 6, 2, 2, 6, 2, 6, 2, 6, 2, 2, 2, 6, 2, 2, 6, 6, 6, 6, 6, 6, 6, 2, 6, 2, 6, 6, 6, 6, 6, 6, 2, 2, 6, 6, 6, 2, 2, 6, 6, 6, 6, 2, 6, 2, 6, 2, 6, 2, 6, 6, 2, 6, 6, 6, 6, 2, 2, 6, 2, 2, 6, 6, 2, 6, 6, 6, 6, 6, 2, 6, 2, 6, 6, 6, 6, 2, 2, 6, 6, 2, 2, 2, 2, 2, 6, 6, 6, 6, 6, 6, 2, 6, 2, 2, 6, 6, 2, 2, 2, 6, 6, 6, 2, 6, 2, 2, 2, 6, 6, 2, 6, 2, 6, 6, 6, 2, 6, 6, 6, 6, 6, 6, 2, 6, 6, 6, 6, 2, 6, 2, 2, 6, 2, 6, 2, 2, 6, 2, 2, 2, 2, 2, 6, 6, 2, 2, 6, 2, 2, 6, 6, 2, 6, 6, 2, 6, 6, 2, 6, 6, 6, 2, 6, 2, 2, 2, 6, 2, 2, 6, 6, 6, 6, 6, 6, 2, 6, 2, 6, 2, 2, 2, 6, 6, 6, 6, 6, 6, 2, 2, 6, 6, 6, 6, 6, 2, 6, 2, 2, 6, 6, 6, 2, 2, 2, 2, 6, 2, 2, 6, 6, 6, 6, 6, 2, 6, 6, 6, 6, 6, 6, 6, 2, 6, 2, 2, 6, 2, 6, 2, 2, 2, 2, 6, 6, 6, 6, 2, 6, 3, 3, 3, 3, 3, 6, 2, 6, 6, 6, 2, 6, 6, 6, 6, 6, 2, 6, 6, 2, 6, 6, 2, 6, 6, 6, 6, 6, 3, 5, 5, 5, 3, 6, 2, 6, 6, 6, 6, 2, 2, 6, 2, 6, 6, 6, 2, 6, 2, 6, 2, 6, 2, 2, 3, 3, 3, 5, 5, 5, 3, 6, 6, 6, 2, 6, 6, 6, 2, 2, 6, 6, 6, 6, 2, 2, 6, 2, 2, 2, 6, 6, 3, 3, 3, 5, 5, 5, 3, 6, 6, 2, 3, 3, 3, 3, 3, 3, 3, 3, 6, 6, 6, 6, 2, 6, 3, 3, 3, 3, 6, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 6, 6, 6, 6, 3, 3, 3, 3, 6, 2, 6, 2, 2, 3, 3, 3, 3, 3, 6, 6, 6, 2, 6, 2, 2, 6, 3, 3, 3, 3, 3, 3, 6, 6, 2, 6, 6, 2, 6, 2, 2, 2, 2, 6, 6, 6, 6, 2, 2, 2, 6, 2, 2, 6, 3, 3, 3, 3, 3, 3, 2, 2, 6, 6, 6, 2, 6, 6, 6, 6, 2, 2, 2, 2, 2, 2, 6, 6, 6, 6, 2, 6, 6, 6, 2, 2, 6, 6, 6, 2, 6, 6, 2, 6, 2, 6, 2, 2, 2, 2, 2, 2, 6, 2, 6, 6, 2, 6, 2, 6, 6, 6, 2, 2, 2, 6, 2, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 2, 2, 6, 2, 2, 6, 6, 2, 2, 2, 2, 2, 2, 6, 6, 6, 6, 6, 6, 6, 2, 6, 6, 6, 6, 2, 2, 6, 2, 2, 6, 2, 6, 6, 2, 6, 6, 2, 6, 6, 6, 6, 2, 6, 2, 6, 6, 6, 2, 6, 6, 6, 6, 2, 6, 6, 6, 2, 6, 6, 2, 6, 6, 4, 4, 4, 2, 6, 2, 2, 2, 6, 6, 2, 2, 6, 6, 6, 6, 2, 6, 6, 6, 6, 6, 2, 6, 6, 2, 6, 6, 4, 4, 6, 2, 6, 2, 6, 6, 2, 2, 2, 2, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 2, 6, 2, 6, 6, 2, 6, 6, 2, 6, 2, 6, 6, 6, 6, 6, 2, 6, 2, 6, 2, 2, 6, 6, 6, 6, 6, 6, 6, 2, 6, 6, 6, 2, 6, 6, 2, 2, 2, 2, 6, 6, 6, 2, 6, 6, 6, 2, 2, 2, 6, 2, 6, 2, 2, 6, 2, 2, 2, 2, 6, 6, 2, 2, 6, 2, 6, 6, 2, 2, 2, 6, 6, 6, 6, 6, 6, 6, 2, 2, 6, 6, 6, 6, 6, 2, 2, 6, 2, 2, 2, 2, 2, 6, 6, 2, 6, 6, 6, 2, 2, 6, 6, 6, 2, 6, 6, 6, 6, 2, 2, 2, 2], "opacity": 1, "visible": true, "x": 0, "y": 0}, {"id": 2, "name": "collision", "type": "tilelayer", "width": 28, "height": 28, "data": [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1], "opacity": 1, "visible": false, "x": 0, "y": 0}, {"id": 3, "name": "objects", "type": "objectgroup", "objects": [{"id": 1, "name": "pine", "type": "prop", "x": -384, "y": 480, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 9}, {"name": "tileY", "type": "int", "value": 21}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 2, "name": "pine", "type": "prop", "x": -416, "y": 464, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 8}, {"name": "tileY", "type": "int", "value": 21}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 3, "name": "rock", "type": "prop", "x": -640, "y": 480, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 5}, {"name": "tileY", "type": "int", "value": 25}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 4, "name": "rock", "type": "prop", "x": 288, "y": 208, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 11}, {"name": "tileY", "type": "int", "value": 2}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 5, "name": "pine", "type": "prop", "x": -128, "y": 320, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 8}, {"name": "tileY", "type": "int", "value": 12}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 6, "name": "pine", "type": "prop", "x": 576, "y": 384, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 21}, {"name": "tileY", "type": "int", "value": 3}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 7, "name": "bush", "type": "prop", "x": 0, "y": 32, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 1}, {"name": "tileY", "type": "int", "value": 1}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 8, "name": "rock", "type": "prop", "x": 96, "y": 368, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 13}, {"name": "tileY", "type": "int", "value": 10}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 9, "name": "bush", "type": "prop", "x": 288, "y": 432, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 18}, {"name": "tileY", "type": "int", "value": 9}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 10, "name": "bush", "type": "prop", "x": 192, "y": 768, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 27}, {"name": "tileY", "type": "int", "value": 21}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 11, "name": "bush", "type": "prop", "x": 512, "y": 384, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 20}, {"name": "tileY", "type": "int", "value": 4}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 12, "name": "pine", "type": "prop", "x": 0, "y": 864, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 27}, {"name": "tileY", "type": "int", "value": 27}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 13, "name": "tree", "type": "prop", "x": 352, "y": 400, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 18}, {"name": "tileY", "type": "int", "value": 7}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 14, "name": "pine", "type": "prop", "x": 576, "y": 512, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 25}, {"name": "tileY", "type": "int", "value": 7}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 15, "name": "rock", "type": "prop", "x": 256, "y": 384, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 16}, {"name": "tileY", "type": "int", "value": 8}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 16, "name": "pine", "type": "prop", "x": -32, "y": 304, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 9}, {"name": "tileY", "type": "int", "value": 10}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 17, "name": "tree", "type": "prop", "x": -128, "y": 704, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 20}, {"name": "tileY", "type": "int", "value": 24}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 18, "name": "tree", "type": "prop", "x": 128, "y": 96, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 5}, {"name": "tileY", "type": "int", "value": 1}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 19, "name": "tree", "type": "prop", "x": -224, "y": 144, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 1}, {"name": "tileY", "type": "int", "value": 8}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 20, "name": "bush", "type": "prop", "x": 0, "y": 352, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 11}, {"name": "tileY", "type": "int", "value": 11}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 21, "name": "bush", "type": "prop", "x": 0, "y": 512, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 16}, {"name": "tileY", "type": "int", "value": 16}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 22, "name": "rock", "type": "prop", "x": 96, "y": 784, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 26}, {"name": "tileY", "type": "int", "value": 23}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 23, "name": "pine", "type": "prop", "x": 288, "y": 400, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 17}, {"name": "tileY", "type": "int", "value": 8}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 24, "name": "tree", "type": "prop", "x": -352, "y": 464, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 9}, {"name": "tileY", "type": "int", "value": 20}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 25, "name": "rock", "type": "prop", "x": 576, "y": 320, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 19}, {"name": "tileY", "type": "int", "value": 1}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 26, "name": "pine", "type": "prop", "x": 96, "y": 400, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 14}, {"name": "tileY", "type": "int", "value": 11}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 27, "name": "rock", "type": "prop", "x": -64, "y": 704, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 21}, {"name": "tileY", "type": "int", "value": 23}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 28, "name": "bush", "type": "prop", "x": 352, "y": 272, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 14}, {"name": "tileY", "type": "int", "value": 3}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 29, "name": "rock", "type": "prop", "x": -320, "y": 160, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 0}, {"name": "tileY", "type": "int", "value": 10}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 30, "name": "pine", "type": "prop", "x": 96, "y": 464, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 16}, {"name": "tileY", "type": "int", "value": 13}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 31, "name": "rock", "type": "prop", "x": -448, "y": 480, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 8}, {"name": "tileY", "type": "int", "value": 22}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 32, "name": "rock", "type": "prop", "x": 800, "y": 400, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 25}, {"name": "tileY", "type": "int", "value": 0}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 33, "name": "pine", "type": "prop", "x": -32, "y": 560, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 17}, {"name": "tileY", "type": "int", "value": 18}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 34, "name": "pine", "type": "prop", "x": -32, "y": 784, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 24}, {"name": "tileY", "type": "int", "value": 25}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 35, "name": "rock", "type": "prop", "x": 736, "y": 496, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 27}, {"name": "tileY", "type": "int", "value": 4}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 36, "name": "pine", "type": "prop", "x": 0, "y": 544, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 17}, {"name": "tileY", "type": "int", "value": 17}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 37, "name": "pine", "type": "prop", "x": -192, "y": 480, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 12}, {"name": "tileY", "type": "int", "value": 18}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 38, "name": "bush", "type": "prop", "x": 224, "y": 368, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 15}, {"name": "tileY", "type": "int", "value": 8}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 39, "name": "pine", "type": "prop", "x": 448, "y": 288, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 16}, {"name": "tileY", "type": "int", "value": 2}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 40, "name": "bush", "type": "prop", "x": 160, "y": 432, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 16}, {"name": "tileY", "type": "int", "value": 11}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 41, "name": "tree", "type": "prop", "x": 352, "y": 336, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 16}, {"name": "tileY", "type": "int", "value": 5}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 42, "name": "pine", "type": "prop", "x": 448, "y": 384, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 19}, {"name": "tileY", "type": "int", "value": 5}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 43, "name": "rock", "type": "prop", "x": -448, "y": 640, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 13}, {"name": "tileY", "type": "int", "value": 27}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 44, "name": "rock", "type": "prop", "x": 256, "y": 224, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 11}, {"name": "tileY", "type": "int", "value": 3}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 45, "name": "pine", "type": "prop", "x": -576, "y": 288, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 0}, {"name": "tileY", "type": "int", "value": 18}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 46, "name": "rock", "type": "prop", "x": -96, "y": 304, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 8}, {"name": "tileY", "type": "int", "value": 11}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 47, "name": "pine", "type": "prop", "x": 128, "y": 448, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 16}, {"name": "tileY", "type": "int", "value": 12}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 48, "name": "pine", "type": "prop", "x": 64, "y": 672, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 22}, {"name": "tileY", "type": "int", "value": 20}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 49, "name": "tree", "type": "prop", "x": 576, "y": 576, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 27}, {"name": "tileY", "type": "int", "value": 9}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 50, "name": "tree", "type": "prop", "x": -320, "y": 544, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 12}, {"name": "tileY", "type": "int", "value": 22}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 51, "name": "tree", "type": "prop", "x": -96, "y": 592, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 17}, {"name": "tileY", "type": "int", "value": 20}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 52, "name": "pine", "type": "prop", "x": -64, "y": 224, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 6}, {"name": "tileY", "type": "int", "value": 8}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 53, "name": "bush", "type": "prop", "x": 736, "y": 368, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 23}, {"name": "tileY", "type": "int", "value": 0}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 54, "name": "pine", "type": "prop", "x": 96, "y": 80, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 4}, {"name": "tileY", "type": "int", "value": 1}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 55, "name": "rock", "type": "prop", "x": 32, "y": 784, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 25}, {"name": "tileY", "type": "int", "value": 24}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 56, "name": "pine", "type": "prop", "x": 64, "y": 64, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 3}, {"name": "tileY", "type": "int", "value": 1}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 57, "name": "bush", "type": "prop", "x": 864, "y": 432, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 27}, {"name": "tileY", "type": "int", "value": 0}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 58, "name": "tree", "type": "prop", "x": -32, "y": 400, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 12}, {"name": "tileY", "type": "int", "value": 13}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 59, "name": "pine", "type": "prop", "x": -96, "y": 80, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 1}, {"name": "tileY", "type": "int", "value": 4}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 60, "name": "bush", "type": "prop", "x": -384, "y": 608, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 13}, {"name": "tileY", "type": "int", "value": 25}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 61, "name": "tree", "type": "prop", "x": -96, "y": 272, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 7}, {"name": "tileY", "type": "int", "value": 10}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 62, "name": "pine", "type": "prop", "x": 0, "y": 0, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 0}, {"name": "tileY", "type": "int", "value": 0}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 63, "name": "pine", "type": "prop", "x": 192, "y": 640, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 23}, {"name": "tileY", "type": "int", "value": 17}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 64, "name": "bush", "type": "prop", "x": 384, "y": 256, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 14}, {"name": "tileY", "type": "int", "value": 2}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 65, "name": "bush", "type": "prop", "x": -352, "y": 368, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 6}, {"name": "tileY", "type": "int", "value": 17}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 66, "name": "tree", "type": "prop", "x": -384, "y": 384, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 6}, {"name": "tileY", "type": "int", "value": 18}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 67, "name": "tree", "type": "prop", "x": 416, "y": 240, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 14}, {"name": "tileY", "type": "int", "value": 1}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 68, "name": "pine", "type": "prop", "x": 64, "y": 608, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 20}, {"name": "tileY", "type": "int", "value": 18}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 69, "name": "tree", "type": "prop", "x": 64, "y": 416, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 14}, {"name": "tileY", "type": "int", "value": 12}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 70, "name": "pine", "type": "prop", "x": 0, "y": 800, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 25}, {"name": "tileY", "type": "int", "value": 25}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 71, "name": "tree", "type": "prop", "x": -192, "y": 736, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 20}, {"name": "tileY", "type": "int", "value": 26}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 72, "name": "bush", "type": "prop", "x": 160, "y": 176, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 8}, {"name": "tileY", "type": "int", "value": 3}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 73, "name": "pine", "type": "prop", "x": 96, "y": 752, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 25}, {"name": "tileY", "type": "int", "value": 22}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 74, "name": "bush", "type": "prop", "x": 224, "y": 240, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 11}, {"name": "tileY", "type": "int", "value": 4}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 75, "name": "bush", "type": "prop", "x": 256, "y": 256, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 12}, {"name": "tileY", "type": "int", "value": 4}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 76, "name": "pine", "type": "prop", "x": 64, "y": 32, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 2}, {"name": "tileY", "type": "int", "value": 0}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 77, "name": "pine", "type": "prop", "x": 32, "y": 208, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 7}, {"name": "tileY", "type": "int", "value": 6}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 78, "name": "rock", "type": "prop", "x": 320, "y": 224, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 12}, {"name": "tileY", "type": "int", "value": 2}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 79, "name": "pine", "type": "prop", "x": 704, "y": 352, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 22}, {"name": "tileY", "type": "int", "value": 0}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 80, "name": "pine", "type": "prop", "x": -416, "y": 560, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 11}, {"name": "tileY", "type": "int", "value": 24}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 81, "name": "rock", "type": "prop", "x": -32, "y": 496, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 15}, {"name": "tileY", "type": "int", "value": 16}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 82, "name": "rock", "type": "prop", "x": -256, "y": 736, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 19}, {"name": "tileY", "type": "int", "value": 27}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 83, "name": "bush", "type": "prop", "x": 160, "y": 688, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 24}, {"name": "tileY", "type": "int", "value": 19}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 84, "name": "pine", "type": "prop", "x": -704, "y": 448, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 3}, {"name": "tileY", "type": "int", "value": 25}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 85, "name": "pine", "type": "prop", "x": 416, "y": 208, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 13}, {"name": "tileY", "type": "int", "value": 0}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 86, "name": "pine", "type": "prop", "x": -608, "y": 528, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 7}, {"name": "tileY", "type": "int", "value": 26}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 87, "name": "pine", "type": "prop", "x": -160, "y": 272, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 6}, {"name": "tileY", "type": "int", "value": 11}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 88, "name": "pine", "type": "prop", "x": -128, "y": 640, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 18}, {"name": "tileY", "type": "int", "value": 22}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 89, "name": "bush", "type": "prop", "x": 64, "y": 448, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 15}, {"name": "tileY", "type": "int", "value": 13}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 90, "name": "tree", "type": "prop", "x": 128, "y": 256, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 10}, {"name": "tileY", "type": "int", "value": 6}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 91, "name": "tree", "type": "prop", "x": -512, "y": 576, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 10}, {"name": "tileY", "type": "int", "value": 26}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 92, "name": "bush", "type": "prop", "x": 32, "y": 688, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 22}, {"name": "tileY", "type": "int", "value": 21}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 93, "name": "tree", "type": "prop", "x": -64, "y": 96, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 2}, {"name": "tileY", "type": "int", "value": 4}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 94, "name": "bush", "type": "prop", "x": -32, "y": 432, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 13}, {"name": "tileY", "type": "int", "value": 14}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 95, "name": "bush", "type": "prop", "x": -128, "y": 512, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 14}, {"name": "tileY", "type": "int", "value": 18}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 96, "name": "rock", "type": "prop", "x": -352, "y": 688, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 16}, {"name": "tileY", "type": "int", "value": 27}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 97, "name": "bush", "type": "prop", "x": 544, "y": 272, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 17}, {"name": "tileY", "type": "int", "value": 0}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 98, "name": "pine", "type": "prop", "x": 544, "y": 304, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 18}, {"name": "tileY", "type": "int", "value": 1}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 99, "name": "tree", "type": "prop", "x": -320, "y": 672, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 16}, {"name": "tileY", "type": "int", "value": 26}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 100, "name": "pine", "type": "prop", "x": -256, "y": 672, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 17}, {"name": "tileY", "type": "int", "value": 25}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 101, "name": "pine", "type": "prop", "x": 32, "y": 720, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 23}, {"name": "tileY", "type": "int", "value": 22}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 102, "name": "rock", "type": "prop", "x": -640, "y": 416, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 3}, {"name": "tileY", "type": "int", "value": 23}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 103, "name": "pine", "type": "prop", "x": 352, "y": 176, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 11}, {"name": "tileY", "type": "int", "value": 0}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 104, "name": "pine", "type": "prop", "x": -288, "y": 464, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 10}, {"name": "tileY", "type": "int", "value": 19}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 105, "name": "rock", "type": "prop", "x": 480, "y": 240, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 15}, {"name": "tileY", "type": "int", "value": 0}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 106, "name": "pine", "type": "prop", "x": 160, "y": 560, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 20}, {"name": "tileY", "type": "int", "value": 15}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 107, "name": "pine", "type": "prop", "x": 96, "y": 656, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 22}, {"name": "tileY", "type": "int", "value": 19}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 108, "name": "pine", "type": "prop", "x": 128, "y": 192, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 8}, {"name": "tileY", "type": "int", "value": 4}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 109, "name": "tree", "type": "prop", "x": 160, "y": 240, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 10}, {"name": "tileY", "type": "int", "value": 5}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 110, "name": "pine", "type": "prop", "x": -576, "y": 416, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 4}, {"name": "tileY", "type": "int", "value": 22}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 111, "name": "pine", "type": "prop", "x": 288, "y": 304, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 14}, {"name": "tileY", "type": "int", "value": 5}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 112, "name": "pine", "type": "prop", "x": -384, "y": 448, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 8}, {"name": "tileY", "type": "int", "value": 20}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 113, "name": "pine", "type": "prop", "x": -256, "y": 576, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 14}, {"name": "tileY", "type": "int", "value": 22}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 114, "name": "tree", "type": "prop", "x": 224, "y": 304, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 13}, {"name": "tileY", "type": "int", "value": 6}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 115, "name": "bush", "type": "prop", "x": -320, "y": 512, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 11}, {"name": "tileY", "type": "int", "value": 21}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 116, "name": "bush", "type": "prop", "x": 512, "y": 352, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 19}, {"name": "tileY", "type": "int", "value": 3}, {"name": "sprite", "type": "string", "value": "bush"}]}, {"id": 117, "name": "pine", "type": "prop", "x": 192, "y": 192, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 9}, {"name": "tileY", "type": "int", "value": 3}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 118, "name": "rock", "type": "prop", "x": -160, "y": 304, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 7}, {"name": "tileY", "type": "int", "value": 12}, {"name": "sprite", "type": "string", "value": "rock"}]}, {"id": 119, "name": "pine", "type": "prop", "x": -32, "y": 528, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 16}, {"name": "tileY", "type": "int", "value": 17}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 120, "name": "pine", "type": "prop", "x": -224, "y": 368, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 8}, {"name": "tileY", "type": "int", "value": 15}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 121, "name": "tree", "type": "prop", "x": -384, "y": 352, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 5}, {"name": "tileY", "type": "int", "value": 17}, {"name": "sprite", "type": "string", "value": "tree"}]}, {"id": 122, "name": "pine", "type": "prop", "x": 160, "y": 336, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 13}, {"name": "tileY", "type": "int", "value": 8}, {"name": "sprite", "type": "string", "value": "pine"}]}, {"id": 123, "name": "from_village", "type": "spawn", "x": -416, "y": 240, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 1}, {"name": "tileY", "type": "int", "value": 14}]}, {"id": 124, "name": "portal_village", "type": "portal", "x": -448, "y": 224, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 0}, {"name": "tileY", "type": "int", "value": 14}, {"name": "targetMap", "type": "string", "value": "meadow_village"}, {"name": "targetSpawn", "type": "string", "value": "spawn_player"}]}, {"id": 125, "name": "wild_spawn_1", "type": "wild_spawn", "x": 64, "y": 224, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 8}, {"name": "tileY", "type": "int", "value": 6}, {"name": "radius", "type": "string", "value": "3"}]}, {"id": 126, "name": "wild_spawn_2", "type": "wild_spawn", "x": -256, "y": 512, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 12}, {"name": "tileY", "type": "int", "value": 20}, {"name": "radius", "type": "string", "value": "3"}]}, {"id": 127, "name": "wild_spawn_3", "type": "wild_spawn", "x": 288, "y": 400, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 17}, {"name": "tileY", "type": "int", "value": 8}, {"name": "radius", "type": "string", "value": "3"}]}, {"id": 128, "name": "wild_spawn_4", "type": "wild_spawn", "x": 320, "y": 544, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 22}, {"name": "tileY", "type": "int", "value": 12}, {"name": "radius", "type": "string", "value": "3"}]}, {"id": 129, "name": "wild_spawn_5", "type": "wild_spawn", "x": -288, "y": 624, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 15}, {"name": "tileY", "type": "int", "value": 24}, {"name": "radius", "type": "string", "value": "3"}]}, {"id": 130, "name": "wild_spawn_6", "type": "wild_spawn", "x": 160, "y": 720, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 25}, {"name": "tileY", "type": "int", "value": 20}, {"name": "radius", "type": "string", "value": "3"}]}, {"id": 131, "name": "from_grove", "type": "spawn", "x": 384, "y": 640, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 26}, {"name": "tileY", "type": "int", "value": 14}]}, {"id": 132, "name": "portal_grove", "type": "portal", "x": 416, "y": 656, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name": "tileX", "type": "int", "value": 27}, {"name": "tileY", "type": "int", "value": 14}, {"name": "targetMap", "type": "string", "value": "ancient_grove"}, {"name": "targetSpawn", "type": "string", "value": "from_forest"}]}], "opacity": 1, "visible": true, "x": 0, "y": 0}]}
+{
+ "type": "map",
+ "orientation": "isometric",
+ "renderorder": "right-down",
+ "width": 28,
+ "height": 28,
+ "tilewidth": 64,
+ "tileheight": 32,
+ "infinite": false,
+ "version": "1.10",
+ "tiledversion": "1.10.2",
+ "nextlayerid": 4,
+ "nextobjectid": 229,
+ "tilesets": [
+  {
+   "firstgid": 1,
+   "name": "verdant",
+   "tilewidth": 64,
+   "tileheight": 32,
+   "tilecount": 6,
+   "columns": 3,
+   "image": "verdant.png",
+   "imagewidth": 192,
+   "imageheight": 64
+  }
+ ],
+ "layers": [
+  {
+   "id": 1,
+   "name": "ground",
+   "type": "tilelayer",
+   "width": 28,
+   "height": 28,
+   "data": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    8,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    8,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    8,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    2,
+    8,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    8,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    8,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    8,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    8,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    8,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    8,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    8,
+    8,
+    8,
+    8,
+    8,
+    2,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    8,
+    5,
+    5,
+    5,
+    8,
+    2,
+    2,
+    2,
+    1,
+    1,
+    5,
+    1,
+    1,
+    5,
+    1,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    8,
+    8,
+    8,
+    5,
+    5,
+    5,
+    8,
+    2,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    8,
+    8,
+    8,
+    5,
+    5,
+    5,
+    8,
+    2,
+    2,
+    2,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    8,
+    8,
+    8,
+    8,
+    2,
+    2,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    8,
+    8,
+    8,
+    8,
+    2,
+    2,
+    2,
+    2,
+    2,
+    8,
+    8,
+    8,
+    8,
+    8,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    2,
+    6,
+    6,
+    6,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    5,
+    1,
+    1,
+    5,
+    1,
+    1,
+    5,
+    1,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    6,
+    6,
+    6,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    10,
+    10,
+    10,
+    10,
+    10,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    10,
+    10,
+    10,
+    7,
+    7,
+    7,
+    10,
+    10,
+    10,
+    2,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    2,
+    2,
+    10,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    10,
+    10,
+    10,
+    7,
+    4,
+    4,
+    4,
+    7,
+    10,
+    10,
+    10,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    6,
+    2,
+    2,
+    2,
+    10,
+    10,
+    10,
+    7,
+    4,
+    4,
+    7,
+    10,
+    10,
+    10,
+    10,
+    6,
+    6,
+    6,
+    6,
+    6,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    6,
+    2,
+    2,
+    10,
+    10,
+    10,
+    10,
+    7,
+    7,
+    10,
+    10,
+    10,
+    10,
+    10,
+    6,
+    6,
+    6,
+    6,
+    6,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    2,
+    2,
+    2,
+    2,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    10,
+    10,
+    10,
+    10,
+    10,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    10,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0
+  },
+  {
+   "id": 2,
+   "name": "collision",
+   "type": "tilelayer",
+   "width": 28,
+   "height": 28,
+   "data": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    1,
+    1,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    1,
+    1,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "opacity": 1,
+   "visible": false,
+   "x": 0,
+   "y": 0
+  },
+  {
+   "id": 3,
+   "name": "objects",
+   "type": "objectgroup",
+   "objects": [
+    {
+     "id": 1,
+     "name": "shrooms",
+     "type": "prop",
+     "x": -480,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "shrooms"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "name": "stump",
+     "type": "prop",
+     "x": 352,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "stump"
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "name": "runes",
+     "type": "prop",
+     "x": 320,
+     "y": 448,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "runes"
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "name": "elder",
+     "type": "prop",
+     "x": 480,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "elder"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.15"
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "name": "pine",
+     "type": "prop",
+     "x": 64,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "name": "pine",
+     "type": "prop",
+     "x": -128,
+     "y": 768,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.4"
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -64,
+     "y": 32,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 9,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -64,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "name": "pine",
+     "type": "prop",
+     "x": 608,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 11,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 128,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.33"
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 352,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "name": "pine",
+     "type": "prop",
+     "x": 512,
+     "y": 352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 608,
+     "y": 464,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 15,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -32,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 0,
+     "y": 96,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.49"
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 320,
+     "y": 352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.48"
+      }
+     ]
+    },
+    {
+     "id": 18,
+     "name": "pine",
+     "type": "prop",
+     "x": 32,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 224,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "name": "pine",
+     "type": "prop",
+     "x": 384,
+     "y": 256,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.25"
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "name": "pine",
+     "type": "prop",
+     "x": 128,
+     "y": 288,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "name": "pine",
+     "type": "prop",
+     "x": 128,
+     "y": 64,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.39"
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "name": "pine",
+     "type": "prop",
+     "x": 160,
+     "y": 80,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "name": "pine",
+     "type": "prop",
+     "x": 832,
+     "y": 448,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "name": "pine",
+     "type": "prop",
+     "x": 256,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.37"
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -224,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 384,
+     "y": 288,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "name": "pine",
+     "type": "prop",
+     "x": 416,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.37"
+      }
+     ]
+    },
+    {
+     "id": 29,
+     "name": "pine",
+     "type": "prop",
+     "x": 704,
+     "y": 448,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 30,
+     "name": "pine",
+     "type": "prop",
+     "x": 0,
+     "y": 0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 31,
+     "name": "pine",
+     "type": "prop",
+     "x": -128,
+     "y": 96,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 32,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 160,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 33,
+     "name": "pine",
+     "type": "prop",
+     "x": 128,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 34,
+     "name": "pine",
+     "type": "prop",
+     "x": 288,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 35,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -32,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 36,
+     "name": "pine",
+     "type": "prop",
+     "x": 64,
+     "y": 256,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 37,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 576,
+     "y": 416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 38,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 192,
+     "y": 320,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.4"
+      }
+     ]
+    },
+    {
+     "id": 39,
+     "name": "pine",
+     "type": "prop",
+     "x": 448,
+     "y": 320,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 40,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 192,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 42,
+     "name": "pine",
+     "type": "prop",
+     "x": -64,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 43,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 544,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 44,
+     "name": "pine",
+     "type": "prop",
+     "x": 64,
+     "y": 96,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.26"
+      }
+     ]
+    },
+    {
+     "id": 45,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 672,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.27"
+      }
+     ]
+    },
+    {
+     "id": 46,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -192,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 47,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 0,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 48,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 256,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.44"
+      }
+     ]
+    },
+    {
+     "id": 49,
+     "name": "pine",
+     "type": "prop",
+     "x": 576,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 21
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 50,
+     "name": "pine",
+     "type": "prop",
+     "x": 704,
+     "y": 512,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 51,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 640,
+     "y": 416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.26"
+      }
+     ]
+    },
+    {
+     "id": 52,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 288,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 53,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 544,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 54,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 160,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 55,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 32,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.36"
+      }
+     ]
+    },
+    {
+     "id": 56,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 576,
+     "y": 480,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 57,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 256,
+     "y": 256,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.27"
+      }
+     ]
+    },
+    {
+     "id": 58,
+     "name": "pine",
+     "type": "prop",
+     "x": 800,
+     "y": 464,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 59,
+     "name": "pine",
+     "type": "prop",
+     "x": 288,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.48"
+      }
+     ]
+    },
+    {
+     "id": 60,
+     "name": "pine",
+     "type": "prop",
+     "x": 32,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.26"
+      }
+     ]
+    },
+    {
+     "id": 61,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 224,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.32"
+      }
+     ]
+    },
+    {
+     "id": 62,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -160,
+     "y": 80,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.34"
+      }
+     ]
+    },
+    {
+     "id": 63,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 160,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 64,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 768,
+     "y": 448,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 66,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -32,
+     "y": 16,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 67,
+     "name": "pine",
+     "type": "prop",
+     "x": 768,
+     "y": 480,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 68,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 416,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.37"
+      }
+     ]
+    },
+    {
+     "id": 69,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 160,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 70,
+     "name": "pine",
+     "type": "prop",
+     "x": 832,
+     "y": 416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.38"
+      }
+     ]
+    },
+    {
+     "id": 71,
+     "name": "pine",
+     "type": "prop",
+     "x": 320,
+     "y": 416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 72,
+     "name": "bush",
+     "type": "prop",
+     "x": 128,
+     "y": 416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 73,
+     "name": "pine",
+     "type": "prop",
+     "x": 544,
+     "y": 592,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 74,
+     "name": "tree",
+     "type": "prop",
+     "x": -128,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 75,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 512,
+     "y": 544,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.31"
+      }
+     ]
+    },
+    {
+     "id": 76,
+     "name": "tree",
+     "type": "prop",
+     "x": 128,
+     "y": 608,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 21
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 77,
+     "name": "pine",
+     "type": "prop",
+     "x": -160,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.39"
+      }
+     ]
+    },
+    {
+     "id": 78,
+     "name": "tree",
+     "type": "prop",
+     "x": -256,
+     "y": 448,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.33"
+      }
+     ]
+    },
+    {
+     "id": 79,
+     "name": "pine",
+     "type": "prop",
+     "x": 128,
+     "y": 352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 80,
+     "name": "tree",
+     "type": "prop",
+     "x": 192,
+     "y": 704,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 81,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -32,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 82,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -32,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 83,
+     "name": "rock",
+     "type": "prop",
+     "x": 0,
+     "y": 608,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 84,
+     "name": "tree",
+     "type": "prop",
+     "x": -64,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 85,
+     "name": "bush",
+     "type": "prop",
+     "x": 416,
+     "y": 496,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 86,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 160,
+     "y": 464,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 87,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -32,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 88,
+     "name": "tree",
+     "type": "prop",
+     "x": 64,
+     "y": 608,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 89,
+     "name": "rock",
+     "type": "prop",
+     "x": 128,
+     "y": 480,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 90,
+     "name": "darkwood",
+     "type": "prop",
+     "x": 320,
+     "y": 704,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 91,
+     "name": "darkwood",
+     "type": "prop",
+     "x": -192,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "darkwood"
+      }
+     ]
+    },
+    {
+     "id": 92,
+     "name": "pine",
+     "type": "prop",
+     "x": 160,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 93,
+     "name": "bush",
+     "type": "prop",
+     "x": -192,
+     "y": 512,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 94,
+     "name": "tree",
+     "type": "prop",
+     "x": -32,
+     "y": 592,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 95,
+     "name": "rock",
+     "type": "prop",
+     "x": 512,
+     "y": 576,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 96,
+     "name": "bush",
+     "type": "prop",
+     "x": -32,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 97,
+     "name": "tree",
+     "type": "prop",
+     "x": -320,
+     "y": 448,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 98,
+     "name": "bush",
+     "type": "prop",
+     "x": -128,
+     "y": 544,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.29"
+      }
+     ]
+    },
+    {
+     "id": 99,
+     "name": "tree",
+     "type": "prop",
+     "x": 192,
+     "y": 672,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 100,
+     "name": "pine",
+     "type": "prop",
+     "x": 160,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      }
+     ]
+    },
+    {
+     "id": 101,
+     "name": "bush",
+     "type": "prop",
+     "x": -320,
+     "y": 352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 102,
+     "name": "blossom",
+     "type": "prop",
+     "x": -352,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "blossom"
+      }
+     ]
+    },
+    {
+     "id": 103,
+     "name": "blossom",
+     "type": "prop",
+     "x": -416,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "blossom"
+      }
+     ]
+    },
+    {
+     "id": 104,
+     "name": "bush",
+     "type": "prop",
+     "x": -256,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 105,
+     "name": "bush",
+     "type": "prop",
+     "x": -160,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 106,
+     "name": "tree",
+     "type": "prop",
+     "x": -512,
+     "y": 288,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 107,
+     "name": "bush",
+     "type": "prop",
+     "x": 0,
+     "y": 832,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 108,
+     "name": "bush",
+     "type": "prop",
+     "x": -640,
+     "y": 544,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 109,
+     "name": "bush",
+     "type": "prop",
+     "x": -256,
+     "y": 672,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 110,
+     "name": "bush",
+     "type": "prop",
+     "x": -32,
+     "y": 720,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 111,
+     "name": "bush",
+     "type": "prop",
+     "x": -128,
+     "y": 672,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 112,
+     "name": "rock",
+     "type": "prop",
+     "x": -352,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 113,
+     "name": "bush",
+     "type": "prop",
+     "x": -288,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 114,
+     "name": "rock",
+     "type": "prop",
+     "x": -96,
+     "y": 656,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 115,
+     "name": "bush",
+     "type": "prop",
+     "x": -768,
+     "y": 448,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 116,
+     "name": "rock",
+     "type": "prop",
+     "x": 32,
+     "y": 752,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 117,
+     "name": "bush",
+     "type": "prop",
+     "x": 192,
+     "y": 768,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 21
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 118,
+     "name": "bush",
+     "type": "prop",
+     "x": -448,
+     "y": 576,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 119,
+     "name": "shrooms",
+     "type": "prop",
+     "x": -608,
+     "y": 464,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "shrooms"
+      }
+     ]
+    },
+    {
+     "id": 120,
+     "name": "bush",
+     "type": "prop",
+     "x": -160,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 121,
+     "name": "bush",
+     "type": "prop",
+     "x": -384,
+     "y": 512,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 122,
+     "name": "bush",
+     "type": "prop",
+     "x": -640,
+     "y": 512,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 123,
+     "name": "bush",
+     "type": "prop",
+     "x": -544,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 124,
+     "name": "rock",
+     "type": "prop",
+     "x": -96,
+     "y": 784,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 125,
+     "name": "bush",
+     "type": "prop",
+     "x": 160,
+     "y": 720,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 126,
+     "name": "bush",
+     "type": "prop",
+     "x": -64,
+     "y": 800,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 127,
+     "name": "bush",
+     "type": "prop",
+     "x": -256,
+     "y": 736,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 128,
+     "name": "bush",
+     "type": "prop",
+     "x": -320,
+     "y": 480,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 129,
+     "name": "shrooms",
+     "type": "prop",
+     "x": 0,
+     "y": 768,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "shrooms"
+      }
+     ]
+    },
+    {
+     "id": 130,
+     "name": "shrooms",
+     "type": "prop",
+     "x": -320,
+     "y": 640,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "shrooms"
+      }
+     ]
+    },
+    {
+     "id": 131,
+     "name": "bush",
+     "type": "prop",
+     "x": 96,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 132,
+     "name": "bush",
+     "type": "prop",
+     "x": -576,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 21
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 133,
+     "name": "rock",
+     "type": "prop",
+     "x": -32,
+     "y": 624,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 134,
+     "name": "rock",
+     "type": "prop",
+     "x": -864,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 135,
+     "name": "pine",
+     "type": "prop",
+     "x": 864,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 136,
+     "name": "pine",
+     "type": "prop",
+     "x": 32,
+     "y": 16,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 137,
+     "name": "bush",
+     "type": "prop",
+     "x": -832,
+     "y": 448,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 138,
+     "name": "pine",
+     "type": "prop",
+     "x": 64,
+     "y": 32,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 139,
+     "name": "bush",
+     "type": "prop",
+     "x": -800,
+     "y": 464,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 140,
+     "name": "pine",
+     "type": "prop",
+     "x": 96,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 141,
+     "name": "rock",
+     "type": "prop",
+     "x": -768,
+     "y": 480,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 142,
+     "name": "tree",
+     "type": "prop",
+     "x": -96,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 143,
+     "name": "bush",
+     "type": "prop",
+     "x": -736,
+     "y": 496,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 144,
+     "name": "tree",
+     "type": "prop",
+     "x": -128,
+     "y": 64,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 145,
+     "name": "rock",
+     "type": "prop",
+     "x": 736,
+     "y": 496,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 146,
+     "name": "bush",
+     "type": "prop",
+     "x": -704,
+     "y": 512,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 147,
+     "name": "pine",
+     "type": "prop",
+     "x": 192,
+     "y": 96,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 148,
+     "name": "rock",
+     "type": "prop",
+     "x": -672,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 149,
+     "name": "tree",
+     "type": "prop",
+     "x": -192,
+     "y": 96,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 150,
+     "name": "pine",
+     "type": "prop",
+     "x": 224,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 151,
+     "name": "tree",
+     "type": "prop",
+     "x": -224,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 152,
+     "name": "rock",
+     "type": "prop",
+     "x": 640,
+     "y": 544,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 153,
+     "name": "pine",
+     "type": "prop",
+     "x": 256,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 154,
+     "name": "bush",
+     "type": "prop",
+     "x": -608,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 155,
+     "name": "tree",
+     "type": "prop",
+     "x": -256,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 156,
+     "name": "rock",
+     "type": "prop",
+     "x": 608,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 157,
+     "name": "pine",
+     "type": "prop",
+     "x": 288,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 158,
+     "name": "rock",
+     "type": "prop",
+     "x": -576,
+     "y": 576,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 159,
+     "name": "tree",
+     "type": "prop",
+     "x": -288,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 160,
+     "name": "rock",
+     "type": "prop",
+     "x": 576,
+     "y": 576,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 161,
+     "name": "pine",
+     "type": "prop",
+     "x": 320,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 162,
+     "name": "bush",
+     "type": "prop",
+     "x": -544,
+     "y": 592,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 163,
+     "name": "tree",
+     "type": "prop",
+     "x": -320,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 164,
+     "name": "pine",
+     "type": "prop",
+     "x": 352,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 165,
+     "name": "bush",
+     "type": "prop",
+     "x": -512,
+     "y": 608,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 166,
+     "name": "rock",
+     "type": "prop",
+     "x": 512,
+     "y": 608,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 167,
+     "name": "pine",
+     "type": "prop",
+     "x": 384,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 168,
+     "name": "rock",
+     "type": "prop",
+     "x": -480,
+     "y": 624,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 169,
+     "name": "tree",
+     "type": "prop",
+     "x": -384,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 170,
+     "name": "rock",
+     "type": "prop",
+     "x": 480,
+     "y": 624,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 171,
+     "name": "pine",
+     "type": "prop",
+     "x": 416,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 172,
+     "name": "bush",
+     "type": "prop",
+     "x": -448,
+     "y": 640,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 173,
+     "name": "tree",
+     "type": "prop",
+     "x": -416,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 174,
+     "name": "rock",
+     "type": "prop",
+     "x": 448,
+     "y": 640,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 175,
+     "name": "pine",
+     "type": "prop",
+     "x": 448,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 176,
+     "name": "bush",
+     "type": "prop",
+     "x": -416,
+     "y": 656,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 177,
+     "name": "pine",
+     "type": "prop",
+     "x": 480,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 178,
+     "name": "rock",
+     "type": "prop",
+     "x": -384,
+     "y": 672,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 179,
+     "name": "tree",
+     "type": "prop",
+     "x": -480,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 180,
+     "name": "rock",
+     "type": "prop",
+     "x": 384,
+     "y": 672,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 181,
+     "name": "pine",
+     "type": "prop",
+     "x": 512,
+     "y": 256,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 182,
+     "name": "bush",
+     "type": "prop",
+     "x": -352,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 183,
+     "name": "tree",
+     "type": "prop",
+     "x": -512,
+     "y": 256,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 184,
+     "name": "rock",
+     "type": "prop",
+     "x": 352,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 185,
+     "name": "bush",
+     "type": "prop",
+     "x": -320,
+     "y": 704,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 186,
+     "name": "tree",
+     "type": "prop",
+     "x": -544,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 187,
+     "name": "pine",
+     "type": "prop",
+     "x": 576,
+     "y": 288,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 188,
+     "name": "rock",
+     "type": "prop",
+     "x": -288,
+     "y": 720,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 189,
+     "name": "tree",
+     "type": "prop",
+     "x": -576,
+     "y": 288,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 190,
+     "name": "rock",
+     "type": "prop",
+     "x": 288,
+     "y": 720,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 191,
+     "name": "pine",
+     "type": "prop",
+     "x": 608,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 192,
+     "name": "tree",
+     "type": "prop",
+     "x": -608,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 193,
+     "name": "rock",
+     "type": "prop",
+     "x": 256,
+     "y": 736,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 194,
+     "name": "bush",
+     "type": "prop",
+     "x": -224,
+     "y": 752,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 195,
+     "name": "tree",
+     "type": "prop",
+     "x": -640,
+     "y": 320,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 196,
+     "name": "rock",
+     "type": "prop",
+     "x": 224,
+     "y": 752,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 197,
+     "name": "pine",
+     "type": "prop",
+     "x": 672,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 21
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 198,
+     "name": "rock",
+     "type": "prop",
+     "x": -192,
+     "y": 768,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 21
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 199,
+     "name": "tree",
+     "type": "prop",
+     "x": -672,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 21
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 200,
+     "name": "pine",
+     "type": "prop",
+     "x": 704,
+     "y": 352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 201,
+     "name": "bush",
+     "type": "prop",
+     "x": -160,
+     "y": 784,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 202,
+     "name": "tree",
+     "type": "prop",
+     "x": -704,
+     "y": 352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 203,
+     "name": "rock",
+     "type": "prop",
+     "x": 160,
+     "y": 784,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 204,
+     "name": "pine",
+     "type": "prop",
+     "x": 736,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 205,
+     "name": "bush",
+     "type": "prop",
+     "x": -128,
+     "y": 800,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 206,
+     "name": "tree",
+     "type": "prop",
+     "x": -736,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 207,
+     "name": "rock",
+     "type": "prop",
+     "x": 128,
+     "y": 800,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 208,
+     "name": "pine",
+     "type": "prop",
+     "x": 768,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 209,
+     "name": "rock",
+     "type": "prop",
+     "x": -96,
+     "y": 816,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 210,
+     "name": "tree",
+     "type": "prop",
+     "x": -768,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 211,
+     "name": "rock",
+     "type": "prop",
+     "x": 96,
+     "y": 816,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 212,
+     "name": "pine",
+     "type": "prop",
+     "x": 800,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "pine"
+      },
+      {
+       "name": "scale",
+       "type": "string",
+       "value": "1.45"
+      }
+     ]
+    },
+    {
+     "id": 213,
+     "name": "bush",
+     "type": "prop",
+     "x": -64,
+     "y": 832,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 214,
+     "name": "tree",
+     "type": "prop",
+     "x": -800,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 215,
+     "name": "rock",
+     "type": "prop",
+     "x": 64,
+     "y": 832,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 216,
+     "name": "bush",
+     "type": "prop",
+     "x": -32,
+     "y": 848,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "bush"
+      }
+     ]
+    },
+    {
+     "id": 217,
+     "name": "tree",
+     "type": "prop",
+     "x": -832,
+     "y": 416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "tree"
+      }
+     ]
+    },
+    {
+     "id": 218,
+     "name": "rock",
+     "type": "prop",
+     "x": 32,
+     "y": 848,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 219,
+     "name": "rock",
+     "type": "prop",
+     "x": 0,
+     "y": 864,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 220,
+     "name": "from_village",
+     "type": "spawn",
+     "x": -416,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 14
+      }
+     ]
+    },
+    {
+     "id": 221,
+     "name": "portal_village",
+     "type": "portal",
+     "x": -448,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "targetMap",
+       "type": "string",
+       "value": "meadow_village"
+      },
+      {
+       "name": "targetSpawn",
+       "type": "string",
+       "value": "spawn_player"
+      }
+     ]
+    },
+    {
+     "id": 222,
+     "name": "from_grove",
+     "type": "spawn",
+     "x": 384,
+     "y": 640,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 26
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 14
+      }
+     ]
+    },
+    {
+     "id": 223,
+     "name": "portal_grove",
+     "type": "portal",
+     "x": 416,
+     "y": 656,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 27
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "targetMap",
+       "type": "string",
+       "value": "ancient_grove"
+      },
+      {
+       "name": "targetSpawn",
+       "type": "string",
+       "value": "from_forest"
+      }
+     ]
+    },
+    {
+     "id": 224,
+     "name": "from_deep",
+     "type": "spawn",
+     "x": 608,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 225,
+     "name": "portal_deep",
+     "type": "portal",
+     "x": 640,
+     "y": 320,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "targetMap",
+       "type": "string",
+       "value": "forest_deep"
+      },
+      {
+       "name": "targetSpawn",
+       "type": "string",
+       "value": "from_forest"
+      }
+     ]
+    },
+    {
+     "id": 226,
+     "name": "wild_spawn_1",
+     "type": "wild_spawn",
+     "x": 64,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "radius",
+       "type": "string",
+       "value": "3"
+      }
+     ]
+    },
+    {
+     "id": 227,
+     "name": "wild_spawn_2",
+     "type": "wild_spawn",
+     "x": -256,
+     "y": 512,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "radius",
+       "type": "string",
+       "value": "3"
+      }
+     ]
+    },
+    {
+     "id": 228,
+     "name": "wild_spawn_3",
+     "type": "wild_spawn",
+     "x": 288,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "radius",
+       "type": "string",
+       "value": "3"
+      }
+     ]
+    },
+    {
+     "id": 229,
+     "name": "wild_spawn_4",
+     "type": "wild_spawn",
+     "x": 320,
+     "y": 544,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "radius",
+       "type": "string",
+       "value": "3"
+      }
+     ]
+    },
+    {
+     "id": 230,
+     "name": "wild_spawn_5",
+     "type": "wild_spawn",
+     "x": -288,
+     "y": 624,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "radius",
+       "type": "string",
+       "value": "3"
+      }
+     ]
+    },
+    {
+     "id": 231,
+     "name": "wild_spawn_6",
+     "type": "wild_spawn",
+     "x": 160,
+     "y": 720,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 25
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "radius",
+       "type": "string",
+       "value": "3"
+      }
+     ]
+    }
+   ],
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0
+  }
+ ]
+}

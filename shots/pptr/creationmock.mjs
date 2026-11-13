@@ -1,0 +1,14 @@
+import puppeteer from "puppeteer-core";
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const browser = await puppeteer.launch({ executablePath: "/home/hatch/.cache/puppeteer/chrome/linux-156.0.8078.47/chrome-linux64/chrome", headless: "new", args: ["--no-sandbox"] });
+const page = await browser.newPage();
+await page.setViewport({ width: 1280, height: 720 });
+const base = "file:///home/hatch/workspace/eidolith/shots/creation-mock/mock.html";
+await page.goto(`${base}?bg=a&g=female&o=sweater&n=Lina2026`, { waitUntil: "networkidle0" });
+await sleep(500);
+await page.screenshot({ path: "/home/hatch/workspace/eidolith/shots/creation4-bg-meadow.png" });
+await page.goto(`${base}?bg=b&g=female&o=floral&n=Lina2026`, { waitUntil: "networkidle0" });
+await sleep(500);
+await page.screenshot({ path: "/home/hatch/workspace/eidolith/shots/creation4-bg-grove.png" });
+console.log("done");
+await browser.close();

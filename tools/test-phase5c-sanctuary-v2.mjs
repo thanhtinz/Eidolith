@@ -12,8 +12,8 @@ const call = async (method, path, token, body) => {
   return { status: r.status, json: await r.json().catch(() => null) };
 };
 
-const email = `p5c_${Date.now()}@test.dev`;
-const username = `p5c_${Date.now() % 100000}`;
+const email = `p5cx${Date.now()}@test.dev`;
+const username = `p5cx${Date.now() % 100000}`;
 await call("POST", "/auth/register", null, { email, username, password: "SecurePass123" });
 const login = await call("POST", "/auth/login", null, { email, password: "SecurePass123" });
 const token = login.json?.data?.accessToken;
@@ -34,7 +34,7 @@ const bld = (st, id) => st.buildings.find(b => b.id === id);
 
 /* ------------------------------ state ------------------------------ */
 let st = await sanc();
-check("5 buildings incl research_lab", st.buildings.length === 5 && !!bld(st, "research_lab"));
+check("7 buildings incl research_lab + wave2 gate/workshop", st.buildings.length === 7 && !!bld(st, "research_lab") && !!bld(st, "expedition_gate") && !!bld(st, "workshop"));
 check("hallLevel 1, cap 8h", st.hallLevel === 1 && st.capHours === 8);
 check("lab: kind data, 2 slots", bld(st, "research_lab").kind === "data" && bld(st, "research_lab").slots === 2);
 check("totals zero, researchData 0", st.totals.bond === 0 && st.totals.xp === 0 && st.totals.data === 0 && st.researchData === 0);

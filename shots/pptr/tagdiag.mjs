@@ -1,0 +1,10 @@
+import puppeteer from "puppeteer-core";
+const browser = await puppeteer.launch({ executablePath: "/home/hatch/.cache/puppeteer/chrome/linux-156.0.8078.47/chrome-linux64/chrome", headless: "new", args: ["--no-sandbox"] });
+const page = await browser.newPage();
+await page.setViewport({ width: 1280, height: 720, deviceScaleFactor: 2 });
+await page.goto("file:///home/hatch/workspace/eidolith/shots/creation-mock/mock.html?g=female&h=blond&o=wine&n=Lina2026", { waitUntil: "networkidle0" });
+console.log("tag text:", JSON.stringify(await page.evaluate(() => document.getElementById("pvtag").textContent)));
+console.log("tag font:", await page.evaluate(() => { const e = document.getElementById("pvtag"); const cs = getComputedStyle(e); return cs.fontFamily + " " + cs.fontSize; }));
+const el = await page.$("#pvtag");
+await el.screenshot({ path: "/tmp/tagonly.png" });
+await browser.close();

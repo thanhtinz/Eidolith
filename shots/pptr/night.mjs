@@ -1,0 +1,14 @@
+import puppeteer from "puppeteer-core";
+const browser = await puppeteer.launch({ executablePath: "/home/hatch/.cache/puppeteer/chrome/linux-156.0.8078.47/chrome-linux64/chrome", headless: "new", args: ["--no-sandbox", "--disable-gpu"], userDataDir: "/home/hatch/workspace/eidolith/shots/chrome-female" });
+const page = await browser.newPage();
+await page.setViewport({ width: 760, height: 1000 });
+await page.goto("http://127.0.0.1:5173/", { waitUntil: "domcontentloaded", timeout: 30000 });
+await page.waitForFunction(() => window.__eidolith?.getPlayerGrid, { timeout: 30000 });
+await page.evaluate(() => window.__eidolith.changeMap("meadow_village", "spawn_player"));
+await new Promise(r => setTimeout(r, 5000));
+await page.evaluate(() => { const s = window.__eidolith.scene; s.worldMinutes = 1410; s.applyTint(); s.update(0, 16); });
+await new Promise(r => setTimeout(r, 6000));
+console.log(JSON.stringify(await page.evaluate(() => { const s = window.__eidolith.scene; return { tint: { x: s.tintRect.x, y: s.tintRect.y, a: s.tintRect.fillAlpha }, grid: window.__eidolith.getPlayerGrid() }; })));
+await page.screenshot({ path: "/home/hatch/workspace/eidolith/shots/fixes-village-night2.png" });
+await browser.close();
+console.log("done");

@@ -12,7 +12,7 @@ const LS_REFRESH = "eidolith.refreshToken";
 export class ApiClientError extends Error {
   constructor(readonly code: string, message: string, readonly status: number) { super(message); }
 }
-export interface RemotePlayer { playerId: string; displayName: string; level: number; avatarId: string; x: number; y: number; mapId: string; }
+export interface RemotePlayer { playerId: string; displayName: string; level: number; avatarId: string; hairStyle?: string; hairColor?: string; outfit?: string; x: number; y: number; mapId: string; }
 export interface WorldSnapshot {
   player: RemotePlayer; players: RemotePlayer[];
   wilds?: import("@eidolith/shared-types").WildSpawnInfo[];

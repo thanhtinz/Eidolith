@@ -11,8 +11,8 @@ const call = async (method, path, token, body, headers = {}) => {
   return { status: r.status, json: await r.json().catch(() => null) };
 };
 
-const email = `p5_${Date.now()}@test.dev`;
-const username = `p5_${Date.now() % 100000}`;
+const email = `p5x${Date.now()}@test.dev`;
+const username = `p5x${Date.now() % 100000}`;
 const reg = await call("POST", "/auth/register", null, { email, username, password: "SecurePass123" });
 const login = await call("POST", "/auth/login", null, { email, password: "SecurePass123" });
 const token = login.json?.data?.accessToken;

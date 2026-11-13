@@ -1,0 +1,13 @@
+import puppeteer from "puppeteer-core";
+const browser = await puppeteer.launch({ executablePath: "/home/hatch/.cache/puppeteer/chrome/linux-156.0.8078.47/chrome-linux64/chrome", headless: "new", args: ["--no-sandbox", "--force-device-scale-factor=1"] });
+const page = await browser.newPage();
+await page.setViewport({ width: 1280, height: 720 });
+await page.goto(`file:///home/hatch/workspace/eidolith/shots/sanc-mock/mock.html?t=a2`, { waitUntil: "networkidle0" });
+await new Promise(r => setTimeout(r, 600));
+await page.screenshot({ path: `/home/hatch/workspace/eidolith/shots/sanc-mock-a2.png` });
+console.log("shot a2 top");
+await page.evaluate(() => { const b = document.querySelector(".body"); b.scrollTop = b.scrollHeight; });
+await new Promise(r => setTimeout(r, 400));
+await page.screenshot({ path: `/home/hatch/workspace/eidolith/shots/sanc-mock-a2-scroll.png` });
+console.log("shot a2 scroll");
+await browser.close();

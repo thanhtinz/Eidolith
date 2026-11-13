@@ -1,8 +1,13 @@
-# EVOLUTION-DRAFT-v1 — Phác thảo dữ liệu 41 dạng tiến hoá (CHỜ TÍN DUYỆT)
+# EVOLUTION-DRAFT-v1 — Phác thảo dữ liệu 41 dạng tiến hoá (ĐÃ DUYỆT + ĐÃ CODE HOÁ)
 
-> Trạng thái: BẢN PHÁC THẢO do Bé tự soạn ngày 2026-11-12 để Tín duyệt một lượt.
-> Chưa đưa vào game-data, chưa mở nút Tiến hoá. Duyệt xong mới code hoá vào
-> `packages/game-data` + migration + transaction tiến hoá (DDD Part 5 §17.2).
+> Trạng thái: **Tín duyệt CẢ 4 ĐIỂM THEO ĐỀ XUẤT ngày 2026-11-12** (nhánh
+> sâu+rẽ vai trò, hệ số ×1.20, Obsidrake giữ Stone, điều kiện chỉ Lv.16 +
+> 1 Core) và bản này ĐÃ được code hoá: 41 template trong game-data
+> (`EVOLUTIONS` EID-021→061, chỉ số sinh từ `evolvedBaseStats` khoá bởi
+> validator), migration 009 (evolution_log), endpoint tiến hoá theo
+> transaction (DDD §17.2), nút Tiến hoá trong thẻ chi tiết + Đài tiến hoá
+> mở khoá. Test API 14/14 + tour Chrome thật. Sprite 41 dạng vẫn là đợt
+> art riêng theo luật vẽ monster.
 
 ## Vì sao có bản này
 

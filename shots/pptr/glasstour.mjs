@@ -1,0 +1,22 @@
+import puppeteer from "puppeteer-core";
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const browser = await puppeteer.launch({ executablePath: "/home/hatch/.cache/puppeteer/chrome/linux-156.0.8078.47/chrome-linux64/chrome", headless: "new", args: ["--no-sandbox"] });
+const ctx = await browser.createBrowserContext();
+const page = await ctx.newPage();
+await page.setViewport({ width: 1280, height: 720 });
+await page.goto("http://localhost:5173/", { waitUntil: "domcontentloaded", timeout: 90000 });
+await page.waitForFunction(() => typeof window.__eidolithStart === "function", { timeout: 30000 }).catch(() => {});
+await page.evaluate(() => window.__eidolithStart && window.__eidolithStart());
+let form = null;
+for (let i = 0; i < 40 && !form; i++) { form = await page.$("#f-email"); if (!form) await sleep(250); }
+console.log("login form:", !!form, "| google btn:", !!(await page.$("#f-google")), "| apple btn:", !!(await page.$("#f-apple")));
+await sleep(500);
+await page.screenshot({ path: "/home/hatch/workspace/eidolith/shots/glass-login.png" });
+await page.click(".f-tab:not(.on)");
+await sleep(600);
+console.log("register fields:", !!(await page.$("#f-username")), "| active tab:", await page.evaluate(() => document.querySelector(".f-tab.on")?.textContent));
+await page.screenshot({ path: "/home/hatch/workspace/eidolith/shots/glass-register.png" });
+await page.evaluate(() => document.querySelector("#f-google").click());
+await sleep(300);
+console.log("google note:", await page.evaluate(() => document.querySelector("#f-error")?.textContent));
+await browser.close();

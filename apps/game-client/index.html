@@ -9,11 +9,81 @@
 <style>
   html, body { margin: 0; padding: 0; background: #10131a; height: 100%; overflow: hidden; }
   #game { width: 100%; height: 100%; }
-  .eidolith-form { font-family: 'Be Vietnam Pro', system-ui, sans-serif; color: #f4f7fa; width: 300px; }
-  .eidolith-form input { width: 100%; box-sizing: border-box; margin: 6px 0; padding: 12px; border-radius: 10px; border: 1.5px solid rgba(255,255,255,.16); background: #232b36; color: #f4f7fa; font-size: 16px; }
+  .eidolith-form { font-family: 'Be Vietnam Pro', system-ui, sans-serif; color: #f4f7fa; width: 356px; box-sizing: border-box; background: linear-gradient(160deg, rgba(255,255,255,.17), rgba(255,255,255,.06)); -webkit-backdrop-filter: blur(16px) saturate(1.35); backdrop-filter: blur(16px) saturate(1.35); border: 1px solid rgba(255,255,255,.30); border-radius: 18px; padding: 16px 20px; box-shadow: 0 18px 50px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.28); }
+  .eidolith-form input { width: 100%; box-sizing: border-box; margin: 6px 0; padding: 12px; border-radius: 10px; border: 1.5px solid rgba(255,255,255,.30); background: rgba(10,16,24,.32); color: #f4f7fa; font-size: 16px; }
+  .eidolith-form input::placeholder { color: rgba(244,247,250,.55); }
+  .eidolith-form select { background: rgba(10,16,24,.32) !important; border-color: rgba(255,255,255,.30) !important; }
   .eidolith-form button { width: 100%; padding: 12px; margin-top: 8px; border: 0; border-radius: 10px; background: #ffd83d; color: #26303a; font-size: 17px; font-weight: 700; cursor: pointer; font-family: 'Baloo 2', sans-serif; }
-  .eidolith-form .switch { background: transparent; color: #aeb9c4; font-weight: 400; font-family: 'Be Vietnam Pro', sans-serif; }
-  .eidolith-form .err { color: #ff8a7a; min-height: 20px; font-size: 14px; }
+  .eidolith-form .err { color: #ffb3a7; min-height: 20px; font-size: 14px; text-shadow: 0 1px 4px rgba(0,0,0,.45); }
+  .eidolith-form .f-tabs { display: flex; gap: 6px; background: rgba(10,16,24,.30); border: 1px solid rgba(255,255,255,.16); padding: 5px; border-radius: 12px; margin-bottom: 10px; }
+  .eidolith-form .f-tab { flex: 1; margin: 0; padding: 9px; border-radius: 9px; background: transparent; color: #dfe8f2; font-size: 15px; font-weight: 600; }
+  .eidolith-form .f-tab.on { background: #ffd83d; color: #26303a; font-weight: 800; }
+  .eidolith-form .f-or { display: flex; align-items: center; gap: 10px; margin: 14px 2px 4px; font-size: 11px; letter-spacing: .14em; color: rgba(244,247,250,.72); }
+  .eidolith-form .f-or::before, .eidolith-form .f-or::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,.25); }
+  .eidolith-form .f-social { display: flex; gap: 10px; }
+  .eidolith-form .f-soc { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; font-size: 15px; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600; }
+  .eidolith-form .f-soc i { font-size: 18px; }
+  .eidolith-form .f-soc.g { background: #ffffff; color: #26303a; }
+  .eidolith-form .f-soc.a { background: #101216; color: #ffffff; border: 1px solid rgba(255,255,255,.40); }
+  .eidolith-server { font-family: 'Be Vietnam Pro', system-ui, sans-serif; width: 540px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
+  .srv-bar { width: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; padding: 17px 26px; border-radius: 20px; cursor: pointer; background: linear-gradient(180deg, #2e2620, #1b1510); border: 2.5px solid #b98a3e; box-shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 1.5px 0 rgba(255,215,140,.35), inset 0 -8px 18px rgba(0,0,0,.45); }
+  .srv-name { font-family: 'Baloo 2', sans-serif; font-size: 23px; font-weight: 800; color: #43d854; text-shadow: 0 2px 6px rgba(0,0,0,.6); }
+  .srv-change { font-size: 19px; font-weight: 700; font-style: italic; color: #ffa02e; text-shadow: 0 0 10px rgba(255,140,30,.45), 0 2px 4px rgba(0,0,0,.6); }
+  .srv-dot { width: 10px; height: 10px; border-radius: 50%; background: #43d854; box-shadow: 0 0 8px rgba(67,216,84,.8); flex: none; }
+  .srv-panel { font-family: 'Be Vietnam Pro', system-ui, sans-serif; width: 780px; box-sizing: border-box; background: linear-gradient(180deg, rgba(40,31,22,.97), rgba(24,19,14,.97)); border: 2.5px solid #b98a3e; border-radius: 18px; box-shadow: 0 24px 60px rgba(0,0,0,.55), inset 0 1.5px 0 rgba(255,215,140,.30); padding: 18px; color: #f4f7fa; }
+  .srv-p-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .srv-p-title { font-family: 'Baloo 2', sans-serif; font-size: 21px; font-weight: 800; letter-spacing: .12em; color: #ffd83d; }
+  .srv-close { width: 36px; height: 36px; border: 0; border-radius: 10px; background: #d33f2e; color: #fff; font-size: 16px; cursor: pointer; }
+  .srv-p-body { display: flex; gap: 14px; height: 330px; }
+  .srv-clusters { width: 188px; flex: none; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
+  .srv-cluster { padding: 12px 14px; border-radius: 11px; background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.13); color: #dfe8f2; text-align: left; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; }
+  .srv-cluster.on { background: #ffd83d; color: #26303a; border-color: #ffd83d; }
+  .srv-grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-content: start; padding-right: 4px; }
+  .srv-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 11px; background: rgba(255,255,255,.05); border: 1.5px solid rgba(255,255,255,.13); color: #f4f7fa; cursor: pointer; font-size: 15px; }
+  .srv-item:hover { background: rgba(255,255,255,.10); }
+  .srv-item.sel { border-color: #43d854; background: rgba(67,216,84,.12); }
+  .srv-item .srv-note { font-size: 12.5px; color: #aeb9c6; }
+  .srv-item .srv-tag { margin-left: auto; font-size: 12px; font-weight: 700; color: #43d854; }
+  .load-wrap { font-family: 'Be Vietnam Pro', system-ui, sans-serif; width: 700px; box-sizing: border-box; text-align: center; }
+  .load-track { height: 18px; border-radius: 999px; background: rgba(10,14,20,.72); border: 2px solid rgba(185,138,62,.9); overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+  .load-fill { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, #f5b921, #ffd83d); transition: width .45s ease; }
+  .load-row { display: flex; justify-content: space-between; margin-top: 8px; font-size: 13.5px; color: #eef4fa; text-shadow: 0 1px 6px rgba(0,0,0,.85); }
+  .load-tip { margin-top: 12px; font-size: 15.5px; color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,.9); }
+  .load-tip b { color: #ffd83d; }
+  .eidolith-create { font-family: 'Be Vietnam Pro', system-ui, sans-serif; color: #f4f7fa; width: 880px; height: 676px; box-sizing: border-box; background: rgba(27,33,43,.96); border: 1px solid rgba(255,255,255,.13); border-radius: 18px; box-shadow: 0 24px 60px rgba(0,0,0,.55); padding: 17px 24px; }
+  .eidolith-create .c-flex { display: flex; flex-direction: row; align-items: stretch; gap: 22px; }
+  .eidolith-create .c-left { width: 208px; flex: none; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 10px; }
+  .eidolith-create .c-left img { height: 232px; max-width: 180px; object-fit: contain; }
+  .eidolith-create .c-pname { font-family: 'Baloo 2', sans-serif; font-size: 19px; font-weight: 800; margin-top: 8px; text-align: center; }
+  .eidolith-create .c-ptag { font-size: 12px; color: #aeb9c6; margin-top: 2px; text-align: center; }
+  .eidolith-create .c-right { flex: 1; min-width: 0; }
+  .eidolith-create h2 { font-family: 'Baloo 2', sans-serif; font-size: 24px; font-weight: 800; color: #ffd83d; text-align: center; letter-spacing: .04em; }
+  .eidolith-create .c-sub { text-align: center; color: #c6d2de; font-size: 13px; margin: 1px 0 8px; }
+  .eidolith-create .c-label { font-size: 12px; font-weight: 800; letter-spacing: .14em; color: #ffd83d; margin: 8px 0 5px; }
+  .eidolith-create input.c-name { width: 100%; box-sizing: border-box; background: #232b36; border: 1.5px solid rgba(255,255,255,.16); color: #fff; border-radius: 10px; padding: 10px 12px; font-size: 15px; outline: none; }
+  .eidolith-create .c-note { font-size: 12px; color: #93a5b5; margin-top: 4px; }
+  .eidolith-create .c-err { color: #ffb3a7; font-size: 13px; min-height: 16px; margin-top: 3px; }
+  .eidolith-create .c-genders { display: flex; gap: 12px; }
+  .eidolith-create .c-gender { flex: 1; display: flex; align-items: center; gap: 11px; background: rgba(255,255,255,.05); border: 2px solid rgba(255,255,255,.13); border-radius: 12px; padding: 8px 13px; cursor: pointer; }
+  .eidolith-create .c-gender.on { background: #ffd83d; border-color: #ffd83d; color: #26303a; }
+  .eidolith-create .c-gicon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex: none; }
+  .eidolith-create .c-gicon.m { background: #2b6cb0; color: #fff; }
+  .eidolith-create .c-gicon.f { background: #c2417d; color: #fff; }
+  .eidolith-create .c-gname { font-family: 'Baloo 2', sans-serif; font-size: 17px; font-weight: 800; line-height: 1.1; }
+  .eidolith-create .c-gsub { font-size: 12px; opacity: .75; }
+  .eidolith-create .c-thumbs { display: flex; gap: 9px; }
+  .eidolith-create .c-th { flex: 1; background: rgba(255,255,255,.05); border: 2px solid rgba(255,255,255,.11); border-radius: 11px; padding: 6px 2px 5px; cursor: pointer; text-align: center; }
+  .eidolith-create .c-th.on { border-color: #ffd83d; background: rgba(255,216,61,.10); }
+  .eidolith-create .c-th img { height: 48px; max-width: 100%; object-fit: contain; display: block; margin: 0 auto; }
+  .eidolith-create .c-th span { display: block; font-size: 11.5px; margin-top: 3px; color: #d7e1ec; }
+  .eidolith-create .c-th.on span { color: #ffd83d; font-weight: 700; }
+  .eidolith-create .c-swatches { display: flex; gap: 10px; }
+  .eidolith-create .c-sw { text-align: center; cursor: pointer; }
+  .eidolith-create .c-sw i { display: block; width: 34px; height: 34px; border-radius: 10px; border: 2.5px solid rgba(255,255,255,.18); }
+  .eidolith-create .c-sw.on i { border-color: #ffd83d; box-shadow: 0 0 0 2px rgba(255,216,61,.35); }
+  .eidolith-create .c-sw span { font-size: 11.5px; color: #c6d2de; display: block; margin-top: 4px; }
+  .eidolith-create .c-go { width: 100%; margin-top: 8px; background: #ffd83d; color: #26303a; border: 0; border-radius: 12px; padding: 12px; font-family: 'Baloo 2', sans-serif; font-size: 17.5px; font-weight: 800; cursor: pointer; }
+  #srv-start { display: block; margin: 18px auto 0; width: 300px; padding: 14px; border: 0; border-radius: 13px; background: #ffd83d; color: #26303a; font-size: 21px; font-weight: 800; cursor: pointer; font-family: 'Baloo 2', sans-serif; box-shadow: 0 10px 26px rgba(0,0,0,.4); }
 </style>
 </head>
 <body>

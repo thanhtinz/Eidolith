@@ -13,7 +13,8 @@
     "@eidolith/protocol": "*",
     "phaser": "^3.86.0",
     "@eidolith/navigation-core": "*",
-    "@eidolith/game-data": "*"
+    "@eidolith/game-data": "*",
+    "@eidolith/validation": "*"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

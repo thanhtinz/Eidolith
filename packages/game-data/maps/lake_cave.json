@@ -1,0 +1,4122 @@
+{
+ "type": "map",
+ "orientation": "isometric",
+ "renderorder": "right-down",
+ "width": 24,
+ "height": 18,
+ "tilewidth": 64,
+ "tileheight": 32,
+ "infinite": false,
+ "version": "1.10",
+ "tiledversion": "1.10.2",
+ "nextlayerid": 4,
+ "nextobjectid": 115,
+ "tilesets": [
+  {
+   "firstgid": 1,
+   "name": "verdant",
+   "tilewidth": 64,
+   "tileheight": 32,
+   "tilecount": 6,
+   "columns": 3,
+   "image": "verdant.png",
+   "imagewidth": 192,
+   "imageheight": 64
+  }
+ ],
+ "layers": [
+  {
+   "id": 1,
+   "name": "ground",
+   "type": "tilelayer",
+   "width": 24,
+   "height": 18,
+   "data": [
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    3,
+    3,
+    3,
+    3,
+    11,
+    11,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    3,
+    11,
+    11,
+    11,
+    3,
+    3,
+    11,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    11,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    11,
+    11,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    7,
+    7,
+    7,
+    7,
+    7,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    7,
+    13,
+    13,
+    13,
+    13,
+    13,
+    7,
+    11,
+    11,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    7,
+    4,
+    4,
+    4,
+    4,
+    4,
+    7,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    7,
+    9,
+    9,
+    9,
+    9,
+    9,
+    7,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    7,
+    7,
+    7,
+    7,
+    7,
+    11,
+    11,
+    11,
+    11,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    3,
+    3,
+    3,
+    11,
+    3,
+    3,
+    3,
+    3,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    3,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11
+   ],
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0
+  },
+  {
+   "id": 2,
+   "name": "collision",
+   "type": "tilelayer",
+   "width": 24,
+   "height": 18,
+   "data": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "opacity": 1,
+   "visible": false,
+   "x": 0,
+   "y": 0
+  },
+  {
+   "id": 3,
+   "name": "objects",
+   "type": "objectgroup",
+   "objects": [
+    {
+     "id": 1,
+     "name": "shrine",
+     "type": "prop",
+     "x": 544,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "shrine"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "name": "cluster",
+     "type": "prop",
+     "x": 448,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "cluster"
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "name": "cluster",
+     "type": "prop",
+     "x": 512,
+     "y": 416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 21
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "cluster"
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "name": "shrooms",
+     "type": "prop",
+     "x": -352,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "shrooms"
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "name": "cluster",
+     "type": "prop",
+     "x": 352,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "cluster"
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "name": "shrooms",
+     "type": "prop",
+     "x": -288,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "shrooms"
+      }
+     ]
+    },
+    {
+     "id": 7,
+     "name": "cluster",
+     "type": "prop",
+     "x": 224,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "cluster"
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "name": "shrooms",
+     "type": "prop",
+     "x": -64,
+     "y": 96,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "shrooms"
+      }
+     ]
+    },
+    {
+     "id": 9,
+     "name": "rock",
+     "type": "prop",
+     "x": 224,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "name": "rock",
+     "type": "prop",
+     "x": -224,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 11,
+     "name": "rock",
+     "type": "prop",
+     "x": 96,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "name": "rock",
+     "type": "prop",
+     "x": 480,
+     "y": 464,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "name": "rock",
+     "type": "prop",
+     "x": 96,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "name": "rock",
+     "type": "prop",
+     "x": -128,
+     "y": 352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 15,
+     "name": "rock",
+     "type": "prop",
+     "x": -224,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "name": "rock",
+     "type": "prop",
+     "x": 320,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "name": "rock",
+     "type": "prop",
+     "x": 0,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 18,
+     "name": "rock",
+     "type": "prop",
+     "x": 128,
+     "y": 96,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "name": "rock",
+     "type": "prop",
+     "x": -320,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "name": "rock",
+     "type": "prop",
+     "x": 32,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "name": "rock",
+     "type": "prop",
+     "x": -256,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "name": "rock",
+     "type": "prop",
+     "x": 288,
+     "y": 464,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "name": "rock",
+     "type": "prop",
+     "x": 96,
+     "y": 496,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "name": "rock",
+     "type": "prop",
+     "x": -480,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "name": "rock",
+     "type": "prop",
+     "x": 96,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "name": "rock",
+     "type": "prop",
+     "x": 320,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "name": "rock",
+     "type": "prop",
+     "x": 64,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "name": "rock",
+     "type": "prop",
+     "x": 576,
+     "y": 416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 29,
+     "name": "rock",
+     "type": "prop",
+     "x": 0,
+     "y": 0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 30,
+     "name": "rock",
+     "type": "prop",
+     "x": 32,
+     "y": 16,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 31,
+     "name": "rock",
+     "type": "prop",
+     "x": 64,
+     "y": 32,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 32,
+     "name": "rock",
+     "type": "prop",
+     "x": 96,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 33,
+     "name": "rock",
+     "type": "prop",
+     "x": 128,
+     "y": 64,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 34,
+     "name": "rock",
+     "type": "prop",
+     "x": 160,
+     "y": 80,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 35,
+     "name": "rock",
+     "type": "prop",
+     "x": 192,
+     "y": 96,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 36,
+     "name": "rock",
+     "type": "prop",
+     "x": 224,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 37,
+     "name": "rock",
+     "type": "prop",
+     "x": 256,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 38,
+     "name": "rock",
+     "type": "prop",
+     "x": 288,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 39,
+     "name": "rock",
+     "type": "prop",
+     "x": 320,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 40,
+     "name": "rock",
+     "type": "prop",
+     "x": 352,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 41,
+     "name": "rock",
+     "type": "prop",
+     "x": 384,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 42,
+     "name": "rock",
+     "type": "prop",
+     "x": 416,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 43,
+     "name": "rock",
+     "type": "prop",
+     "x": 448,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 44,
+     "name": "rock",
+     "type": "prop",
+     "x": 480,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 45,
+     "name": "rock",
+     "type": "prop",
+     "x": 512,
+     "y": 256,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 46,
+     "name": "rock",
+     "type": "prop",
+     "x": 544,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 47,
+     "name": "rock",
+     "type": "prop",
+     "x": 576,
+     "y": 288,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 48,
+     "name": "rock",
+     "type": "prop",
+     "x": 608,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 49,
+     "name": "rock",
+     "type": "prop",
+     "x": 640,
+     "y": 320,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 50,
+     "name": "rock",
+     "type": "prop",
+     "x": 672,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 21
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 51,
+     "name": "rock",
+     "type": "prop",
+     "x": 704,
+     "y": 352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 52,
+     "name": "rock",
+     "type": "prop",
+     "x": 736,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 53,
+     "name": "rock",
+     "type": "prop",
+     "x": -544,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 54,
+     "name": "rock",
+     "type": "prop",
+     "x": -512,
+     "y": 288,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 55,
+     "name": "rock",
+     "type": "prop",
+     "x": -480,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 56,
+     "name": "rock",
+     "type": "prop",
+     "x": -448,
+     "y": 320,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 57,
+     "name": "rock",
+     "type": "prop",
+     "x": -416,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 58,
+     "name": "rock",
+     "type": "prop",
+     "x": -384,
+     "y": 352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 59,
+     "name": "rock",
+     "type": "prop",
+     "x": -352,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 60,
+     "name": "rock",
+     "type": "prop",
+     "x": -320,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 61,
+     "name": "rock",
+     "type": "prop",
+     "x": -288,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 62,
+     "name": "rock",
+     "type": "prop",
+     "x": -256,
+     "y": 416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 63,
+     "name": "rock",
+     "type": "prop",
+     "x": -224,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 64,
+     "name": "rock",
+     "type": "prop",
+     "x": -192,
+     "y": 448,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 65,
+     "name": "rock",
+     "type": "prop",
+     "x": -128,
+     "y": 480,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 66,
+     "name": "rock",
+     "type": "prop",
+     "x": -96,
+     "y": 496,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 67,
+     "name": "rock",
+     "type": "prop",
+     "x": -64,
+     "y": 512,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 68,
+     "name": "rock",
+     "type": "prop",
+     "x": -32,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 69,
+     "name": "rock",
+     "type": "prop",
+     "x": 0,
+     "y": 544,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 70,
+     "name": "rock",
+     "type": "prop",
+     "x": 32,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 71,
+     "name": "rock",
+     "type": "prop",
+     "x": 64,
+     "y": 576,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 72,
+     "name": "rock",
+     "type": "prop",
+     "x": 96,
+     "y": 592,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 73,
+     "name": "rock",
+     "type": "prop",
+     "x": 128,
+     "y": 608,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 21
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 74,
+     "name": "rock",
+     "type": "prop",
+     "x": 160,
+     "y": 624,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 75,
+     "name": "rock",
+     "type": "prop",
+     "x": 192,
+     "y": 640,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 76,
+     "name": "rock",
+     "type": "prop",
+     "x": -32,
+     "y": 16,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 77,
+     "name": "rock",
+     "type": "prop",
+     "x": -64,
+     "y": 32,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 78,
+     "name": "rock",
+     "type": "prop",
+     "x": -96,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 79,
+     "name": "rock",
+     "type": "prop",
+     "x": -128,
+     "y": 64,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 80,
+     "name": "rock",
+     "type": "prop",
+     "x": -160,
+     "y": 80,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 81,
+     "name": "rock",
+     "type": "prop",
+     "x": -192,
+     "y": 96,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 82,
+     "name": "rock",
+     "type": "prop",
+     "x": -224,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 83,
+     "name": "rock",
+     "type": "prop",
+     "x": -256,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 84,
+     "name": "rock",
+     "type": "prop",
+     "x": -288,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 85,
+     "name": "rock",
+     "type": "prop",
+     "x": -320,
+     "y": 160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 86,
+     "name": "rock",
+     "type": "prop",
+     "x": -352,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 87,
+     "name": "rock",
+     "type": "prop",
+     "x": -384,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 88,
+     "name": "rock",
+     "type": "prop",
+     "x": -416,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 89,
+     "name": "rock",
+     "type": "prop",
+     "x": -448,
+     "y": 224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 90,
+     "name": "rock",
+     "type": "prop",
+     "x": -480,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 91,
+     "name": "rock",
+     "type": "prop",
+     "x": -512,
+     "y": 256,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 92,
+     "name": "rock",
+     "type": "prop",
+     "x": 704,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 93,
+     "name": "rock",
+     "type": "prop",
+     "x": 672,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 94,
+     "name": "rock",
+     "type": "prop",
+     "x": 640,
+     "y": 416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 95,
+     "name": "rock",
+     "type": "prop",
+     "x": 608,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 96,
+     "name": "rock",
+     "type": "prop",
+     "x": 576,
+     "y": 448,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 97,
+     "name": "rock",
+     "type": "prop",
+     "x": 544,
+     "y": 464,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 6
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 98,
+     "name": "rock",
+     "type": "prop",
+     "x": 512,
+     "y": 480,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 99,
+     "name": "rock",
+     "type": "prop",
+     "x": 480,
+     "y": 496,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 100,
+     "name": "rock",
+     "type": "prop",
+     "x": 448,
+     "y": 512,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 101,
+     "name": "rock",
+     "type": "prop",
+     "x": 416,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 102,
+     "name": "rock",
+     "type": "prop",
+     "x": 384,
+     "y": 544,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 103,
+     "name": "rock",
+     "type": "prop",
+     "x": 352,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 104,
+     "name": "rock",
+     "type": "prop",
+     "x": 320,
+     "y": 576,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 105,
+     "name": "rock",
+     "type": "prop",
+     "x": 288,
+     "y": 592,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 106,
+     "name": "rock",
+     "type": "prop",
+     "x": 256,
+     "y": 608,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 15
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 107,
+     "name": "rock",
+     "type": "prop",
+     "x": 224,
+     "y": 624,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 23
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "sprite",
+       "type": "string",
+       "value": "rock"
+      }
+     ]
+    },
+    {
+     "id": 108,
+     "name": "from_lake",
+     "type": "spawn",
+     "x": -128,
+     "y": 448,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 16
+      }
+     ]
+    },
+    {
+     "id": 109,
+     "name": "portal_lake",
+     "type": "portal",
+     "x": -160,
+     "y": 464,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 17
+      },
+      {
+       "name": "targetMap",
+       "type": "string",
+       "value": "crystal_lake"
+      },
+      {
+       "name": "targetSpawn",
+       "type": "string",
+       "value": "from_cave"
+      }
+     ]
+    },
+    {
+     "id": 110,
+     "name": "wild_spawn_1",
+     "type": "wild_spawn",
+     "x": -32,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "radius",
+       "type": "string",
+       "value": "3"
+      }
+     ]
+    },
+    {
+     "id": 111,
+     "name": "wild_spawn_2",
+     "type": "wild_spawn",
+     "x": 160,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "radius",
+       "type": "string",
+       "value": "3"
+      }
+     ]
+    },
+    {
+     "id": 112,
+     "name": "wild_spawn_3",
+     "type": "wild_spawn",
+     "x": -288,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "radius",
+       "type": "string",
+       "value": "3"
+      }
+     ]
+    },
+    {
+     "id": 113,
+     "name": "wild_spawn_4",
+     "type": "wild_spawn",
+     "x": 448,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 19
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "radius",
+       "type": "string",
+       "value": "2"
+      }
+     ]
+    },
+    {
+     "id": 114,
+     "name": "wild_spawn_5",
+     "type": "wild_spawn",
+     "x": 288,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "tileX",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "tileY",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "radius",
+       "type": "string",
+       "value": "3"
+      }
+     ]
+    }
+   ],
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0
+  }
+ ]
+}

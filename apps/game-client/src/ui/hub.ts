@@ -1,8 +1,9 @@
 import Phaser from "phaser";
-import type { PlayerProfile, PlayerWallet, OwnedCreature, InventoryStack, SummonPullResponse, QuestStateResponse, QuestView, SideQuestView, SanctuaryStateResponse, SanctuaryBuildingView } from "@eidolith/shared-types";
+import type { PlayerProfile, PlayerWallet, OwnedCreature, InventoryStack, SummonPullResponse, QuestStateResponse, QuestView, SideQuestView, SanctuaryStateResponse, SanctuaryBuildingView, ExpeditionsResponse, WorkshopResponse, ExpeditionDestinationView, FriendsResponse, FriendView, PlayerSearchResult } from "@eidolith/shared-types";
 import { CREATURES, ELEMENTS, creatureById, statsAtLevel, skillsOf } from "@eidolith/game-data";
 import { network } from "../net/NetworkManager";
 import { CREATURE_SPRITES } from "./sprites";
+import { sfxClick, sfxOpen, sfxClose, sfxReward, sfxLevelUp, sfxThrow, sfxCapture, sfxBreakOut, sfxFled } from "./sfx";
 /** Hub UI (Part 13 §2): top player bar + bottom navigation
  *  World · Eidolons · Sanctuary · Quests · Menu with bottom-sheet panels.
  *  Design: docs/HUB-DESIGN-v1.md. DOM overlay — the empty area lets touches
@@ -82,6 +83,47 @@ const CSS = `
 .mmeta .wsep{color:#aeb9c4;margin:0 7px}
 .mmeta #hub-wicon{color:var(--sel);margin-right:5px}
 .party{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:8px;pointer-events:auto}
+#hub-chat{position:absolute;left:14px;bottom:14px;width:356px;z-index:6;background:rgba(27,33,43,.92);border:1px solid var(--line);border-radius:15px;box-shadow:0 10px 26px rgba(10,15,20,.45);overflow:hidden}
+#hub-chat .chead{display:flex;align-items:center;gap:8px;padding:9px 13px;border-bottom:1px solid var(--line);font:800 12px 'Baloo 2',sans-serif;letter-spacing:.13em;color:var(--sel)}
+#hub-chat .ctab{background:none;border:none;color:#8b93a0;font:800 12px 'Baloo 2',sans-serif;letter-spacing:.13em;cursor:pointer;padding:2px 4px;position:relative}
+#hub-chat .ctab.on{color:var(--sel)}
+#hub-chat .cdot{position:absolute;top:-3px;right:-8px;width:8px;height:8px;border-radius:50%;background:#e5484d}
+#hub-chat .chead .mapchip{margin-left:auto;background:rgba(57,182,232,.16);border:1px solid rgba(57,182,232,.4);color:#9adcf7;border-radius:999px;padding:2px 9px;font:700 11px 'Be Vietnam Pro',sans-serif;letter-spacing:0}
+#hub-chat .msgs{padding:10px 13px 4px;display:flex;flex-direction:column;gap:7px}
+#hub-chat .msg{font-size:13.5px;line-height:1.45;color:#e8edf2;word-break:break-word}
+#hub-chat .msg .who{font-weight:700}
+#hub-chat .msg .when{color:#8b93a0;font-size:11px;margin-left:6px}
+#hub-chat .row{display:flex;gap:8px;padding:9px 11px 11px;align-items:center}
+#hub-chat input{flex:1;min-width:0;background:rgba(20,26,34,.8);border:1px solid var(--line);border-radius:10px;padding:9px 11px;color:#fff;font:400 13.5px 'Be Vietnam Pro',sans-serif;outline:none}
+#hub-chat .send{width:36px;height:36px;flex:none;border-radius:50%;background:var(--sel);color:var(--selink);border:none;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.btn-y{background:var(--sel);color:var(--selink);border:none;border-radius:11px;padding:10px 16px;font:800 14.5px 'Baloo 2',sans-serif;cursor:pointer}
+.btn-g{background:rgba(255,255,255,.10);color:#dfe6ec;border:1px solid var(--line);border-radius:11px;padding:10px 14px;font:800 14px 'Baloo 2',sans-serif;cursor:pointer}
+.fr-search{display:flex;gap:8px}
+.fr-sbox{flex:1;display:flex;align-items:center;gap:9px;background:rgba(20,26,34,.65);border:1px solid var(--line);border-radius:11px;padding:0 13px;color:#8b93a0}
+.fr-sbox input{flex:1;min-width:0;background:none;border:none;outline:none;color:#fff;font:400 14.5px 'Be Vietnam Pro',sans-serif;padding:11px 0}
+.fr-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.fr-strip .blk{background:var(--plate2);border:1px solid var(--line);border-radius:13px;padding:10px 14px}
+.fr-strip .blk b{font:800 22px 'Baloo 2',sans-serif;color:#fff;display:block;line-height:1.05}
+.fr-strip .blk span{font-size:12px;letter-spacing:.1em;color:#8b93a0;font-weight:700}
+.fr-card{display:flex;gap:14px;align-items:center;background:var(--plate2);border:1px solid var(--line);border-radius:15px;padding:12px 14px;margin-bottom:10px}
+.fr-ava{position:relative;width:64px;height:64px;flex:none;border-radius:13px;background:linear-gradient(180deg,rgba(57,182,232,.20),rgba(20,26,34,.6));border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.fr-ava img{width:54px;height:54px;object-fit:contain}
+.fr-ava .ph{font:800 26px 'Baloo 2',sans-serif;color:#fff}
+.fr-ava .dotwrap{position:absolute;right:-4px;bottom:-4px;background:var(--plate);border-radius:50%;padding:2px;display:flex}
+.fr-ondot{width:10px;height:10px;border-radius:50%;background:var(--bar);box-shadow:0 0 0 3px rgba(61,220,95,.18)}
+.fr-offdot{width:10px;height:10px;border-radius:50%;background:#5b6672}
+.fr-lvpill{background:var(--sel);color:var(--selink);font:800 11.5px 'Baloo 2',sans-serif;border-radius:999px;padding:2px 8px}
+.fr-name{display:flex;align-items:center;gap:8px;color:#fff;font-weight:700;font-size:17px}
+.fr-status{font-size:13px;color:#aeb9c4;margin-top:2px;display:flex;align-items:center;gap:6px}
+.fr-team{display:flex;align-items:center;gap:8px;margin-top:7px}
+.fr-team .tl{font-size:11px;letter-spacing:.1em;color:#8b93a0;font-weight:700}
+.fr-tslots{display:flex;gap:6px}
+.fr-tslot{width:40px;height:40px;border-radius:10px;background:rgba(20,26,34,.7);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.fr-tslot img{width:34px;height:34px;object-fit:contain}
+.fr-tslot .ph{font:800 15px 'Baloo 2',sans-serif}
+.fr-tslot.empty{border-style:dashed;color:#5b6672;font-size:13px}
+.fr-iconbtn{width:40px;height:40px;flex:none;border-radius:11px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:#dfe6ec;font-size:15px;cursor:pointer}
+.fr-cnt{background:rgba(255,216,61,.16);border:1px solid rgba(255,216,61,.45);color:var(--sel);border-radius:999px;padding:1px 9px;font-size:12px;margin-left:8px;letter-spacing:0}
 .pmini{display:flex;align-items:center;gap:8px;background:var(--plate);border:1px solid var(--line);border-radius:12px;padding:6px 12px 6px 6px;box-shadow:0 8px 20px rgba(10,15,20,.4);cursor:pointer}
 .pmini img{width:36px;height:36px;object-fit:contain}
 .pmini .pn{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:13.5px;line-height:1;color:#fff}
@@ -134,8 +176,37 @@ const CSS = `
 .dt-head .ph{font-size:64px;font-family:'Baloo 2',sans-serif}
 .dt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
 .dt-stat{background:var(--plate2);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
-.dt-stat b{display:block;font-family:'Baloo 2',sans-serif;font-size:21px;color:#fff}
+.dt-stat b{display:block;font-family:'Baloo 2',sans-serif;font-size:24px;color:#fff}
 .dt-stat span{font-size:12.5px;color:#aeb9c4;letter-spacing:.6px}
+.dt-a-top{display:flex;gap:16px;align-items:stretch}
+.dt-stage{width:296px;flex:none;border:1px solid var(--line);border-radius:15px;padding:16px 14px 14px;text-align:center;position:relative;overflow:hidden}
+.dt-stage .dt-glow{position:absolute;left:50%;top:96px;transform:translate(-50%,-50%);width:190px;height:190px;border-radius:50%;pointer-events:none}
+.dt-stage img{width:172px;height:172px;object-fit:contain;position:relative}
+.dt-stage .dt-phm{width:172px;height:172px;margin:0 auto;position:relative;display:flex;align-items:center;justify-content:center}
+.dt-stage .dt-phm .disc{width:138px;height:138px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 64px 'Baloo 2',sans-serif;color:#fff;border:3px solid}
+.dt-stage h3{font:800 26px 'Baloo 2',sans-serif;color:#fff;position:relative;margin-top:4px}
+.dt-stage .meta{font-size:13.5px;color:#c3ccd4;margin-top:3px;position:relative}
+.dt-a-right{flex:1;min-width:0}
+.dt-xpbar{height:20px;background:rgba(255,255,255,.10);border-radius:999px;position:relative;overflow:hidden}
+.dt-xpbar i{position:absolute;top:0;bottom:0;left:0;background:var(--bar2);border-radius:999px}
+.dt-xpbar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.dt-trait{background:rgba(20,26,34,.65);border:1px solid var(--line);border-left:4px solid var(--sel);border-radius:11px;padding:10px 13px;font-size:14px;color:#c3ccd4;margin-top:10px}
+.dt-skills{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.dt-sk{background:rgba(20,26,34,.65);border:1px solid var(--line);border-radius:13px;padding:11px 12px;display:flex;gap:10px;align-items:center}
+.dt-sk .sic{width:38px;height:38px;flex:none;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
+.dt-sk b{color:#fff;font-size:15px;display:block}
+.dt-sk .tag{font-size:10.5px;letter-spacing:.08em;color:var(--sel);font-weight:800}
+.dt-corepill{margin-left:auto;background:rgba(255,216,61,.14);border:1px solid rgba(255,216,61,.5);color:var(--sel);font-weight:700;font-size:13px;border-radius:999px;padding:4px 12px;letter-spacing:0;text-transform:none;font-family:'Be Vietnam Pro',sans-serif}
+.dt-evo{background:rgba(20,26,34,.65);border:1px solid var(--line);border-radius:14px;padding:13px 14px}
+.dt-evo h4{font:800 19px 'Baloo 2',sans-serif;color:#fff}
+.dt-evo .rl{font-size:12.5px;color:#aeb9c4;margin:2px 0 7px}
+.dt-evo .st{font-size:13px;color:#c3ccd4;line-height:1.5}
+.dt-evo .ult{font-size:13px;color:#c3ccd4}
+.dt-evo .ult b{color:var(--sel)}
+.dt-evobtn{width:100%;margin-top:10px;background:var(--sel);color:var(--selink);border:none;border-radius:11px;padding:10px;font:800 14.5px 'Baloo 2',sans-serif;cursor:pointer}
+.dt-evobtn:disabled{background:rgba(255,255,255,.14);color:#8a94a0;cursor:default}
+.dt-evobtn.armed{background:#e5484d;color:#fff}
+.dt-awake{border:1px solid rgba(255,216,61,.55);background:rgba(255,216,61,.07);border-radius:14px;padding:13px 15px;font-size:14.5px;color:#c3ccd4}
 .hearts{color:#ff5a4a;letter-spacing:3px;font-size:16px}
 .hearts .off{color:rgba(255,255,255,.16)}
 .sk{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;background:var(--plate2);margin-bottom:6px;font-size:15px}
@@ -248,6 +319,11 @@ const CSS = `
 .s2-locktag{margin-left:auto;color:var(--sel);font:800 13.5px 'Baloo 2',sans-serif;white-space:nowrap}
 .pickrow.dis{opacity:.55;cursor:default}
 .pickrow.dis:hover{border-color:var(--line)}
+.pickrow.sel{border-color:var(--sel);background:rgba(255,216,61,.10)}
+.s2-dest{display:flex;gap:12px;align-items:center;background:rgba(20,26,34,.65);border:1px solid var(--line);border-radius:13px;padding:11px 13px;margin-top:10px}
+.s2-dest .nm2{font:800 15.5px 'Baloo 2',sans-serif;color:#fff}
+.s2-dest .sub2{font-size:12.5px;color:#aeb9c4;margin-top:1px}
+.s2-dest .s2-up{margin-left:auto}
 .dlg-card{text-align:left}
 .dlg-card h3{margin-top:0}
 .dlg-card .say{font-size:16.5px;line-height:1.5;color:#e8e2d2;margin:10px 0}
@@ -315,7 +391,7 @@ export interface HubHandle {
 
 export interface HubHudInfo { mapLabel: string; weatherLabel: string; weatherKey: string; startMinutes: number; players: number; mapId: string; mapW: number; mapH: number; }
 const WEATHER_ICON: Record<string, string> = { clear: "fa-sun", cloudy: "fa-cloud", rain: "fa-cloud-rain", wind: "fa-wind", storm: "fa-cloud-bolt", fog: "fa-smog", snow: "fa-snowflake" };
-export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hud: HubHudInfo; onLogout: () => void; onArena?: () => void; onBoss?: () => void }): HubHandle {
+export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hud: HubHudInfo; onLogout: () => void; onArena?: () => void; onBoss?: () => void; onFriendBattle?: (playerId: string) => void }): HubHandle {
   const p = opts.profile;
   const regionName = p.currentRegion.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   const avatar = p.avatarId === "wanderer_female" ? "assets/chars/wanderer-female-v4.png" : "assets/chars/wanderer-v4.png";
@@ -337,6 +413,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       <div class="mmeta"><span id="hub-clock"></span><span class="wsep">|</span><i id="hub-wicon" class="fa-solid ${WEATHER_ICON[opts.hud.weatherKey] ?? "fa-cloud-sun"}"></i> ${opts.hud.weatherLabel}</div>
     </div>
     <div class="party" id="hub-party"></div>
+    <div id="hub-chat"><div class="chead"><button class="ctab on" id="hub-chat-tab-zone">KHU VỰC<span class="cdot" id="hub-chat-dot-zone" hidden></span></button><button class="ctab" id="hub-chat-tab-world">THẾ GIỚI<span class="cdot" id="hub-chat-dot-world" hidden></span></button><span class="mapchip"><i class="fa-solid fa-location-dot" id="hub-chat-chip-icon"></i> <span id="hub-chat-map"></span></span></div><div class="msgs" id="hub-chat-msgs"></div><div class="row"><input id="hub-chat-in" maxlength="200" placeholder="Nhắn cho mọi người quanh đây…"/><button class="send" id="hub-chat-send"><i class="fa-solid fa-paper-plane"></i></button></div></div>
     <section class="hub-panel" id="hub-panel"><header><div><h2 id="hub-title"></h2><div class="sub" id="hub-sub"></div></div><button class="x" id="hub-close"><i class="fa-solid fa-xmark"></i></button></header><div class="hub-body" id="hub-body"></div></section>
     <div class="enc" id="hub-enc" hidden></div>
     <div class="enc" id="hub-dlg" hidden></div>
@@ -369,6 +446,12 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   const syncTimer = window.setInterval(sync, 600);
   window.addEventListener("resize", sync);
   const root = overlay;
+  // UI SFX pack (Part 15): one delegated tick for every enabled button
+  // in the hub; meaningful actions layer their own cue on top.
+  root.addEventListener("click", (e) => {
+    const b = (e.target as HTMLElement).closest("button");
+    if (b && !(b as HTMLButtonElement).disabled) sfxClick();
+  });
   // Live world clock (+0.4 game-min per real second, same rate as the world)
   // and player count via the game's hud:players event.
   let minutes = opts.hud.startMinutes;
@@ -410,6 +493,77 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
     if (txt) txt.textContent = `EXP ${me.experience}/${100 * me.level}`;
   }).catch(() => undefined);
   const panel = root.querySelector("#hub-panel") as HTMLElement;
+  // Zone chat (Phase 6): last 5 messages + input; send via world WS.
+  const chatMsgs = root.querySelector("#hub-chat-msgs") as HTMLElement;
+  const chatIn = root.querySelector("#hub-chat-in") as HTMLInputElement;
+  const CHAT_MAP_NAME: Record<string, string> = { meadow_village: "Meadow Village", whispering_forest: "Whispering Forest", ancient_grove: "Ancient Grove" };
+  (root.querySelector("#hub-chat-map") as HTMLElement).textContent = CHAT_MAP_NAME[opts.hud.mapId] ?? opts.hud.mapId;
+  const CHAT_COLORS = ["#ffd83d", "#3ddc5f", "#ff9a5a", "#c792ff", "#ff7ab0", "#ffe066"];
+  const chatColorFor = (id: string) => { let h = 0; for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return CHAT_COLORS[h % CHAT_COLORS.length]; };
+  type ChatLine = { name: string; content: string; self: boolean; pid: string; ts: number };
+  const chatStore: Record<"zone" | "world", ChatLine[]> = { zone: [], world: [] };
+  let chatTab: "zone" | "world" = "zone";
+  const tabZone = root.querySelector("#hub-chat-tab-zone") as HTMLElement;
+  const tabWorld = root.querySelector("#hub-chat-tab-world") as HTMLElement;
+  const dotZone = root.querySelector("#hub-chat-dot-zone") as HTMLElement;
+  const dotWorld = root.querySelector("#hub-chat-dot-world") as HTMLElement;
+  const chipText = root.querySelector("#hub-chat-map") as HTMLElement;
+  const chipIcon = root.querySelector("#hub-chat-chip-icon") as HTMLElement;
+  const mapName = CHAT_MAP_NAME[opts.hud.mapId] ?? opts.hud.mapId;
+  const lineEl = (l: ChatLine) => {
+    const d = document.createElement("div");
+    d.className = "msg";
+    const who = document.createElement("span");
+    who.className = "who";
+    who.style.color = l.self ? "#39b6e8" : chatColorFor(l.pid);
+    who.textContent = l.name;
+    const when = document.createElement("span");
+    when.className = "when";
+    const dt = new Date(l.ts);
+    when.textContent = `${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}`;
+    d.appendChild(who); d.appendChild(when); d.appendChild(document.createElement("br"));
+    d.appendChild(document.createTextNode(l.content));
+    return d;
+  };
+  const renderChat = () => {
+    chatMsgs.innerHTML = "";
+    for (const l of chatStore[chatTab].slice(-5)) chatMsgs.appendChild(lineEl(l));
+  };
+  const setChatTab = (t: "zone" | "world") => {
+    chatTab = t;
+    tabZone.classList.toggle("on", t === "zone");
+    tabWorld.classList.toggle("on", t === "world");
+    if (t === "zone") { dotZone.hidden = true; chipIcon.className = "fa-solid fa-location-dot"; chipText.textContent = mapName; chatIn.placeholder = "Nhắn cho mọi người quanh đây…"; }
+    else { dotWorld.hidden = true; chipIcon.className = "fa-solid fa-globe"; chipText.textContent = "Toàn máy chủ"; chatIn.placeholder = "Nhắn cho cả thế giới…"; }
+    renderChat();
+  };
+  tabZone.addEventListener("click", () => setChatTab("zone"));
+  tabWorld.addEventListener("click", () => setChatTab("world"));
+  chipText.textContent = mapName;
+  const appendChat = (channel: "zone" | "world", l: ChatLine) => {
+    const arr = chatStore[channel];
+    arr.push(l);
+    if (arr.length > 30) arr.splice(0, arr.length - 30);
+    if (channel === chatTab) renderChat();
+    else if (channel === "world") dotWorld.hidden = false;
+    else dotZone.hidden = false;
+  };
+  const sendChat = () => {
+    const v = chatIn.value.trim();
+    if (!v) return;
+    network.send("world.chat.send", { content: v, channel: chatTab });
+    chatIn.value = "";
+  };
+  (root.querySelector("#hub-chat-send") as HTMLElement).addEventListener("click", sendChat);
+  chatIn.addEventListener("keydown", (e) => {
+    e.stopPropagation();
+    if (e.key === "Enter") { e.preventDefault(); sendChat(); }
+  });
+  const unsubChat = network.subscribe("world.chat.message", (p: { playerId: string; displayName: string; content: string; ts: number; channel?: string }) => {
+    appendChat(p.channel === "world" ? "world" : "zone", {
+      name: p.displayName, content: p.content, self: p.playerId === opts.profile.playerId, pid: p.playerId, ts: p.ts,
+    });
+  });
   const title = root.querySelector("#hub-title") as HTMLElement;
   const sub = root.querySelector("#hub-sub") as HTMLElement;
   const body = root.querySelector("#hub-body") as HTMLElement;
@@ -492,6 +646,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
         if (pulling) return;
         pulling = true;
         void network.request<SummonPullResponse>("POST", "/summoning/pull", { bannerId: banner.id, pullCount: count }, true, { "Idempotency-Key": crypto.randomUUID() }).then(res => {
+          sfxReward();
           crystal = res.remainingCrystal;
           pity = { ...pity, sinceRare: res.pity.sinceRare, sinceEpic: res.pity.sinceEpic };
           crystalEl2.textContent = crystal.toLocaleString("vi-VN");
@@ -538,34 +693,89 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
         const bestOf = new Map<string, OwnedCreature>();
         for (const it of items) { const cur = bestOf.get(it.creatureId); if (!cur || it.level > cur.level) bestOf.set(it.creatureId, it); }
         const showDetail = (it: OwnedCreature): void => {
+          void network.request<PlayerWallet>("GET", "/player/wallet").then(w => {
+            if (!root.isConnected) return;
+            renderDetail(it, w.evolutionCore);
+          }).catch(() => { if (root.isConnected) renderDetail(it, 0); });
+        };
+        const renderDetail = (it: OwnedCreature, cores: number): void => {
           const def = creatureById(it.creatureId);
           if (!def) return;
           const st = statsAtLevel(def, it.level);
           const xpNext = it.level >= 50 ? 0 : 60 + 40 * it.level;
           const xpPct = xpNext ? Math.min(100, Math.round((it.experience / xpNext) * 100)) : 100;
           const hearts = Array.from({ length: 10 }, (_, i) => `<i class="fa-solid fa-heart ${i < it.bondLevel ? "" : "off"}"></i>`).join("");
-          const skills = skillsOf(it.creatureId).map(sk => `<div class="sk"><span class="sic" style="background:${ELEMENT_COLOR[it.element]}"><i class="fa-solid ${sk.slot === 3 ? "fa-star" : sk.slot === 2 ? "fa-shield-halved" : "fa-paw"}"></i></span><span>${sk.name}</span>${sk.slot === 3 ? `<span class="tag">CHIÊU CUỐI</span>` : sk.slot === 2 ? `<span class="tag">KỸ NĂNG</span>` : `<span class="tag">ĐÒN THƯỜNG</span>`}</div>`).join("");
+          const elc = ELEMENT_COLOR[it.element] ?? "#666";
+          const skills = skillsOf(it.creatureId).map(sk => `<div class="dt-sk"><span class="sic" style="background:${elc}"><i class="fa-solid ${sk.slot === 3 ? "fa-star" : sk.slot === 2 ? "fa-shield-halved" : "fa-paw"}"></i></span><span><b>${sk.name}</b><span class="tag">${sk.slot === 3 ? "CHIÊU CUỐI" : sk.slot === 2 ? "KỸ NĂNG" : "ĐÒN THƯỜNG"}</span></span></div>`).join("");
+          const evoSection = evoSectionFor(it, def, cores);
           const sp = SPRITES[it.creatureId];
           sub.textContent = `Chi tiết Eidolon`;
           body.innerHTML = `<button class="qclaim" id="dt-back" style="margin:0 0 12px">← Bộ sưu tập</button>
-            <div class="dt-head">${sp ? `<img src="${sp}" alt="${it.name}"/>` : `<span class="ph" style="color:${ELEMENT_COLOR[it.element]}">${it.name.slice(0, 1)}</span>`}
-              <div><h3 style="font-family:'Baloo 2',sans-serif;font-size:27px;color:#fff">${it.name} · Lv.${it.level}</h3>
-              <div class="meta"><span class="chip" style="background:${ELEMENT_COLOR[it.element]}">${ELEMENT_VI[it.element] ?? it.element}</span> <span class="rar" style="color:${ELEMENT_COLOR[it.element]}">${RARITY_VI[it.rarity]}</span></div>
-              <div class="meta">${ROLE_VI[it.role]} · ${def.habitat || "Chưa rõ nơi sống"}</div>
-              <div class="hearts" style="margin-top:6px">${hearts}<span style="color:#aeb9c4;font-size:13.5px;letter-spacing:0"> Bond ${it.bondLevel}/10</span></div></div></div>
-            <div class="qobj" style="margin-top:12px"><span>Kinh nghiệm</span><span class="st">${it.level >= 50 ? "MAX" : `${it.experience}/${xpNext} XP`}</span></div>
-            <div class="bar"><i style="width:${xpPct}%"></i></div>
-            ${def.descriptionVi ? `<p style="font-size:15px;color:#c3ccd4;margin-top:10px">${def.descriptionVi}</p>` : ""}
-            <div class="dt-grid">
-              <div class="dt-stat"><b>${st.hp}</b><span>MÁU (HP)</span></div>
-              <div class="dt-stat"><b>${st.atk}</b><span>TẤN CÔNG</span></div>
-              <div class="dt-stat"><b>${st.def}</b><span>PHÒNG THỦ</span></div>
-              <div class="dt-stat"><b>${st.spd}</b><span>TỐC ĐỘ</span></div>
+            <div class="dt-a-top">
+              <div class="dt-stage" style="background:linear-gradient(180deg, ${elc}30, rgba(35,43,54,.85) 62%)">
+                <div class="dt-glow" style="background:radial-gradient(circle, ${elc}66, transparent 68%)"></div>
+                ${sp ? `<img src="${sp}" alt="${it.name}"/>` : `<div class="dt-phm"><div class="disc" style="background:${elc}26;border-color:${elc}">${it.name.slice(0, 1)}</div></div>`}
+                <h3>${it.name} · Lv.${it.level}</h3>
+                <div class="meta"><span class="chip" style="background:${elc}">${ELEMENT_VI[it.element] ?? it.element}</span> <span class="rar" style="color:${elc}">${RARITY_VI[it.rarity]}</span></div>
+                <div class="meta">${ROLE_VI[it.role]} · ${def.habitat || "Chưa rõ nơi sống"}</div>
+                <div class="hearts" style="margin-top:6px;position:relative">${hearts}<span style="color:#aeb9c4;font-size:13.5px;letter-spacing:0"> Bond ${it.bondLevel}/10</span></div>
+              </div>
+              <div class="dt-a-right">
+                <div class="hub-sec" style="margin-top:0">Kinh nghiệm</div>
+                <div class="dt-xpbar"><i style="width:${xpPct}%"></i><span>${it.level >= 50 ? "MAX" : `${it.experience} / ${xpNext} XP`}</span></div>
+                ${def.descriptionVi ? `<p style="font-size:14.5px;color:#c3ccd4;margin-top:11px">${def.descriptionVi}</p>` : ""}
+                <div class="dt-grid" style="margin:10px 0 0">
+                  <div class="dt-stat"><b>${st.hp}</b><span>MÁU (HP)</span></div>
+                  <div class="dt-stat"><b>${st.atk}</b><span>TẤN CÔNG</span></div>
+                  <div class="dt-stat"><b>${st.def}</b><span>PHÒNG THỦ</span></div>
+                  <div class="dt-stat"><b>${st.spd}</b><span>TỐC ĐỘ</span></div>
+                </div>
+                ${def.traitName ? `<div class="dt-trait"><b style="color:var(--sel)">Đặc tính — ${def.traitName}:</b> ${def.traitDescVi || ""}</div>` : ""}
+                <div class="hub-sec">Kỹ năng</div>
+                <div class="dt-skills">${skills}</div>
+              </div>
             </div>
-            ${def.traitName ? `<div class="hub-sec">Đặc tính — ${def.traitName}</div><p style="font-size:15px;color:#c3ccd4">${def.traitDescVi || ""}</p>` : ""}
-            <div class="hub-sec">Kỹ năng</div>${skills}
-            ${def.evolutionBranches.length ? `<div class="hub-sec">Nhánh tiến hoá</div><p style="font-size:15px;color:#c3ccd4">${def.evolutionBranches.join(" · ")}<br/>Yêu cầu: Lv.16 + 1 Evolution Core cho mỗi lần tiến hoá.</p>` : ""}`;
+            ${evoSection}`;
           (body.querySelector("#dt-back") as HTMLElement).addEventListener("click", () => renderers.eidolons());
+          body.querySelectorAll<HTMLElement>("[data-evolve]").forEach(btn => btn.addEventListener("click", () => {
+            const tid = btn.dataset.evolve!;
+            if (!btn.dataset.armed) {
+              btn.dataset.armed = "1";
+              btn.textContent = "Chạm lại để xác nhận — tốn 1 Evolution Core";
+              btn.classList.add("armed");
+              return;
+            }
+            btn.setAttribute("disabled", "1"); btn.textContent = "Đang tiến hoá…";
+            void network.request<{ toCreatureId: string }>("POST", `/creatures/${it.instanceId}/evolve`, { targetId: tid }).then(() => {
+              sfxLevelUp();
+              showToast(`Đã tiến hoá thành ${creatureById(tid)?.name ?? tid}!`);
+              refreshParty();
+              void network.request<{ items: OwnedCreature[] }>("GET", "/creatures").then(({ items }) => {
+                const updated = items.find(x => x.instanceId === it.instanceId);
+                if (updated && root.isConnected) showDetail(updated);
+              }).catch(() => undefined);
+            }).catch((e: Error) => { showToast(e.message); showDetail(it); });
+          }));
+        };
+        // Evolution section (approved EVOLUTION-DRAFT-v1, detail mock A):
+        // one card per branch target; evolved forms show an Awakened banner.
+        const evoSectionFor = (it: OwnedCreature, def: ReturnType<typeof creatureById>, cores: number): string => {
+          if (!def) return "";
+          if (def.evolvedFrom) {
+            const base = creatureById(def.evolvedFrom);
+            return `<div class="hub-sec">Tiến hoá</div><div class="dt-awake"><i class="fa-solid fa-gem" style="color:var(--sel)"></i> Dạng <b style="color:var(--sel)">Awakened</b> — đã tiến hoá từ ${base?.name ?? def.evolvedFrom}. Bậc Ascended sẽ mở ở giai đoạn sau.</div>`;
+          }
+          const targets = def.evolutionTargets ?? [];
+          if (!targets.length) return "";
+          const cards = targets.map(tid => {
+            const t = creatureById(tid);
+            if (!t) return "";
+            const tst = statsAtLevel(t, it.level);
+            const telc = ELEMENT_COLOR[t.element] ?? "#666";
+            const dis = it.level < 16 ? "Cần Lv.16" : cores < 1 ? "Thiếu Evolution Core" : null;
+            return `<div class="dt-evo"><h4>${t.name}</h4><div class="rl"><span class="chip" style="background:${telc}">${ELEMENT_VI[t.element] ?? t.element}</span> ${ROLE_VI[t.role]} · ${RARITY_VI[t.rarity]}</div><div class="st">HP ${tst.hp} · ATK ${tst.atk} · DEF ${tst.def} · SPD ${tst.spd}</div><div class="ult">Chiêu cuối: <b>${t.skillNames[2]}</b></div>${dis ? `<button class="dt-evobtn" disabled>${dis}</button>` : `<button class="dt-evobtn" data-evolve="${tid}">Tiến hoá · 1 Core</button>`}</div>`;
+          }).join("");
+          return `<div class="hub-sec" style="display:flex;align-items:center">Nhánh tiến hoá<span class="dt-corepill"><i class="fa-solid fa-gem"></i> Đang có: ${cores} Evolution Core</span></div><div style="display:grid;grid-template-columns:repeat(${targets.length},1fr);gap:12px">${cards}</div><p style="font-size:13px;color:#8b93a0;margin-top:8px">Chỉ số tính ở Lv.${it.level} hiện tại. Tiến hoá giữ nguyên cấp, XP và Bond — không quay lại được.</p>`;
         };
         body.querySelectorAll<HTMLElement>(".slot[data-inst]").forEach(el => el.addEventListener("click", () => { const it = byId.get(el.dataset.inst!); if (it) showDetail(it); }));
         body.querySelectorAll<HTMLElement>(".dex .card").forEach((el, idx) => el.addEventListener("click", () => { const it = bestOf.get(CREATURES[idx].id); if (it) showDetail(it); }));
@@ -577,7 +787,9 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       const BICON: Record<string, [string, string]> = {
         bond_garden: ["fa-seedling", "#3f9e63"], training_ground: ["fa-dumbbell", "#d0812a"],
         research_lab: ["fa-flask", "#3973b8"], evo_shrine: ["fa-gem", "#6b4fa1"],
+        expedition_gate: ["fa-compass", "#4a7a9e"], workshop: ["fa-hammer", "#7a6a4f"],
       };
+      const CUR_VI: Record<string, string> = { gold: "Gold", crystal: "Crystal", bond_essence: "Bond Essence", research_data: "Research Data", evolution_core: "Evolution Core" };
       const UNIT: Record<string, string> = { bond: "Bond", xp: "XP", data: "Data" };
       const fmtDur = (sec: number): string => {
         if (sec <= 0) return "ngay";
@@ -597,9 +809,11 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       };
       void (async () => {
         try {
-          const [state, owned] = await Promise.all([
+          const [state, owned, expState, shopState] = await Promise.all([
             network.request<SanctuaryStateResponse>("GET", "/sanctuary"),
             network.request<{ items: OwnedCreature[] }>("GET", "/creatures"),
+            network.request<ExpeditionsResponse>("GET", "/sanctuary/expeditions"),
+            network.request<WorkshopResponse>("GET", "/sanctuary/workshop"),
           ]);
           if (!root.isConnected) return;
           const byInstance = new Map(owned.items.map(c => [c.instanceId, c]));
@@ -627,6 +841,23 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
             return `<button class="s2-up" data-upgrade="${bd.id}">${upLabel(bd)}</button>`;
           };
 
+          const bhead = (bd: SanctuaryBuildingView, icon: string, color: string): string =>
+            `<div class="s2-bhead"><div class="s2-bic" style="background:${color}"><i class="fa-solid ${icon}"></i></div><div><h3>${bd.nameVi}</h3><div class="bd">${bd.descVi}</div></div><span class="s2-lvpill">Lv.${bd.level}</span></div>`;
+          const expCard = (bd: SanctuaryBuildingView): string => {
+            const [icon, color] = BICON[bd.id] ?? ["fa-compass", "#4a7a9e"];
+            const act = expState.active.map(e => {
+              const st = new Date(e.startedAt).getTime(), en = new Date(e.endsAt).getTime();
+              const pct = Math.max(0, Math.min(100, Math.round(((Date.now() - st) / Math.max(1, en - st)) * 100)));
+              return `<div class="s2-dest"><div style="min-width:0;flex:1"><div class="nm2">${e.nameVi}</div><div class="sub2">${e.creatureNames.join(" · ")}</div><div class="s2-abar" style="margin:7px 0 0"><i style="width:${e.ready ? 100 : pct}%"></i><span>${e.ready ? "Đội đã về — chờ nhận kết quả" : `Còn ${fmtDur(Math.max(0, (en - Date.now()) / 1000))}`}</span></div></div>${e.ready ? `<button class="s2-up" data-claim="${e.id}">Nhận kết quả</button>` : ""}</div>`;
+            }).join("");
+            const dests = expState.destinations.map(d => `<div class="s2-dest"><div style="min-width:0"><div class="nm2">${d.nameVi} <span class="chip" style="background:#39424f;font-size:11px">${fmtDur(d.minutes * 60)}</span></div><div class="sub2">${d.requiresText}</div><div class="sub2">Phần thưởng: ${d.rewardText}</div></div><button class="s2-up" data-exp-pick="${d.id}">Gửi đội đi</button></div>`).join("");
+            return `<div class="s2-b">${bhead(bd, icon, color)}${act ? `<div class="hub-sec" style="margin-top:12px">Đội đang đi</div>${act}` : ""}<div class="hub-sec" style="margin-top:12px">Điểm đến</div>${dests}<p style="font-size:12.5px;color:#8b93a0;margin-top:10px">Eidolon đang đi thám hiểm không thể phân công hay ra trận cho đến khi nhận kết quả chuyến đi.</p></div>`;
+          };
+          const shopCard = (bd: SanctuaryBuildingView): string => {
+            const [icon, color] = BICON[bd.id] ?? ["fa-hammer", "#7a6a4f"];
+            const rows = shopState.recipes.map(r => `<div class="s2-dest"><div style="min-width:0"><div class="nm2">${r.nameVi}</div><div class="sub2">Giá: ${r.costs.map(c => `${fmt(c.amount)} ${CUR_VI[c.currency] ?? c.currency}`).join(" + ")}</div></div><button class="s2-up" data-craft="${r.id}" ${r.canAfford ? "" : "disabled"}>Chế tạo</button></div>`).join("");
+            return `<div class="s2-b">${bhead(bd, icon, color)}${rows}</div>`;
+          };
           const draw = (): void => {
             const hall = state.buildings.find(b => b.id === "main_hall")!;
             const work = state.buildings.filter(b => b.kind === "bond" || b.kind === "xp" || b.kind === "data");
@@ -645,9 +876,15 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
               if (bd.id === "main_hall") continue;
               const [icon, color] = BICON[bd.id] ?? ["fa-house", "#8a6d3b"];
               if (bd.kind === "locked") {
-                html += `<div class="s2-b locked"><div class="s2-bhead"><div class="s2-bic" style="background:${color};width:40px;height:40px;font-size:18px"><i class="fa-solid ${icon}"></i></div><div><h3 style="font-size:18px">${bd.nameVi}</h3><div class="bd">${bd.descVi}</div></div><span class="s2-locktag"><i class="fa-solid fa-lock"></i> Mở khoá: người chơi Lv.10 + duyệt bản tiến hoá</span></div></div>`;
+                html += `<div class="s2-b locked"><div class="s2-bhead"><div class="s2-bic" style="background:${color};width:40px;height:40px;font-size:18px"><i class="fa-solid ${icon}"></i></div><div><h3 style="font-size:18px">${bd.nameVi}</h3><div class="bd">${bd.descVi}</div></div><span class="s2-locktag"><i class="fa-solid fa-lock"></i> Chưa mở khoá</span></div></div>`;
                 continue;
               }
+              if (bd.kind === "shrine") {
+                html += `<div class="s2-b">${bhead(bd, icon, color)}<p style="font-size:14px;color:#c3ccd4;margin-top:12px">Đài đã mở. Tiến hoá thực hiện trong <b>thẻ chi tiết của từng Eidolon</b> (mục Eidolons): cần <b>Lv.16 + 1 Evolution Core</b>. Mỗi loài có 2–3 nhánh với vai trò khác nhau — chọn kỹ, tiến hoá không quay lại được.</p></div>`;
+                continue;
+              }
+              if (bd.kind === "expedition") { html += expCard(bd); continue; }
+              if (bd.kind === "workshop") { html += shopCard(bd); continue; }
               const unit = UNIT[bd.kind] ?? "";
               const totAcc = bd.assignments.reduce((n, a) => n + a.accrued, 0);
               const totCap = bd.assignments.reduce((n, a) => n + (a.progress01 > 0 ? a.accrued / a.progress01 : 0), 0);
@@ -700,12 +937,50 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
             }));
           };
 
+          const drawExpPicker = (dest: ExpeditionDestinationView): void => {
+            const awayIds = new Set(expState.active.flatMap(e => e.creatureIds));
+            const free = owned.items.filter(c => !assignedIds.has(c.instanceId) && !awayIds.has(c.instanceId));
+            const sel = new Set<string>();
+            const row = (c: OwnedCreature): string => {
+              const d = defOf(c.creatureId);
+              return `<button class="pickrow" data-exp-sel="${c.instanceId}">${thumb(c.creatureId)}<span><b>${d?.name ?? c.creatureId}</b> <span class="chip" style="background:var(--sel);color:var(--selink);font-size:10.5px">Lv.${c.level}</span> <span class="chip" style="background:${ELEMENT_COLOR[d?.element ?? ""] ?? "#666"};font-size:10.5px">${d?.element ?? ""}</span> <span style="color:#aeb9c4;font-size:13px">${d ? ROLE_VI[d.role] : ""} · Bond ${c.bondLevel}</span></span></button>`;
+            };
+            body.innerHTML = `<div class="hub-sec">Gửi đội đi — ${dest.nameVi} · ${fmtDur(dest.minutes * 60)}</div>
+              <p style="font-size:13.5px;color:#aeb9c4;margin:2px 0 8px">${dest.requiresText} · Chọn 1–3 Eidolon. Phần thưởng: ${dest.rewardText}.</p>`
+              + (free.length ? free.map(row).join("") : `<p style="font-size:15.5px;color:#9a937f">Không có Eidolon nào rảnh (đang phân công hoặc đang đi chuyến khác).</p>`)
+              + `<div id="exp-status" style="font-size:14px;color:#aeb9c4;margin-top:10px">Đã chọn 0/3</div>
+              <div style="display:flex;gap:10px;margin-top:8px"><button class="s2-up" id="exp-start" disabled style="margin-left:0">Xuất phát</button><button class="slotempty" id="exp-back">← Quay lại Sanctuary</button></div>`;
+            const status = body.querySelector("#exp-status") as HTMLElement;
+            const startBtn = body.querySelector("#exp-start") as HTMLButtonElement;
+            const refreshStatus = (): void => {
+              const chosen = owned.items.filter(c => sel.has(c.instanceId));
+              const sumLv = chosen.reduce((n, c) => n + c.level, 0);
+              let req = "";
+              let okReq = true;
+              if (dest.needElement) { const has = chosen.some(c => defOf(c.creatureId)?.element === dest.needElement); req = ` · Cần 1 hệ ${dest.needElement}: ${has ? "đủ" : "chưa có"}`; okReq = okReq && has; }
+              if (dest.minTotalLevel) { req = ` · Tổng cấp ${sumLv}/${dest.minTotalLevel}`; okReq = okReq && sumLv >= dest.minTotalLevel; }
+              status.textContent = `Đã chọn ${sel.size}/3${req}`;
+              startBtn.disabled = !(sel.size >= 1 && okReq);
+            };
+            body.querySelectorAll<HTMLElement>("[data-exp-sel]").forEach(b2 => b2.addEventListener("click", () => {
+              const id = b2.dataset.expSel!;
+              if (sel.has(id)) { sel.delete(id); b2.classList.remove("sel"); }
+              else if (sel.size >= 3) { showToast("Mỗi chuyến tối đa 3 Eidolon"); return; }
+              else { sel.add(id); b2.classList.add("sel"); }
+              refreshStatus();
+            }));
+            body.querySelector("#exp-back")?.addEventListener("click", () => draw());
+            startBtn.addEventListener("click", () => {
+              void network.request("POST", "/sanctuary/expeditions/start", { destinationId: dest.id, creatureInstanceIds: [...sel] }).then(() => { showToast("Đội đã xuất phát!"); renderers.sanctuary(); }).catch((e: Error) => showToast(e.message));
+            });
+          };
           const wire = (): void => {
             body.querySelectorAll<HTMLElement>("[data-unassign]").forEach(btn => btn.addEventListener("click", () => {
               void network.request("POST", "/sanctuary/unassign", { creatureInstanceId: btn.dataset.unassign }).then(() => { showToast("Đã rút Eidolon về"); renderers.sanctuary(); }).catch((e: Error) => showToast(e.message));
             }));
             body.querySelector<HTMLElement>("[data-collectall]")?.addEventListener("click", () => {
               void network.request<{ totals: { bond: number; xp: number; data: number } }>("POST", "/sanctuary/collect-all", {}).then(r => {
+                if (r.totals.bond || r.totals.xp || r.totals.data) sfxReward();
                 const parts = [r.totals.bond ? `+${r.totals.bond} Bond` : "", r.totals.xp ? `+${r.totals.xp} XP` : "", r.totals.data ? `+${r.totals.data} Data` : ""].filter(Boolean).join(" · ");
                 showToast(parts ? `Thu hoạch xong: ${parts}` : "Chưa có gì để thu hoạch");
                 renderers.sanctuary(); refreshParty(); refreshWallet();
@@ -724,12 +999,96 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
               const bd = state.buildings.find(b => b.id === btn.dataset.pick)!;
               drawPicker(bd);
             }));
+            body.querySelectorAll<HTMLElement>("[data-exp-pick]").forEach(btn => btn.addEventListener("click", () => {
+              const dest = expState.destinations.find(d => d.id === btn.dataset.expPick)!;
+              drawExpPicker(dest);
+            }));
+            body.querySelectorAll<HTMLElement>("[data-claim]").forEach(btn => btn.addEventListener("click", () => {
+              void network.request<{ rewards: { currency: string; amount: number }[] }>("POST", `/sanctuary/expeditions/${btn.dataset.claim}/claim`, {}).then(r => {
+                sfxReward();
+                showToast(`Đội đã về: ${r.rewards.map(x => `+${x.amount} ${CUR_VI[x.currency] ?? x.currency}`).join(" · ")}`);
+                renderers.sanctuary(); refreshWallet();
+              }).catch((e: Error) => showToast(e.message));
+            }));
+            body.querySelectorAll<HTMLElement>("[data-craft]").forEach(btn => btn.addEventListener("click", () => {
+              void network.request<{ itemId: string; qty: number }>("POST", "/sanctuary/workshop/craft", { recipeId: btn.dataset.craft }).then(() => {
+                showToast("Chế tạo xong — vật phẩm đã vào Túi đồ");
+                renderers.sanctuary(); refreshWallet();
+              }).catch((e: Error) => showToast(e.message));
+            }));
           };
           draw();
         } catch (e) {
           body.innerHTML = `<p style="font-size:15.5px;color:#e88">${e instanceof Error ? e.message : "Không tải được Sanctuary"}</p>`;
         }
       })();
+    },
+    friends: () => {
+      // Redesign A "Thẻ đồng hành" (approved mockup): summary strip, rich
+      // companion cards with team preview + current map, request cards.
+      title.textContent = "Bạn bè"; sub.textContent = "Kết bạn · đấu giao hữu · rủ nhau đi săn";
+      body.innerHTML = `<div id="fr-main"><p style="color:#8b93a0;font-size:14px">Đang tải…</p></div>`;
+      const main = body.querySelector("#fr-main") as HTMLElement;
+      const MAP_NAME: Record<string, string> = { meadow_village: "Meadow Village", whispering_forest: "Whispering Forest", ancient_grove: "Ancient Grove" };
+      const AVATAR_IMG: Record<string, string> = { wanderer_male: "assets/chars/wanderer-v4.png", wanderer_female: "assets/chars/wanderer-female-v4.png", avatar_default: "assets/chars/wanderer-v4.png" };
+      const avaHtml = (f: FriendView) => `<div class="fr-ava">${AVATAR_IMG[f.avatarId] ? `<img src="${AVATAR_IMG[f.avatarId]}" alt=""/>` : `<span class="ph">${f.displayName.slice(0, 1).toUpperCase()}</span>`}<span class="dotwrap"><span class="${f.online ? "fr-ondot" : "fr-offdot"}"></span></span></div>`;
+      const teamHtml = (f: FriendView) => {
+        const slots: string[] = [];
+        for (let i = 0; i < 5; i++) {
+          const t = (f.team ?? [])[i];
+          if (!t) { slots.push(`<span class="fr-tslot empty"><i class="fa-solid fa-plus"></i></span>`); continue; }
+          const def = creatureById(t.creatureId);
+          const nm = def?.name ?? t.creatureId;
+          const sp = SPRITES[t.creatureId];
+          slots.push(sp
+            ? `<span class="fr-tslot" title="${nm} · Lv.${t.level}"><img src="${sp}" alt="${nm}"/></span>`
+            : `<span class="fr-tslot" title="${nm} · Lv.${t.level}"><span class="ph" style="color:${ELEMENT_COLOR[def?.element ?? ""] ?? "#999"}">${nm.slice(0, 1)}</span></span>`);
+        }
+        return `<div class="fr-team"><span class="tl">ĐỘI HÌNH</span><div class="fr-tslots">${slots.join("")}</div></div>`;
+      };
+      const headHtml = (f: FriendView, status: string) => `${avaHtml(f)}<div style="flex:1;min-width:0"><div class="fr-name">${f.displayName} <span class="fr-lvpill">Lv.${f.level}</span></div><div class="fr-status">${status}</div></div>`;
+      const paint = async () => {
+        try {
+          const d = await network.request<FriendsResponse>("GET", "/social/friends");
+          const onlineCount = d.friends.filter(f => f.online).length;
+          let h = `<div class="fr-strip">
+            <div class="blk"><b>${d.friends.length}</b><span>TỔNG SỐ BẠN</span></div>
+            <div class="blk"><b style="color:var(--bar)">${onlineCount}</b><span>ĐANG ONLINE</span></div>
+            <div class="blk"><b style="color:var(--sel)">${d.incoming.length}</b><span>LỜI MỜI MỚI</span></div></div>
+            <div class="fr-search" style="margin-top:12px"><div class="fr-sbox"><i class="fa-solid fa-magnifying-glass"></i><input id="fr-q" placeholder="Tìm người chơi theo tên…"/></div><button class="btn-y" id="fr-go">Tìm</button></div>
+            <div id="fr-results"></div>`;
+          if (d.incoming.length) h += `<div class="hub-sec">Lời mời kết bạn<span class="fr-cnt">${d.incoming.length}</span></div>` + d.incoming.map(f => `<div class="fr-card">${headHtml(f, "Muốn kết bạn với bạn")}<div style="display:flex;gap:8px;flex:none"><button class="btn-y" data-acc="${f.requestId}">Chấp nhận</button><button class="btn-g" data-dec="${f.requestId}">Từ chối</button></div></div>`).join("");
+          h += `<div class="hub-sec">Danh sách bạn</div>`;
+          h += d.friends.length
+            ? d.friends.map(f => `<div class="fr-card">${avaHtml(f)}<div style="flex:1;min-width:0"><div class="fr-name">${f.displayName} <span class="fr-lvpill">Lv.${f.level}</span></div><div class="fr-status">${f.online ? `<i class="fa-solid fa-location-dot" style="color:var(--bar2)"></i> Đang ở ${MAP_NAME[f.mapId ?? ""] ?? "thế giới"}` : `<i class="fa-solid fa-clock"></i> Offline`}</div>${teamHtml(f)}</div><div style="display:flex;gap:8px;align-items:center;flex:none"><button class="${f.online ? "btn-y" : "btn-g"}" data-duel="${f.playerId}"><i class="fa-solid fa-bolt"></i> Đấu giao hữu</button><button class="fr-iconbtn" data-unf="${f.playerId}" title="Huỷ kết bạn"><i class="fa-solid fa-user-xmark"></i></button></div></div>`).join("")
+            : `<p style="color:#8b93a0;font-size:14px">Chưa có bạn nào — tìm người chơi ở ô trên và gửi lời mời nhé.</p>`;
+          if (d.outgoing.length) h += `<div class="hub-sec">Đã gửi lời mời</div>` + d.outgoing.map(f => `<div class="fr-card">${headHtml(f, "Đang chờ phản hồi…")}</div>`).join("");
+          main.innerHTML = h;
+          main.querySelectorAll("[data-acc]").forEach(b => b.addEventListener("click", async () => { try { await network.request("POST", `/social/friends/${(b as HTMLElement).dataset.acc}/accept`); showToast("Đã kết bạn!"); void paint(); } catch (e) { showToast(e instanceof Error ? e.message : "Lỗi"); } }));
+          main.querySelectorAll("[data-dec]").forEach(b => b.addEventListener("click", async () => { try { await network.request("POST", `/social/friends/${(b as HTMLElement).dataset.dec}/decline`); void paint(); } catch (e) { showToast(e instanceof Error ? e.message : "Lỗi"); } }));
+          main.querySelectorAll("[data-unf]").forEach(b => b.addEventListener("click", async () => { try { await network.request("DELETE", `/social/friends/${(b as HTMLElement).dataset.unf}`); showToast("Đã huỷ kết bạn"); void paint(); } catch (e) { showToast(e instanceof Error ? e.message : "Lỗi"); } }));
+          main.querySelectorAll("[data-duel]").forEach(b => b.addEventListener("click", () => { opts.onFriendBattle?.((b as HTMLElement).dataset.duel!); }));
+          const results = main.querySelector("#fr-results") as HTMLElement;
+          const doSearch = async () => {
+            const q = (main.querySelector("#fr-q") as HTMLInputElement).value.trim();
+            if (q.length < 2) { showToast("Nhập ít nhất 2 ký tự"); return; }
+            try {
+              const d2 = await network.request<{ results: PlayerSearchResult[] }>("GET", `/social/search?q=${encodeURIComponent(q)}`);
+              results.innerHTML = `<div class="hub-sec">Kết quả tìm kiếm</div>` + (d2.results.length ? d2.results.map(r => {
+                const act = r.relation === "friend" ? `<span style="color:#3ddc5f;font-size:13px;font-weight:700">Đã là bạn</span>`
+                  : r.relation === "outgoing" ? `<span style="color:#8b93a0;font-size:13px">Đã gửi lời mời</span>`
+                  : r.relation === "incoming" ? `<button class="btn-y" data-add="${r.playerId}">Chấp nhận lời mời</button>`
+                  : `<button class="btn-y" data-add="${r.playerId}">Kết bạn</button>`;
+                return `<div class="fr-card">${headHtml(r, r.online ? "Đang online" : "Offline")}<div style="flex:none">${act}</div></div>`;
+              }).join("") : `<p style="color:#8b93a0;font-size:14px">Không tìm thấy người chơi nào.</p>`);
+              results.querySelectorAll("[data-add]").forEach(b => b.addEventListener("click", async () => { try { const r = await network.request<{ status: string }>("POST", "/social/friends/request", { playerId: (b as HTMLElement).dataset.add }); showToast(r.status === "accepted" ? "Đã kết bạn!" : "Đã gửi lời mời"); void doSearch(); void paint(); } catch (e) { showToast(e instanceof Error ? e.message : "Lỗi"); } }));
+            } catch (e) { showToast(e instanceof Error ? e.message : "Lỗi tìm kiếm"); }
+          };
+          (main.querySelector("#fr-go") as HTMLElement).addEventListener("click", () => void doSearch());
+          (main.querySelector("#fr-q") as HTMLInputElement).addEventListener("keydown", (e) => { if (e.key === "Enter") void doSearch(); });
+        } catch (e) { main.innerHTML = `<p style="color:#ff9a8a;font-size:14px">${e instanceof Error ? e.message : "Lỗi tải bạn bè"}</p>`; }
+      };
+      void paint();
     },
     quests: () => {
       title.textContent = "Nhiệm vụ"; sub.textContent = "Nhật ký nhiệm vụ";
@@ -748,6 +1107,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
           const [scope, key] = btn.dataset.claim!.split(":");
           btn.textContent = "Đang nhận…"; (btn as HTMLButtonElement).disabled = true;
           void network.request("POST", `/progression/quests/${scope}/${key}/claim`, {}).then(() => {
+            sfxReward();
             showToast("Đã nhận thưởng nhiệm vụ!");
             void network.request<QuestStateResponse>("GET", "/progression/quests").then(st => { state = st; draw(); updateTracker(st); }).catch(() => undefined);
             void network.request<{ gold: number; crystal: number }>("GET", "/player/wallet").then(w => {
@@ -771,6 +1131,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       body.querySelectorAll("[data-m]").forEach(btn => btn.addEventListener("click", () => {
         const key = (btn as HTMLElement).dataset.m!;
         if (key === "arena") { setTab("world"); opts.onArena?.(); return; }
+        if (key === "friends") { renderers.friends(); return; }
         if (key === "bag") { renderBag(); return; }
         if (key === "summon") { renderSummon(); return; }
         if (key === "settings") {
@@ -804,9 +1165,10 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
   const setTab = (tab: string) => {
     navEl.classList.remove("open");
     root.querySelectorAll(".hub-nav button[data-tab]").forEach(b => b.classList.toggle("on", (b as HTMLElement).dataset.tab === tab));
-    if (tab === "world") { panel.classList.remove("open"); return; }
+    if (tab === "world") { panel.classList.remove("open"); sfxClose(); return; }
     renderers[tab]?.();
     panel.classList.add("open");
+    sfxOpen();
   };
   root.querySelectorAll(".hub-nav button[data-tab]").forEach(b => b.addEventListener("click", () => setTab((b as HTMLElement).dataset.tab!)));
   root.querySelector("#hub-close")!.addEventListener("click", () => setTab("world"));
@@ -839,10 +1201,12 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       if (over) { close(); return; }
       if (busy || orbs <= 0) return;
       busy = true; syncBtn();
+      sfxThrow();
       void network.request<{ captured: boolean; fled: boolean; orbsLeft: number }>("POST", `/encounters/${enc.encounterId}/capture`, { captureItemId: "basic_capture_orb" })
         .then(res => {
           orbs = res.orbsLeft;
           if (res.captured) {
+            sfxCapture();
             over = true;
             msg.textContent = `Bắt thành công! ${def.name} đã vào bộ sưu tập.`;
             msg.className = "enc-msg good";
@@ -850,10 +1214,12 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
             refreshParty();
             window.setTimeout(close, 1700);
           } else if (res.fled) {
+            sfxFled();
             over = true;
             msg.textContent = `${def.name} đã bỏ chạy…`;
             msg.className = "enc-msg bad";
           } else {
+            sfxBreakOut();
             msg.textContent = "Nó phá vỡ cầu và thoát ra! Ném tiếp đi.";
             msg.className = "enc-msg bad";
             encEl.classList.remove("shake"); void encEl.offsetWidth; encEl.classList.add("shake");
@@ -897,6 +1263,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       });
       dlgEl.querySelector("#dlg-claim")?.addEventListener("click", () => {
         void network.request("POST", `/progression/quests/side/${q!.key}/claim`, {}).then(() => {
+          sfxReward();
           showToast("Đã nhận thưởng nhiệm vụ phụ!");
           void network.request<{ gold: number; crystal: number }>("GET", "/player/wallet").then(w => { goldEl.textContent = fmt(w.gold); crystalEl.textContent = fmt(w.crystal); }).catch(() => undefined);
           closeDlg();
@@ -925,6 +1292,7 @@ export function mountHub(scene: Phaser.Scene, opts: { profile: PlayerProfile; hu
       crystalEl.textContent = fmt(w.crystal);
     },
     destroy: () => {
+      unsubChat();
       window.clearInterval(clockTimer);
     scene.game.events.off("hud:pos", onPos);
       window.clearInterval(syncTimer);

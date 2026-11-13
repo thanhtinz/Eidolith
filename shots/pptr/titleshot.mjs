@@ -1,0 +1,12 @@
+import puppeteer from "puppeteer-core";
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const browser = await puppeteer.launch({ executablePath: "/home/hatch/.cache/puppeteer/chrome/linux-156.0.8078.47/chrome-linux64/chrome", headless: "new", args: ["--no-sandbox"] });
+const ctx = await browser.createBrowserContext();
+const page = await ctx.newPage();
+await page.setViewport({ width: 1280, height: 720 });
+await page.goto("http://localhost:5173/", { waitUntil: "domcontentloaded", timeout: 90000 });
+await page.waitForFunction(() => typeof window.__eidolithStart === "function", { timeout: 30000 }).catch(() => {});
+await sleep(1200);
+await page.screenshot({ path: "/home/hatch/workspace/eidolith/shots/title-screen-live.png" });
+console.log("done");
+await browser.close();

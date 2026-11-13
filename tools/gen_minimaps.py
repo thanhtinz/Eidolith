@@ -7,14 +7,15 @@ from PIL import Image, ImageDraw
 MAPS = "/home/hatch/workspace/eidolith/packages/game-data/maps"
 OUT = "/home/hatch/workspace/eidolith/apps/game-client/public/assets/maps"
 S = 5
-GROUND = {1: (105, 168, 79), 2: (95, 156, 71), 3: (160, 130, 86), 4: (63, 127, 196), 5: (134, 188, 94)}
+GROUND = {1: (105, 168, 79), 2: (95, 156, 71), 3: (160, 130, 86), 4: (63, 127, 196), 5: (134, 188, 94), 6: (74, 122, 56),
+          7: (232, 205, 130), 8: (150, 105, 66), 9: (110, 200, 205), 13: (110, 200, 205), 10: (105, 110, 60), 11: (150, 150, 150), 12: (170, 120, 70)}
 
 def prop(o, n):
     for p in o.get("properties", []):
         if p["name"] == n:
             return p["value"]
 
-for map_id in ["meadow_village", "whispering_forest", "ancient_grove"]:
+for map_id in ["meadow_village", "whispering_forest", "ancient_grove", "crystal_lake", "windmill_fields", "riverbend_village", "lake_cave", "forest_deep", "grove_ruins", "mist_marsh", "hilltop_shrine", "farm_acres", "forest_camp", "root_hollow_1", "root_hollow_2"]:
     m = json.load(open(f"{MAPS}/{map_id}.json"))
     w, h = m["width"], m["height"]
     img = Image.new("RGB", (w * S, h * S), (40, 60, 35))

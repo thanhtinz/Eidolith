@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { randomUUID } from "node:crypto";
 import bcrypt from "bcryptjs";
 import { isValidEmail, isValidPassword, isValidUsername } from "@eidolith/validation";
 import type { RegisterRequest, LoginRequest, RefreshRequest, AuthTokens, LoginResponse, RegisterResponse } from "@eidolith/shared-types";
@@ -15,12 +16,17 @@ authRouter.post("/register", async (req, res, next) => {
     const body = req.body as RegisterRequest;
     const details: Record<string, unknown> = {};
     if (!isValidEmail(body.email ?? "")) details.email = "Email không hợp lệ";
-    if (!isValidUsername(body.username ?? "")) details.username = "Username 3–32 ký tự, chỉ chữ/số/_";
+    // Username is OPTIONAL since the character-creation flow (2026-11-12): the
+    // name is chosen at creation, not at register. Clients that still send one
+    // (legacy/tests) keep the old named-at-register path.
+    const namedAtRegister = typeof body.username === "string" && body.username.trim().length > 0;
+    if (namedAtRegister && !isValidUsername(body.username ?? "")) details.username = "Tên nhân vật 3–20 ký tự, chỉ gồm chữ cái và số — không dùng ký tự đặc biệt";
     if (!isValidPassword(body.password ?? "")) details.password = "Mật khẩu tối thiểu 8 ký tự, gồm chữ và số";
     if (Object.keys(details).length) throw Errors.validation(details);
-    const existing = await query(`SELECT id FROM auth.users WHERE lower(email)=lower($1) OR lower(username)=lower($2)`, [body.email, body.username]);
+    const username = namedAtRegister ? body.username!.trim() : `w${randomUUID().replace(/-/g, "").slice(0, 12)}`;
+    const existing = await query(`SELECT id FROM auth.users WHERE lower(email)=lower($1) OR lower(username)=lower($2)`, [body.email, username]);
     if (existing.rows.length) {
-      const row = await query<{ email: string; username: string }>(`SELECT email, username FROM auth.users WHERE lower(email)=lower($1) OR lower(username)=lower($2)`, [body.email, body.username]);
+      const row = await query<{ email: string; username: string }>(`SELECT email, username FROM auth.users WHERE lower(email)=lower($1) OR lower(username)=lower($2)`, [body.email, username]);
       throw row.rows[0].email.toLowerCase() === body.email.toLowerCase() ? Errors.emailTaken() : Errors.usernameTaken();
     }
     const passwordHash = await bcrypt.hash(body.password, 12);
@@ -28,10 +34,13 @@ authRouter.post("/register", async (req, res, next) => {
     try {
       await client.query("BEGIN");
       const { rows } = await client.query<{ id: string }>(
-        `INSERT INTO auth.users (email, username, password_hash) VALUES ($1,$2,$3) RETURNING id`, [body.email, body.username, passwordHash]);
+        `INSERT INTO auth.users (email, username, password_hash) VALUES ($1,$2,$3) RETURNING id`, [body.email, username, passwordHash]);
       const userId = rows[0].id;
       const { rows: profileRows } = await client.query<{ id: string }>(
-        `INSERT INTO players.player_profiles (user_id, display_name) VALUES ($1,$2) RETURNING id`, [userId, body.username]);
+        `INSERT INTO players.player_profiles (user_id, display_name) VALUES ($1,$2) RETURNING id`, [userId, username]);
+      if (namedAtRegister) {
+        await client.query(`UPDATE players.player_profiles SET character_created_at = now() WHERE user_id = $1`, [userId]);
+      }
       const playerId = profileRows[0].id;
       await client.query(`INSERT INTO players.player_settings (player_id) VALUES ($1)`, [playerId]);
       await client.query(`INSERT INTO players.player_progress (player_id) VALUES ($1)`, [playerId]);

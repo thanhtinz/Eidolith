@@ -29,7 +29,7 @@ export const Errors = {
   emailTaken: () => new ApiError(409, "AUTH_EMAIL_TAKEN", "Email đã tồn tại"),
   playerNotFound: () => new ApiError(404, "PLAYER_NOT_FOUND", "Không tìm thấy player"),
   nameTaken: () => new ApiError(409, "PLAYER_NAME_TAKEN", "Tên đã tồn tại"),
-  invalidName: () => new ApiError(422, "PLAYER_INVALID_NAME", "Tên không hợp lệ"),
+  invalidName: () => new ApiError(422, "PLAYER_INVALID_NAME", "Tên nhân vật 3–20 ký tự, chỉ gồm chữ cái và số — không dùng ký tự đặc biệt"),
   rateLimited: () => new ApiError(429, "RATE_LIMITED", "Quá nhiều yêu cầu, thử lại sau"),
   internal: () => new ApiError(500, "INTERNAL_ERROR", "Lỗi hệ thống"),
 };

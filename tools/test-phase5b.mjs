@@ -12,8 +12,8 @@ const call = async (method, path, token, body) => {
   return { status: r.status, json: await r.json().catch(() => null) };
 };
 
-const email = `p5b_${Date.now()}@test.dev`;
-const username = `p5b_${Date.now() % 100000}`;
+const email = `p5bx${Date.now()}@test.dev`;
+const username = `p5bx${Date.now() % 100000}`;
 await call("POST", "/auth/register", null, { email, username, password: "SecurePass123" });
 const login = await call("POST", "/auth/login", null, { email, password: "SecurePass123" });
 const token = login.json?.data?.accessToken;
@@ -36,7 +36,7 @@ const wallet = async () => {
 
 /* ------------------------------ Sanctuary ------------------------------ */
 let st = await call("GET", "/sanctuary", token);
-check("sanctuary state: 5 buildings (v2 added research_lab)", st.status === 200 && st.json.data.buildings.length === 5);
+check("sanctuary state: 7 buildings (v2 + wave 2)", st.status === 200 && st.json.data.buildings.length === 7);
 const garden = st.json.data.buildings.find(b => b.id === "bond_garden");
 check("bond garden: 3 slots, empty", garden.slots === 3 && garden.assignments.length === 0);
 

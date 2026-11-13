@@ -9,7 +9,7 @@ page.on("pageerror", e => console.log("[pageerror]", String(e).slice(0, 160)));
 await page.goto("http://localhost:5173/", { waitUntil: "networkidle2", timeout: 60000 });
 await sleep(5000);
 if (await page.$("#f-email")) {
-  if (await page.$("#f-username")) { await page.click("#f-switch"); await sleep(600); }
+  if (await page.$("#f-username")) { await page.click(".f-tab:not(.on)"); await sleep(600); }
   await page.type("#f-email", "tour5@test.dev"); await page.type("#f-password", "SecurePass123");
   await page.click("#f-submit"); console.log("logged in");
 }

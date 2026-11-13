@@ -174,3 +174,171 @@ export function sfxSting(): void {
   whoosh(0);
   tone({ type: "triangle", f0: 520, f1: 1180, dur: 0.35, vol: 0.14 });
 }
+
+/* Stage 4: night ambience — synthesized crickets + a rare distant owl,
+ * driven by the world sun model (WorldScene calls setNightAmbience when
+ * darkness passes the threshold). No audio assets; respects the sfx
+ * setting like every other sound here. */
+let ambTimer: ReturnType<typeof setInterval> | null = null;
+let ambOn = false;
+export function setNightAmbience(on: boolean): void {
+  if (on === ambOn) return;
+  ambOn = on;
+  if (ambTimer) { clearInterval(ambTimer); ambTimer = null; }
+  if (!on) return;
+  const chirp = () => {
+    if (!ambOn || !enabled()) return;
+    for (let i = 0; i < 3; i++)
+      tone({ type: "sine", f0: 4300, f1: 3900, delay: i * 0.09, dur: 0.05, vol: 0.012 });
+    if (Math.random() < 0.22)
+      tone({ type: "sine", f0: 340, f1: 290, delay: 0.6, dur: 0.35, vol: 0.02 });
+  };
+  chirp();
+  ambTimer = setInterval(chirp, 3400);
+}
+
+/* ------------------------------------------------------------------ */
+/* Part 15 batch 2 (2026-11-13): UI pack, capture cues, footsteps,    */
+/* reward/level stings, thunder, weather loops and day birds.        */
+/* Everything stays synthesized WebAudio — no audio assets.          */
+/* ------------------------------------------------------------------ */
+
+export function sfxClick(): void {
+  if (!enabled() || !ac()) return;
+  played();
+  tone({ type: "triangle", f0: 1150, f1: 880, dur: 0.05, vol: 0.05 });
+}
+
+export function sfxOpen(): void {
+  if (!enabled() || !ac()) return;
+  played();
+  tone({ type: "triangle", f0: 520, f1: 940, dur: 0.1, vol: 0.05 });
+  noise({ dur: 0.08, vol: 0.02, type: "bandpass", f0: 900, f1: 1800, q: 1.2 });
+}
+
+export function sfxClose(): void {
+  if (!enabled() || !ac()) return;
+  played();
+  tone({ type: "triangle", f0: 880, f1: 470, dur: 0.09, vol: 0.045 });
+}
+
+export function sfxError(): void {
+  if (!enabled() || !ac()) return;
+  played();
+  tone({ type: "square", f0: 175, f1: 140, dur: 0.13, vol: 0.06 });
+}
+
+export function sfxReward(): void {
+  if (!enabled() || !ac()) return;
+  played();
+  [1319, 1760, 2349].forEach((f, i) => tone({ type: "triangle", f0: f, delay: 0.06 * i, dur: 0.28, vol: 0.11 }));
+  noise({ delay: 0.1, dur: 0.25, vol: 0.03, type: "highpass", f0: 5200 });
+}
+
+export function sfxLevelUp(): void {
+  if (!enabled() || !ac()) return;
+  played();
+  [523, 659, 784, 1047, 1319].forEach((f, i) => tone({ type: "triangle", f0: f, delay: 0.07 * i, dur: 0.5, vol: 0.13 }));
+  noise({ delay: 0.2, dur: 0.5, vol: 0.025, type: "highpass", f0: 6000 });
+}
+
+export function sfxThrow(): void {
+  if (!enabled() || !ac()) return;
+  played();
+  noise({ dur: 0.3, vol: 0.16, type: "bandpass", f0: 2400, f1: 500, q: 1.3 });
+}
+
+export function sfxCapture(): void {
+  if (!enabled() || !ac()) return;
+  played();
+  tone({ type: "triangle", f0: 300, f1: 920, dur: 0.16, vol: 0.16 });
+  [1047, 1319, 1568, 2093].forEach((f, i) => tone({ f0: f, delay: 0.16 + 0.06 * i, dur: 0.4, vol: 0.1 }));
+}
+
+export function sfxBreakOut(): void {
+  if (!enabled() || !ac()) return;
+  played();
+  noise({ dur: 0.16, vol: 0.2, type: "bandpass", f0: 750, q: 0.9 });
+  tone({ f0: 200, f1: 70, dur: 0.22, vol: 0.22 });
+}
+
+export function sfxFled(): void {
+  if (!enabled() || !ac()) return;
+  played();
+  tone({ type: "triangle", f0: 840, f1: 260, dur: 0.4, vol: 0.12 });
+}
+
+let lastStep = 0;
+let stepAlt = false;
+export function sfxStep(): void {
+  if (!enabled() || !ac()) return;
+  const now = performance.now();
+  if (now - lastStep < 235) return;
+  lastStep = now;
+  stepAlt = !stepAlt;
+  played();
+  noise({ dur: 0.05, vol: 0.026, type: "lowpass", f0: stepAlt ? 460 : 380 });
+}
+
+export function sfxThunder(): void {
+  if (!enabled() || !ac()) return;
+  played();
+  noise({ dur: 1.5, vol: 0.4, type: "lowpass", f0: 420, f1: 55 });
+  tone({ f0: 58, f1: 30, dur: 1.1, vol: 0.3 });
+  noise({ delay: 0.03, dur: 0.2, vol: 0.12, type: "bandpass", f0: 1800, q: 0.7 });
+}
+
+/* Weather loop rig: one persistent filtered-noise loop whose filter
+ * and gain morph per weather kind (rain / wind / storm / off). */
+let wxRig: { flt: BiquadFilterNode; gain: GainNode } | null = null;
+let wxKind: "rain" | "wind" | "storm" | "off" = "off";
+let wxLfo: ReturnType<typeof setInterval> | null = null;
+export function setWeatherAmbience(kind: "rain" | "wind" | "storm" | "off"): void {
+  if (kind === wxKind) return;
+  wxKind = kind;
+  if (wxLfo) { clearInterval(wxLfo); wxLfo = null; }
+  const c = ac(); if (!c || !master) return;
+  if (!wxRig) {
+    const src = c.createBufferSource(); src.buffer = noiseBuffer(c); src.loop = true;
+    const flt = c.createBiquadFilter(); flt.type = "lowpass"; flt.frequency.value = 900;
+    const gain = c.createGain(); gain.gain.value = 0;
+    src.connect(flt); flt.connect(gain); gain.connect(master);
+    src.start();
+    wxRig = { flt, gain };
+  }
+  const t = c.currentTime;
+  const on = enabled();
+  const target = !on || kind === "off" ? 0 : kind === "rain" ? 0.045 : kind === "storm" ? 0.075 : 0.03;
+  wxRig.gain.gain.setTargetAtTime(target, t, 0.6);
+  if (kind === "wind" || kind === "storm") {
+    wxRig.flt.type = "bandpass"; wxRig.flt.Q.value = 0.9;
+    wxRig.flt.frequency.setTargetAtTime(560, t, 0.5);
+    // The interval is cleared on every kind change, so it only ever
+    // runs while wind/storm is the current kind.
+    wxLfo = setInterval(() => {
+      wxRig?.flt.frequency.setTargetAtTime(340 + Math.random() * 520, c.currentTime, 0.7);
+    }, 1300);
+  } else {
+    wxRig.flt.type = "lowpass";
+    wxRig.flt.frequency.setTargetAtTime(950, t, 0.5);
+  }
+}
+
+/* Day ambience for Verdant (Part 15 §3): sparse bird phrases over the
+ * grassland — short descending chirps, well under the mix. */
+let dayTimer: ReturnType<typeof setInterval> | null = null;
+let dayOn = false;
+export function setDayAmbience(on: boolean): void {
+  if (on === dayOn) return;
+  dayOn = on;
+  if (dayTimer) { clearInterval(dayTimer); dayTimer = null; }
+  if (!on) return;
+  const phrase = () => {
+    if (!dayOn || !enabled()) return;
+    const n = 2 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < n; i++)
+      tone({ f0: 2950 + Math.random() * 500, f1: 2050, delay: i * 0.13, dur: 0.09, vol: 0.013 });
+  };
+  phrase();
+  dayTimer = setInterval(phrase, 3600);
+}

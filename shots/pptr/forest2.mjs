@@ -1,0 +1,11 @@
+import puppeteer from "puppeteer-core";
+const browser = await puppeteer.launch({ executablePath: "/home/hatch/.cache/puppeteer/chrome/linux-156.0.8078.47/chrome-linux64/chrome", headless: "new", args: ["--no-sandbox", "--disable-gpu"], userDataDir: "/home/hatch/workspace/eidolith/shots/chrome-female" });
+const page = await browser.newPage();
+await page.setViewport({ width: 760, height: 1000 });
+await page.goto("http://127.0.0.1:5173/", { waitUntil: "domcontentloaded", timeout: 30000 });
+await page.waitForFunction(() => window.__eidolith?.getPlayerGrid, { timeout: 30000 });
+await new Promise(r => setTimeout(r, 1800));
+console.log("at:", JSON.stringify(await page.evaluate(() => window.__eidolith.getPlayerGrid())));
+await page.screenshot({ path: "/home/hatch/workspace/eidolith/shots/fixes-forest-spawn.png" });
+await browser.close();
+console.log("done");

@@ -245,3 +245,53 @@ collectionRouter.post("/summoning/pull", async (req: AuthedRequest, res, next) =
   } finally { client.release(); }
 });
 
+
+/* ---- Evolution (Awakened) — approved EVOLUTION-DRAFT-v1, DDD §17.2 ----
+ * One transaction: lock the instance, validate ownership/state/level,
+ * spend 1 Evolution Core, repoint the instance at the evolved template
+ * (level/XP/bond untouched), write the audit log. Creatures assigned in
+ * the Sanctuary or away on an expedition must come home first. */
+export const EVOLUTION_MIN_LEVEL = 16;
+collectionRouter.post("/creatures/:instanceId/evolve", async (req: AuthedRequest, res, next) => {
+  try {
+    const playerId = await profileIdOf(req.userId!);
+    const { targetId } = req.body as { targetId?: string };
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      const { rows } = await client.query<{ id: string; creature_id: string; level: number }>(
+        `SELECT id, creature_id, level FROM creatures.creature_instances WHERE id = $1 AND player_id = $2 FOR UPDATE`,
+        [req.params.instanceId, playerId]);
+      if (!rows.length) throw err(404, "CREATURE_NOT_FOUND", "Eidolon không tồn tại");
+      const inst = rows[0];
+      const baseDef = creatureById(inst.creature_id);
+      if (!baseDef || baseDef.evolvedFrom) throw err(422, "EVOLUTION_NOT_AVAILABLE", "Dạng này không tiến hoá thêm được ở giai đoạn này");
+      if (!(baseDef.evolutionTargets ?? []).includes(targetId ?? ""))
+        throw err(422, "EVOLUTION_TARGET_INVALID", "Nhánh tiến hoá không hợp lệ cho loài này");
+      if (Number(inst.level) < EVOLUTION_MIN_LEVEL)
+        throw err(422, "EVOLUTION_LEVEL", `Cần cấp ${EVOLUTION_MIN_LEVEL} để tiến hoá (hiện tại Lv.${inst.level})`);
+      const { rows: busyA } = await client.query(
+        `SELECT 1 FROM sanctuary.assignments WHERE creature_instance_id = $1`, [inst.id]);
+      if (busyA.length) throw err(422, "EVOLUTION_BUSY", "Eidolon đang phân công ở Sanctuary — rút về trước khi tiến hoá");
+      const { rows: busyE } = await client.query(
+        `SELECT 1 FROM sanctuary.expeditions WHERE player_id = $1 AND claimed_at IS NULL AND $2 = ANY(creature_instance_ids)`, [playerId, inst.id]);
+      if (busyE.length) throw err(422, "EVOLUTION_BUSY", "Eidolon đang đi thám hiểm — chờ đội về trước khi tiến hoá");
+      const { rows: spent } = await client.query<{ balance: string }>(
+        `UPDATE economy.player_wallets SET balance = balance - 1, updated_at = now()
+         WHERE player_id = $1 AND currency_id = 'evolution_core' AND balance >= 1 RETURNING balance`, [playerId]);
+      if (!spent.length) throw err(422, "EVOLUTION_NO_CORE", "Cần 1 Evolution Core để tiến hoá");
+      await client.query(
+        `INSERT INTO economy.currency_transactions (player_id, currency_id, amount, balance_after, reason)
+         VALUES ($1, 'evolution_core', -1, $2, 'evolution')`, [playerId, Number(spent[0].balance)]);
+      await client.query(`UPDATE creatures.creature_instances SET creature_id = $1 WHERE id = $2`, [targetId, inst.id]);
+      await client.query(
+        `INSERT INTO progression.evolution_log (player_id, instance_id, from_creature_id, to_creature_id) VALUES ($1, $2, $3, $4)`,
+        [playerId, inst.id, inst.creature_id, targetId]);
+      await client.query("COMMIT");
+      ok(req, res, { instanceId: inst.id, fromCreatureId: inst.creature_id, toCreatureId: targetId });
+    } catch (e) {
+      await client.query("ROLLBACK").catch(() => undefined);
+      throw e;
+    } finally { client.release(); }
+  } catch (e) { next(e); }
+});

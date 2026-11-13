@@ -6,8 +6,8 @@ const call = async (method, path, token, body, headers = {}) => {
   const r = await fetch(BASE + path, { method, headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...headers }, body: body ? JSON.stringify(body) : undefined });
   return { status: r.status, json: await r.json().catch(() => null) };
 };
-const email = `p4_${Date.now()}@test.dev`;
-const username = `p4_${Date.now() % 100000}`;
+const email = `p4x${Date.now()}@test.dev`;
+const username = `p4x${Date.now() % 100000}`;
 const reg = await call("POST", "/auth/register", null, { email, username, password: "SecurePass123" });
 const login = await call("POST", "/auth/login", null, { email, password: "SecurePass123" });
 const token = login.json?.data?.accessToken;

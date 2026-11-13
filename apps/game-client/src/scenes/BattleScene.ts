@@ -335,7 +335,7 @@ export class BattleScene extends Phaser.Scene {
         const crit = Boolean(d.crit);
         const color = ELEMENT_CSS[String(d.element)] ?? "#ffffff";
         this.floater(t.cont.x, t.cont.y - 74, crit ? `${d.amount}!` : `${d.amount}`, crit ? "#ffd94a" : color, crit ? 23 : 16.5, instant);
-        if (!instant) sfxHit(crit);
+        if (!instant) { sfxHit(crit); this.impactFx(t, String(d.element), crit); }
         if (!instant && t.art instanceof Phaser.GameObjects.Image) {
           const img = t.art;
           img.setTintFill(0xffffff);
@@ -455,6 +455,24 @@ export class BattleScene extends Phaser.Scene {
     this.spotlightFx(v, skillName);
   }
 
+  /* Ordinary-hit impact (Part 15 impact layer): a short element burst
+   * + ring at the target, so non-ult hits read as physical contact,
+   * not just a floating number. Crits burst bigger and gold-white. */
+  private impactFx(t: UnitVis, element: string, crit: boolean): void {
+    const css = crit ? "#ffd94a" : ELEMENT_CSS[element] ?? "#ffffff";
+    const color = Phaser.Display.Color.HexStringToColor(css).color;
+    const x = t.cont.x, y = t.cont.y - 26;
+    const n = crit ? 10 : 6;
+    for (let i = 0; i < n; i++) {
+      const p = this.add.circle(x, y, crit ? 3.4 : 2.6, i % 3 === 0 ? 0xffffff : color, 1).setDepth(455);
+      const ang = Math.random() * Math.PI * 2, dist = (crit ? 46 : 32) + Math.random() * (crit ? 40 : 26);
+      this.tweens.add({ targets: p, x: x + Math.cos(ang) * dist, y: y + Math.sin(ang) * dist * 0.7 - 6, alpha: 0, scale: 0.3, duration: 240 + Math.random() * 160, ease: "Quad.easeOut", onComplete: () => p.destroy() });
+    }
+    const ring = this.add.circle(x, y + 8, 12, color, 0).setDepth(454);
+    ring.setStrokeStyle(2, color, 0.85);
+    this.tweens.add({ targets: ring, scale: crit ? 2.5 : 1.8, alpha: 0, duration: 260, ease: "Quad.easeOut", onComplete: () => ring.destroy() });
+  }
+
   private spotlightFx(v: UnitVis, skillName: string): void {
     sfxUlt(v.def.element);
     const css = ELEMENT_CSS[v.def.element] ?? "#ffd94a";
@@ -528,6 +546,8 @@ export class BattleScene extends Phaser.Scene {
       const ups = r.levelUps.map(u => `${creatureById(u.creatureId)?.name ?? u.creatureId} lên Lv.${u.level}`).join(" · ");
       rw.textContent = `+${r.gold} Gold · Đội +${r.creatureXp} XP · Bạn +${r.playerXp} XP`
         + (r.evolutionCore ? " · +1 Evolution Core" : "") + (ups ? ` · ${ups}!` : "") + (r.playerLeveledUp ? ` · Bạn lên Lv.${r.playerLevel}!` : "");
+    } else if (rw) {
+      rw.textContent = "Trận giao hữu — không tính thưởng";
     }
     if (this.statusEl) this.statusEl.textContent = "Đã kết thúc";
     this.resultEl.hidden = false;

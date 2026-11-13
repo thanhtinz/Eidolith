@@ -1,0 +1,32 @@
+import puppeteer from "puppeteer-core";
+const CHROME = "/home/hatch/.cache/puppeteer/chrome/linux-156.0.8078.47/chrome-linux64/chrome";
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const browser = await puppeteer.launch({ executablePath: CHROME, headless: "new", args: ["--no-sandbox", "--window-size=1280,720"] });
+const page = await browser.newPage();
+await page.setViewport({ width: 1280, height: 720 });
+page.on("pageerror", (e) => console.log("PAGEERROR:", String(e).slice(0, 200)));
+await page.goto("http://127.0.0.1:5173/", { waitUntil: "domcontentloaded", timeout: 60000 });
+for (let i = 0; i < 60 && !(await page.evaluate(() => !!window.__eidolithStart)); i++) await sleep(500);
+await page.evaluate(() => window.__eidolithStart());
+await sleep(600);
+const email = `df${Date.now() % 100000000}@test.dev`;
+await page.evaluate(() => document.querySelector(".f-tab:not(.on)")?.click());
+await sleep(300);
+await page.type("#f-email", email);
+await page.type("#f-password", "SecurePass123");
+await page.evaluate(() => document.querySelector("#f-submit")?.click());
+for (let i = 0; i < 40 && !(await page.$("#srv-start")); i++) await sleep(500);
+await page.evaluate(() => document.querySelector("#srv-start")?.click());
+for (let i = 0; i < 40 && !(await page.$("#c-name")); i++) await sleep(500);
+if (await page.$("#c-name")) {
+  await page.type("#c-name", "Daytour" + (Date.now() % 1000));
+  await page.evaluate(() => document.querySelector("#c-submit")?.click());
+}
+for (let i = 0; i < 80 && !(await page.evaluate(() => !!window.__eidolith?.changeMap)); i++) await sleep(500);
+await page.evaluate(() => { window.__eidolith.changeMap("mist_marsh", "from_fields"); });
+await sleep(2500);
+await page.evaluate(() => window.__eidolith.setWorldMinutes(660));
+await sleep(1200);
+await page.screenshot({ path: "shots/rich-marsh2.png" });
+console.log("shot done");
+await browser.close();

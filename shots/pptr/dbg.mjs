@@ -1,0 +1,12 @@
+import puppeteer from "puppeteer-core";
+const browser = await puppeteer.launch({ executablePath: "/home/hatch/.cache/puppeteer/chrome/linux-156.0.8078.47/chrome-linux64/chrome", headless: "new", args: ["--no-sandbox", "--disable-gpu"], userDataDir: "/home/hatch/workspace/eidolith/shots/chrome-female" });
+const page = await browser.newPage();
+page.on("console", m => console.log("PAGE:", m.text().slice(0, 200)));
+page.on("pageerror", e => console.log("PAGEERROR:", String(e).slice(0, 300)));
+await page.setViewport({ width: 760, height: 1000 });
+await page.goto("http://127.0.0.1:5173/", { waitUntil: "domcontentloaded", timeout: 30000 });
+await new Promise(r => setTimeout(r, 9000));
+console.log("eidolith hook:", await page.evaluate(() => typeof window.__eidolith));
+console.log("body text:", await page.evaluate(() => document.body.innerText.slice(0, 200)));
+await page.screenshot({ path: "/home/hatch/workspace/eidolith/shots/dbg-hub.png" });
+await browser.close();
